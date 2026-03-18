@@ -7,17 +7,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 
+
+
 :root[data-theme="dark"] {
-  --bg: #09090f; --surface: #12121e; --card: #1a1a2e; --border: #2a2a45;
-  --accent: #6c63ff; --accent2: #ff6584; --text: #e8e8f0; --muted: #6b6b8a;
+  --bg: #1a0a10; --surface: #26101a; --card: #2e1420; --border: #4a2030;
+  --accent: #ff6b9d; --accent2: #ff9ec4; --text: #f5e6ec; --muted: #a06080;
   --danger: #ff4757; --success: #43e97b; --shadow: rgba(0,0,0,0.4);
-  --user-bubble: #1e1e3a; --ai-bubble: #12121e;
+  --user-bubble: #3a1525; --ai-bubble: #26101a;
 }
 :root[data-theme="light"] {
-  --bg: #f0f0f8; --surface: #ffffff; --card: #ffffff; --border: #e0e0ee;
-  --accent: #6c63ff; --accent2: #ff6584; --text: #1a1a2e; --muted: #9090aa;
-  --danger: #ff4757; --success: #22c55e; --shadow: rgba(0,0,0,0.08);
-  --user-bubble: #e8e6ff; --ai-bubble: #ffffff;
+  --bg: #fff0f5; --surface: #ffffff; --card: #ffffff; --border: #ffd6e7;
+  --accent: #e8447a; --accent2: #ff85b3; --text: #2a1020; --muted: #b07090;
+  --danger: #ff4757; --success: #22c55e; --shadow: rgba(200,0,80,0.08);
+  --user-bubble: #ffe0ee; --ai-bubble: #ffffff;
+}
+:root[data-theme="black"] {
+  --bg: #000000; --surface: #0d0d0d; --card: #141414; --border: #2a2a2a;
+  --accent: #ff6b9d; --accent2: #ff9ec4; --text: #ffffff; --muted: #666666;
+  --danger: #ff4757; --success: #43e97b; --shadow: rgba(0,0,0,0.8);
+  --user-bubble: #1a1a1a; --ai-bubble: #0d0d0d;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Syne', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; transition: background 0.3s, color 0.3s; }
@@ -128,7 +136,7 @@ button:active { transform: translateY(0); }
 
 .msg-bubble { padding: 12px 16px; border-radius: 18px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
 .msg.user .msg-bubble { background: var(--accent); color: white; border-bottom-right-radius: 4px; }
-.msg.ai .msg-bubble { background: var(--ai-bubble); border: 1px solid var(--border); color: var(--text); border-bottom-left-radius: 4px; }
+.msg.ai .msg-bubble { background: var(--ai-bubble); border: 1px solid var(--border); color: var(--text); border-bottom-left-radius: 4px; font-family: 'Syne', sans-serif; font-size: 14px; line-height: 1.7; font-weight: 500; letter-spacing: 0.1px; }
 .msg-time { font-size: 10px; color: var(--muted); margin-top: 4px; font-family: 'Space Mono', monospace; padding: 0 4px; }
 
 /* image in chat */
@@ -217,6 +225,21 @@ button:active { transform: translateY(0); }
 .bottom-nav-btn.active { color: var(--accent); }
 .bottom-nav-btn:hover { color: var(--accent); transform: none; opacity: 1; }
 
+/* SENTENCE PICKER */
+.sentence-picker { margin-top: 12px; }
+.sentence-item {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 12px 14px; margin-bottom: 8px;
+  cursor: pointer; transition: all 0.2s; position: relative;
+}
+.sentence-item:hover { border-color: var(--accent); background: rgba(108,99,255,0.04); }
+.sentence-item.selected { border-color: var(--accent); background: rgba(108,99,255,0.1); }
+.sentence-item.selected::after { content: '✓'; position: absolute; top: 10px; right: 12px; color: var(--accent); font-weight: 800; font-size: 14px; }
+.sentence-de { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; line-height: 1.5; }
+.sentence-ru { font-size: 12px; color: var(--muted); line-height: 1.4; }
+.sentence-loading { text-align: center; padding: 20px; color: var(--muted); font-size: 13px; }
+.sentence-spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 8px; vertical-align: middle; }
+
 /* EXAM MODE */
 .exam-timer { font-family: 'Space Mono', monospace; font-size: 32px; font-weight: 700; text-align: center; padding: 10px; border-radius: 14px; margin-bottom: 10px; }
 .exam-timer.ok { color: var(--success); background: rgba(67,233,123,0.08); border: 1px solid rgba(67,233,123,0.2); }
@@ -289,6 +312,8 @@ button:active { transform: translateY(0); }
 .chat-item-del:hover { color:var(--danger); transform:none; }
 .btn-new-chat { background:var(--accent); border:none; color:white; font-size:11px; font-weight:700; padding:4px 10px; border-radius:8px; cursor:pointer; width:auto; margin:0; font-family:"Syne",sans-serif; transition:opacity 0.2s; }
 .btn-new-chat:hover { opacity:0.85; transform:none; }
+
+
 </style>
 </head>
 <body>
@@ -312,6 +337,7 @@ button:active { transform: translateY(0); }
       <button class="nav-btn" onclick="showPanel('cards')" id="nb-cards"><span class="icon">🃏</span> Карточки</button>
       <button class="nav-btn" onclick="showPanel('stats')" id="nb-stats"><span class="icon">📊</span> Статистика</button>
       <button class="nav-btn" onclick="showPanel('exam')" id="nb-exam"><span class="icon">⏱️</span> Экзамен</button>
+      <button class="nav-btn" onclick="showPanel('artikel')" id="nb-artikel"><span class="icon">🇩🇪</span> Артикли</button>
     </div>
     <div class="sidebar-section" style="flex:1;overflow:hidden;display:flex;flex-direction:column;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
@@ -335,6 +361,10 @@ button:active { transform: translateY(0); }
           <input id="translation" placeholder="Заполнится автоматически">
           <span class="label">Тема</span>
           <input id="topic" placeholder="Работа, B2, Путешествия...">
+          <div id="sentencePicker" class="sentence-picker" style="display:none;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;">Выбери предложение для запоминания:</div>
+            <div id="sentenceList"></div>
+          </div>
           <button onclick="addWord()">Добавить слово</button>
         </div>
         <div class="card">
@@ -370,6 +400,7 @@ button:active { transform: translateY(0); }
 
     <div class="panel" id="panel-list">
       <div class="panel-scroll">
+        <input id="searchWords" placeholder="🔍 Поиск по словам..." oninput="renderList()" style="margin-bottom:8px;">
         <select id="filterTopic" onchange="renderList()"><option value="">Все темы</option></select>
         <div id="wordListContainer" style="margin-top:12px;"></div>
       </div>
@@ -451,6 +482,32 @@ button:active { transform: translateY(0); }
       </div>
     </div>
 
+    <!-- ARTIKEL PANEL -->
+    <div class="panel" id="panel-artikel">
+      <div class="panel-scroll">
+        <div id="artikelContent">
+          <div class="card" style="text-align:center;padding:30px;">
+            <div style="font-size:40px;margin-bottom:12px;">🇩🇪</div>
+            <div style="font-size:18px;font-weight:800;margin-bottom:8px;">Режим артиклей</div>
+            <div style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.6;">Угадай правильный артикль:<br>der, die или das?<br>Только слова с артиклями учитываются.</div>
+            <button onclick="startArtikel()">🚀 Начать</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLAN PANEL -->
+    <div class="panel" id="panel-plan">
+      <div class="panel-scroll">
+        <div class="card">
+          <div style="font-size:15px;font-weight:800;margin-bottom:6px;">🗓️ План учёбы от ИИ</div>
+          <div style="font-size:13px;color:var(--muted);margin-bottom:10px;line-height:1.6;">ИИ проанализирует твои слова и составит персональный план на неделю</div>
+          <button class="btn-ai" onclick="generatePlan()">✨ Составить план</button>
+        </div>
+        <div id="planResult"></div>
+      </div>
+    </div>
+
     <!-- EXAM PANEL -->
     <div class="panel" id="panel-exam">
       <div class="panel-scroll">
@@ -469,6 +526,7 @@ button:active { transform: translateY(0); }
   </div>
 </div>
 
+
 <div id="toast"></div>
 
 <nav class="bottom-nav" id="bottomNav">
@@ -478,9 +536,13 @@ button:active { transform: translateY(0); }
   <button class="bottom-nav-btn" onclick="showPanel('exam')" id="bn-exam"><span class="bn-icon">⏱️</span>Экзамен</button>
   <button class="bottom-nav-btn" onclick="showPanel('chat')" id="bn-chat"><span class="bn-icon">📸</span>ИИ</button>
   <button class="bottom-nav-btn" onclick="showPanel('stats')" id="bn-stats"><span class="bn-icon">📊</span>Стат</button>
+  <button class="bottom-nav-btn" onclick="showPanel('artikel')" id="bn-artikel"><span class="bn-icon">🇩🇪</span>Арт.</button>
+  <button class="bottom-nav-btn" onclick="showPanel('plan')" id="bn-plan"><span class="bn-icon">🗓️</span>План</button>
 </nav>
 
 <script>
+
+
 // ── CONFIG ── замени на свой ключ с https://aistudio.google.com
 var MISTRAL_KEY = localStorage.getItem('mistral_key') || '';
 var GROQ_KEY = localStorage.getItem('groq_key') || '';
@@ -498,19 +560,21 @@ let currentChatId = null;
 let allChats = JSON.parse(localStorage.getItem('chats_v1') || '{}');
 
 // ── THEME ──
-const savedTheme = localStorage.getItem('theme') || 'dark';
+var savedTheme = localStorage.getItem('theme') || 'dark';
 document.documentElement.setAttribute('data-theme', savedTheme);
 updateThemeIcon();
 
 function toggleTheme() {
-  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  var cur = document.documentElement.getAttribute('data-theme');
+  var next = cur === 'dark' ? 'light' : cur === 'light' ? 'black' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('theme', next);
   updateThemeIcon();
 }
 function updateThemeIcon() {
-  const btn = document.querySelector('.theme-btn');
-  if (btn) btn.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙';
+  var btn = document.querySelector('.theme-btn');
+  var cur = document.documentElement.getAttribute('data-theme');
+  if (btn) btn.textContent = cur === 'dark' ? '🌸' : cur === 'light' ? '⬛' : '🌙';
 }
 
 // ── PROFILE ──
@@ -550,6 +614,7 @@ function showPanel(name) {
   if (name === 'test') startTest();
   if (name === 'cards') startCards();
   if (name === 'stats') renderStats();
+  if (name === 'artikel') startArtikel();
   if (name === 'exam') {
     var sel = document.getElementById('examTopicSelect');
     if (sel) {
@@ -758,6 +823,22 @@ function renderList() {
   });
 }
 function deleteWord(id) { words = words.filter(function(w) { return w.id !== id; }); save(); renderList(); showToast('🗑️ Слово удалено'); }
+
+function editWord(id) {
+  var w = words.find(function(x) { return x.id === id; });
+  if (!w) return;
+  var newWord = prompt('Немецкое слово:', w.word);
+  if (newWord === null) return;
+  var newTrans = prompt('Перевод:', w.translation);
+  if (newTrans === null) return;
+  var newTopic = prompt('Тема:', w.topic);
+  if (newTopic === null) return;
+  w.word = newWord.trim() || w.word;
+  w.translation = newTrans.trim() || w.translation;
+  w.topic = newTopic.trim() || w.topic;
+  save(); renderList();
+  showToast('✅ Слово обновлено!');
+}
 
 // ── TEST + SRS ──
 const SRS_INTERVALS = [0, 60000, 600000, 86400000, 259200000];
@@ -982,6 +1063,8 @@ async function sendMessage() {
       var text = typeof msg.content === 'string' ? msg.content : msg.content.map(function(p) { return p.type === 'text' ? p.text : p.type === 'image' ? '[фото]' : ''; }).join(' ');
       if (text.trim()) groqMessages.push({ role: role, content: text });
     });
+
+    var mistralModel = (hasPDF || !hasImages) ? 'mistral-small-latest' : 'pixtral-12b-2409';
 
     async function callMistral() {
       var r = await fetch('https://api.mistral.ai/v1/chat/completions', {
@@ -1407,12 +1490,281 @@ async function importWordsFromPhoto() {
   btn.textContent = '✨ Распознать и добавить слова'; btn.disabled = false;
 }
 
+// ── ARTIKEL MODE ──
+var artikelQueue = [], artikelIndex = 0, artikelCorrect = 0, artikelWrong = 0;
+
+function startArtikel() {
+  var artikelWords = words.filter(function(w) {
+    return /^(der|die|das) /i.test(w.word);
+  });
+  if (artikelWords.length === 0) {
+    document.getElementById('artikelContent').innerHTML =
+      '<div class="card" style="text-align:center;padding:30px;">' +
+      '<div style="font-size:40px;margin-bottom:12px;">😅</div>' +
+      '<div style="font-size:15px;font-weight:700;margin-bottom:8px;">Нет слов с артиклями</div>' +
+      '<div style="font-size:13px;color:var(--muted);">Добавь слова в формате "der Hund", "die Katze", "das Haus"</div>' +
+      '</div>';
+    return;
+  }
+  artikelQueue = artikelWords.sort(function() { return Math.random()-0.5; });
+  artikelIndex = 0; artikelCorrect = 0; artikelWrong = 0;
+  renderArtikelQuestion();
+}
+
+function renderArtikelQuestion() {
+  var content = document.getElementById('artikelContent');
+  if (artikelIndex >= artikelQueue.length) {
+    var pct = Math.round((artikelCorrect/artikelQueue.length)*100);
+    var emoji = pct >= 80 ? '🎉' : pct >= 50 ? '👍' : '💪';
+    content.innerHTML = '<div class="card" style="text-align:center;padding:30px;">' +
+      '<div style="font-size:48px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">' + pct + '%</div>' +
+      '<div style="font-size:16px;color:var(--muted);margin:8px 0;">' + emoji + ' ' + artikelCorrect + ' из ' + artikelQueue.length + '</div>' +
+      '<button onclick="startArtikel()">Ещё раз</button></div>';
+    return;
+  }
+  var w = artikelQueue[artikelIndex];
+  var wordWithoutArtikel = w.word.replace(/^(der|die|das) /i, '');
+  content.innerHTML = '';
+  var card = document.createElement('div');
+  card.className = 'card';
+  card.style.textAlign = 'center';
+
+  var progress = document.createElement('div');
+  progress.className = 'progress-bar-wrap';
+  progress.style.marginBottom = '16px';
+  progress.innerHTML = '<div class="progress-bar" style="width:' + Math.round((artikelIndex/artikelQueue.length)*100) + '%"></div>';
+
+  var counter = document.createElement('div');
+  counter.style.cssText = 'font-family:Space Mono,monospace;font-size:11px;color:var(--muted);margin-bottom:16px;';
+  counter.textContent = (artikelIndex+1) + ' / ' + artikelQueue.length;
+
+  var wordEl = document.createElement('div');
+  wordEl.className = 'test-word-big';
+  wordEl.style.marginBottom = '8px';
+  wordEl.textContent = wordWithoutArtikel;
+
+  var transEl = document.createElement('div');
+  transEl.style.cssText = 'color:var(--muted);font-size:13px;margin-bottom:24px;';
+  transEl.textContent = w.translation;
+
+  var soundBtn = document.createElement('button');
+  soundBtn.className = 'sound-btn';
+  soundBtn.textContent = '🔊';
+  soundBtn.style.cssText = 'display:block;margin:0 auto 20px;';
+  soundBtn.onclick = function() { speakWord(w.word); };
+
+  var btnRow = document.createElement('div');
+  btnRow.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px;';
+
+  ['der','die','das'].forEach(function(art) {
+    var btn = document.createElement('button');
+    btn.textContent = art;
+    btn.style.cssText = 'font-size:18px;font-weight:800;font-family:Space Mono,monospace;margin:0;';
+    btn.onclick = function() { checkArtikel(art, w, wordWithoutArtikel); };
+    btnRow.appendChild(btn);
+  });
+
+  var fb = document.createElement('div');
+  fb.className = 'feedback-box'; fb.id = 'artikelFeedback';
+
+  var stats = document.createElement('div');
+  stats.className = 'stats-row';
+  stats.style.marginTop = '10px';
+  stats.innerHTML = '<div class="stat-box stat-ok"><div class="stat-num">' + artikelCorrect + '</div><div class="stat-label">Правильно</div></div><div class="stat-box stat-fail"><div class="stat-num">' + artikelWrong + '</div><div class="stat-label">Ошибки</div></div>';
+
+  content.appendChild(progress);
+  card.appendChild(counter); card.appendChild(wordEl); card.appendChild(transEl);
+  card.appendChild(soundBtn); card.appendChild(btnRow); card.appendChild(fb);
+  content.appendChild(card);
+  content.appendChild(stats);
+}
+
+function checkArtikel(chosen, w, wordWithoutArtikel) {
+  var correct = w.word.toLowerCase().split(' ')[0];
+  var fb = document.getElementById('artikelFeedback');
+  var btns = document.querySelectorAll('#artikelContent button:not(.sound-btn)');
+  btns.forEach(function(b) { b.disabled = true; });
+  if (chosen === correct) {
+    artikelCorrect++;
+    fb.innerHTML = '✓ Правильно! <strong>' + w.word + '</strong>';
+    fb.className = 'feedback-box feedback-ok';
+  } else {
+    artikelWrong++;
+    fb.innerHTML = '✗ Правильно: <strong>' + w.word + '</strong>';
+    fb.className = 'feedback-box feedback-fail';
+  }
+  artikelIndex++;
+  setTimeout(renderArtikelQuestion, 1400);
+}
+
+// ── STUDY PLAN ──
+async function generatePlan() {
+  var btn = document.querySelector('#panel-plan .btn-ai');
+  if (btn) { btn.textContent = '⏳ Составляю план...'; btn.disabled = true; }
+  var resultDiv = document.getElementById('planResult');
+  resultDiv.innerHTML = '';
+
+  if (!MISTRAL_KEY && !GROQ_KEY) {
+    resultDiv.innerHTML = '<div class="card" style="color:var(--danger);">⚠️ Нужен API ключ. Нажми 🔑 в чате.</div>';
+    if (btn) { btn.textContent = '✨ Составить план'; btn.disabled = false; }
+    return;
+  }
+
+  var now = Date.now();
+  var dueWords = words.filter(function(w) { return (w.nextReview||0) <= now; });
+  var weakWords = words.filter(function(w) { return (w.srs||0) === 0; });
+  var strongWords = words.filter(function(w) { return (w.srs||0) >= 3; });
+  var topics = [...new Set(words.map(function(w) { return w.topic; }))];
+
+  var planLines = [
+    'Составь персональный план учёбы немецкого языка на 7 дней.',
+    '',
+    'Статистика ученика:',
+    '- Всего слов: ' + words.length,
+    '- Нужно повторить сегодня: ' + dueWords.length,
+    '- Сложные слова (srs=0): ' + weakWords.length,
+    '- Хорошо знает (srs>=3): ' + strongWords.length,
+    '- Темы: ' + topics.join(', '),
+    '',
+    'Примеры сложных слов: ' + weakWords.slice(0,5).map(function(w){return w.word;}).join(', '),
+    '',
+    'Составь конкретный план по дням (Пн-Вс) с указанием:',
+    '- Что повторять',
+    '- Сколько новых слов добавить',
+    '- На чём сфокусироваться',
+    '- Короткое упражнение на день',
+    '',
+    'Отвечай на русском, будь конкретным и мотивирующим!'
+  ];
+  var prompt = planLines.join('\n');
+
+  try {
+    var messages = [{ role: 'user', content: prompt }];
+    var response;
+    if (MISTRAL_KEY) {
+      response = await fetch('https://api.mistral.ai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY },
+        body: JSON.stringify({ model: 'mistral-small-latest', messages: messages, max_tokens: 1200 })
+      });
+    } else {
+      response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY },
+        body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: messages, max_tokens: 1200 })
+      });
+    }
+    var data = await response.json();
+    var planText = data.choices && data.choices[0] ? data.choices[0].message.content.trim() : '⚠️ Не удалось составить план.';
+
+    // Render plan nicely
+    var lines = planText.split('\n');
+    var html = '<div class="card" style="line-height:1.8;">';
+    lines.forEach(function(line) {
+      if (!line.trim()) { html += '<br>'; return; }
+      if (/^(Пн|Вт|Ср|Чт|Пт|Сб|Вс|День|Monday|Tuesday|##|\*\*)/.test(line.trim())) {
+        html += '<div style="font-weight:800;color:var(--accent);margin-top:14px;font-size:15px;">' + line.replace(/\*\*/g,'') + '</div>';
+      } else if (line.trim().startsWith('-') || line.trim().startsWith('•')) {
+        html += '<div style="padding-left:12px;color:var(--text);font-size:13px;">' + line + '</div>';
+      } else {
+        html += '<div style="font-size:13px;">' + line.replace(/\*\*/g,'<strong>').replace(/\*\*/g,'</strong>') + '</div>';
+      }
+    });
+    html += '</div>';
+    resultDiv.innerHTML = html;
+    showToast('✅ План готов!');
+  } catch(e) {
+    resultDiv.innerHTML = '<div class="card" style="color:var(--danger);">⚠️ Ошибка: ' + e.message + '</div>';
+  }
+  if (btn) { btn.textContent = '✨ Обновить план'; btn.disabled = false; }
+}
+
+// ── SENTENCE GENERATOR ──
+var selectedSentence = null;
+
+async function generateSentences(word) {
+  if (!MISTRAL_KEY && !GROQ_KEY) return; // silently skip if no key
+  var picker = document.getElementById('sentencePicker');
+  var list = document.getElementById('sentenceList');
+  picker.style.display = 'block';
+  selectedSentence = null;
+  list.innerHTML = '<div class="sentence-loading"><span class="sentence-spinner"></span>ИИ составляет предложения...</div>';
+
+  var promptLines = [
+    'Составь 4 реальных немецких предложения со словом "' + word + '".',
+    '',
+    'Требования:',
+    '- Предложения должны быть из реальной жизни (разговор, работа, учёба, путешествия)',
+    '- Разной сложности: 1 простое, 2 средних, 1 сложное',
+    '- Разные ситуации и контексты, не повторяться',
+    '- Полезные для реального использования',
+    '',
+    'Отвечай ТОЛЬКО в JSON без лишнего текста:',
+    '{sentences:[{de:немецкое предложение,ru:перевод на русский}]}'
+  ];
+
+  try {
+    var messages = [{ role: 'user', content: promptLines.join('\n') }];
+    var response;
+    if (MISTRAL_KEY) {
+      response = await fetch('https://api.mistral.ai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY },
+        body: JSON.stringify({ model: 'mistral-small-latest', messages: messages, max_tokens: 600 })
+      });
+    } else {
+      response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY },
+        body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: messages, max_tokens: 600 })
+      });
+    }
+    var data = await response.json();
+    var text = data.choices && data.choices[0] ? data.choices[0].message.content : '';
+    var jsonMatch = text.match(/\{[\s\S]*\}/);
+    var parsed = null;
+    if (jsonMatch) { try { parsed = JSON.parse(jsonMatch[0]); } catch(e) {} }
+
+    if (parsed && parsed.sentences && parsed.sentences.length > 0) {
+      list.innerHTML = '';
+      parsed.sentences.forEach(function(s, i) {
+        var item = document.createElement('div');
+        item.className = 'sentence-item';
+        item.innerHTML = '<div class="sentence-de">' + s.de + '</div><div class="sentence-ru">' + s.ru + '</div>';
+        item.onclick = function() {
+          document.querySelectorAll('.sentence-item').forEach(function(el) { el.classList.remove('selected'); });
+          item.classList.add('selected');
+          selectedSentence = { de: s.de, ru: s.ru };
+        };
+        list.appendChild(item);
+      });
+      // Add "none" option
+      var noneItem = document.createElement('div');
+      noneItem.className = 'sentence-item';
+      noneItem.style.cssText = 'border-style:dashed;color:var(--muted);text-align:center;font-size:13px;';
+      noneItem.innerHTML = '<div class="sentence-de" style="color:var(--muted);">Без примера</div>';
+      noneItem.onclick = function() {
+        document.querySelectorAll('.sentence-item').forEach(function(el) { el.classList.remove('selected'); });
+        noneItem.classList.add('selected');
+        selectedSentence = null;
+      };
+      list.appendChild(noneItem);
+    } else {
+      list.innerHTML = '<div style="color:var(--muted);font-size:12px;padding:8px;">Не удалось сгенерировать предложения</div>';
+    }
+  } catch(e) {
+    list.innerHTML = '<div style="color:var(--muted);font-size:12px;padding:8px;">Ошибка генерации</div>';
+  }
+}
+
 // ── INIT ──
 updateTopics();
 updateWordCount();
 renderChatList();
 const chatIds = Object.keys(allChats).sort(function(a,b) { return allChats[b].createdAt - allChats[a].createdAt; });
 if (chatIds.length > 0) loadChat(chatIds[0]);
+
+
 </script>
 </body>
 </html>
