@@ -1079,27 +1079,19 @@ async function sendMessage() {
 
     var mistralModel = (hasPDF || !hasImages) ? 'mistral-small-latest' : 'pixtral-12b-2409';
 
-    function callMistral() {
-      return fetch('https://api.mistral.ai/v1/chat/completions', {
+    var response, usedGroq = false;
+    if (MISTRAL_KEY) {
+      response = await fetch('https://api.mistral.ai/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY },
         body: JSON.stringify({ model: mistralModel, messages: mistralMessages, max_tokens: 1000 })
       });
-    }
-
-    function callGroq() {
-      return fetch('https://api.groq.com/openai/v1/chat/completions', {
+    } else {
+      response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY },
         body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: groqMessages, max_tokens: 1000 })
       });
-    }
-
-    var response, usedGroq = false;
-    if (MISTRAL_KEY) {
-      response = await callMistral();
-    } else {
-      response = await callGroq();
       usedGroq = true;
     }
 
@@ -1108,8 +1100,12 @@ async function sendMessage() {
       removeTyping();
       appendAIMessage('⚡ Mistral занят — переключаюсь на Groq...');
       showTyping();
-      try { response = await callGroq(); usedGroq = true; }
-      catch(e) { appendAIMessage('⚠️ Groq ошибка: ' + e.message); isAITyping = false; return; }
+      response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY },
+        body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: groqMessages, max_tokens: 1000 })
+      });
+      usedGroq = true;
     } else if (response.status === 429) {
       removeTyping();
       var countEl = document.createElement('div');
@@ -1128,7 +1124,11 @@ async function sendMessage() {
       });
       var cm = document.getElementById('countdownMsg'); if (cm) cm.remove();
       showTyping();
-      response = await callMistral();
+      response = await fetch('https://api.mistral.ai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY },
+        body: JSON.stringify({ model: mistralModel, messages: mistralMessages, max_tokens: 1000 })
+      });
     }
 
     var rawText = await response.text();
