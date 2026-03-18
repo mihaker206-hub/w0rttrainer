@@ -182,6 +182,41 @@ button:active { transform: translateY(0); }
 .welcome-msg strong { color: var(--accent); }
 
 
+
+/* ── MOBILE / TABLET ── */
+@media (max-width: 700px) {
+  .app { grid-template-columns: 1fr; height: auto; min-height: calc(100vh - 53px); }
+  .sidebar { display: none; }
+  .main { height: calc(100vh - 53px - 56px); }
+  .chat-panel { height: calc(100vh - 53px - 56px); }
+  .bottom-nav { display: flex; }
+  header { padding: 12px 16px; }
+  .logo { font-size: 15px; }
+  #nicknameDisplay { display: none; }
+  .panel-scroll { padding: 12px; }
+}
+@media (min-width: 701px) {
+  .bottom-nav { display: none; }
+}
+
+/* BOTTOM NAV (mobile) */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--surface); border-top: 1px solid var(--border);
+  display: none; z-index: 200; height: 56px;
+  box-shadow: 0 -4px 20px var(--shadow);
+}
+.bottom-nav-btn {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 2px; background: none; border: none;
+  color: var(--muted); font-size: 10px; font-weight: 600;
+  font-family: 'Syne', sans-serif; cursor: pointer;
+  transition: color 0.2s; padding: 0; margin: 0; width: auto;
+}
+.bottom-nav-btn .bn-icon { font-size: 20px; line-height: 1; }
+.bottom-nav-btn.active { color: var(--accent); }
+.bottom-nav-btn:hover { color: var(--accent); transform: none; opacity: 1; }
+
 /* EXAM MODE */
 .exam-timer { font-family: 'Space Mono', monospace; font-size: 32px; font-weight: 700; text-align: center; padding: 10px; border-radius: 14px; margin-bottom: 10px; }
 .exam-timer.ok { color: var(--success); background: rgba(67,233,123,0.08); border: 1px solid rgba(67,233,123,0.2); }
@@ -308,6 +343,28 @@ button:active { transform: translateY(0); }
           <textarea id="csvInput" rows="3" placeholder="Hund,собака,Животные"></textarea>
           <button class="btn-s" onclick="importCSV()">Импортировать</button>
         </div>
+        <div class="card">
+          <div style="font-size:15px;font-weight:800;margin-bottom:6px;">📄 Импорт слов из файла или фото</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:4px;">Загрузи PDF или фото со словами — ИИ прочитает и добавит их автоматически</div>
+          <div class="upload-zone" onclick="document.getElementById('importPhotoInput').click()" id="importUploadZone">
+            <div class="upload-icon">📎</div>
+            <strong>Выбери PDF или фото</strong>
+            <p>PDF, JPG, PNG — любой формат со словами</p>
+          </div>
+          <input type="file" id="importPhotoInput" accept="image/*,application/pdf" onchange="handleImportPhoto(event)" style="display:none">
+          <img id="importPhotoPreview" style="display:none;width:100%;border-radius:12px;margin-top:10px;max-height:180px;object-fit:cover;">
+          <div id="importFileInfo" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px;margin-top:10px;font-size:13px;"></div>
+          <button class="btn-ai" id="importPhotoBtn" style="display:none" onclick="importWordsFromPhoto()">✨ Распознать и добавить слова</button>
+          <div id="importPhotoResult"></div>
+        </div>
+        <div class="card">
+          <div style="font-size:15px;font-weight:800;margin-bottom:6px;">📤 Экспорт слов</div>
+          <div style="font-size:13px;color:var(--muted);margin-bottom:4px;">Скачай все слова в файл</div>
+          <div class="two-col" style="margin-top:8px;">
+            <button class="btn-s" onclick="exportCSV()">💾 Скачать CSV</button>
+            <button class="btn-s" onclick="exportJSON()">📋 Скачать JSON</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -375,7 +432,7 @@ button:active { transform: translateY(0); }
           </div>
         </div>
         <div class="chat-hint">Enter — отправить · Shift+Enter — новая строка · 📎 — фото · <a href="#" onclick="setupApiKey()" style="color:var(--accent);">🔑 Сменить ключ</a></div>
-        <input type="file" id="photoInput" accept="image/*" multiple onchange="handlePhotos(event)">
+        <input type="file" id="photoInput" accept="image/*,application/pdf" multiple onchange="handlePhotos(event)">
       </div>
     </div>
 
@@ -413,6 +470,15 @@ button:active { transform: translateY(0); }
 </div>
 
 <div id="toast"></div>
+
+<nav class="bottom-nav" id="bottomNav">
+  <button class="bottom-nav-btn active" onclick="showPanel('add')" id="bn-add"><span class="bn-icon">➕</span>Добавить</button>
+  <button class="bottom-nav-btn" onclick="showPanel('list')" id="bn-list"><span class="bn-icon">📋</span>Слова</button>
+  <button class="bottom-nav-btn" onclick="showPanel('test')" id="bn-test"><span class="bn-icon">✅</span>Тест</button>
+  <button class="bottom-nav-btn" onclick="showPanel('exam')" id="bn-exam"><span class="bn-icon">⏱️</span>Экзамен</button>
+  <button class="bottom-nav-btn" onclick="showPanel('chat')" id="bn-chat"><span class="bn-icon">📸</span>ИИ</button>
+  <button class="bottom-nav-btn" onclick="showPanel('stats')" id="bn-stats"><span class="bn-icon">📊</span>Стат</button>
+</nav>
 
 <script>
 // ── CONFIG ── замени на свой ключ с https://aistudio.google.com
@@ -475,6 +541,11 @@ function showPanel(name) {
   if (panel) panel.classList.add('active');
   const nb = document.getElementById('nb-' + name);
   if (nb) nb.classList.add('active');
+  // Update bottom nav
+  document.querySelectorAll('.bottom-nav-btn').forEach(function(b) { b.classList.remove('active'); });
+  var bn = document.getElementById('bn-' + name);
+  if (bn) bn.classList.add('active');
+
   if (name === 'list') renderList();
   if (name === 'test') startTest();
   if (name === 'cards') startCards();
@@ -804,13 +875,14 @@ function appendUserMessage(text, images) {
   const div = document.createElement('div');
   div.className = 'msg user';
   const imgHtml = images.map(function(img) {
+    if (img.isPDF) return '<div class="img-label">📄 ' + (img.name || 'PDF файл') + '</div>';
     return '<div class="img-label">📎 Фото</div><img class="msg-img" src="' + img.url + '">';
   }).join('');
   const safeText = String(text).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   div.innerHTML = imgHtml + '<div class="msg-bubble">' + safeText + '</div><div class="msg-time">' + getTime() + '</div>';
   container.appendChild(div);
   container.scrollTop = container.scrollHeight;
-  persistMessage('user', text, images.map(function(i) { return i.url; }));
+  persistMessage('user', text, images.map(function(i) { return i.isPDF ? '' : i.url; }));
 }
 
 function showTyping() {
@@ -915,7 +987,7 @@ async function sendMessage() {
       var r = await fetch('https://api.mistral.ai/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY },
-        body: JSON.stringify({ model: 'pixtral-12b-2409', messages: mistralMessages, max_tokens: 1000 })
+        body: JSON.stringify({ model: mistralModel, messages: mistralMessages, max_tokens: 1000 })
       });
       return r;
     }
@@ -1200,6 +1272,139 @@ function finishExam() {
       '<div style="font-size:13px;color:var(--muted);margin:12px 0;">' + examCorrect + ' из ' + total + ' · ' + timeStr + '</div>' +
       '<button onclick="showPanel(&quot;exam&quot;)">Попробовать снова</button>' +
     '</div>';
+}
+
+// ── EXPORT ──
+function exportCSV() {
+  if (words.length === 0) { showToast('⚠️ Нет слов для экспорта!'); return; }
+  var rows = ['слово,перевод,тема'];
+  words.forEach(function(w) { rows.push(w.word + ',' + w.translation + ',' + w.topic); });
+  var blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'worttrainer_слова.csv';
+  a.click();
+  showToast('✅ CSV скачан!');
+}
+
+function exportJSON() {
+  if (words.length === 0) { showToast('⚠️ Нет слов для экспорта!'); return; }
+  var blob = new Blob([JSON.stringify(words, null, 2)], { type: 'application/json' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'worttrainer_слова.json';
+  a.click();
+  showToast('✅ JSON скачан!');
+}
+
+// ── IMPORT FROM PHOTO ──
+var importPhotoBase64 = null, importPhotoMime = 'image/jpeg';
+
+function handleImportPhoto(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  importPhotoMime = file.type || 'image/jpeg';
+  var isPDF = file.type === 'application/pdf';
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    importPhotoBase64 = e.target.result.split(',')[1];
+    if (isPDF) {
+      var preview = document.getElementById('importPhotoPreview');
+      preview.style.display = 'none';
+      var info = document.getElementById('importFileInfo');
+      info.style.display = 'block';
+      info.innerHTML = '📄 <strong>' + file.name + '</strong> (' + Math.round(file.size/1024) + ' KB) — готов к распознаванию';
+    } else {
+      var preview = document.getElementById('importPhotoPreview');
+      preview.src = e.target.result; preview.style.display = 'block';
+      document.getElementById('importFileInfo').style.display = 'none';
+    }
+    document.getElementById('importPhotoBtn').style.display = 'block';
+    document.getElementById('importUploadZone').style.display = 'none';
+    document.getElementById('importPhotoResult').innerHTML = '';
+  };
+  reader.readAsDataURL(file);
+  event.target.value = '';
+}
+
+async function importWordsFromPhoto() {
+  if (!importPhotoBase64) return;
+  if (!MISTRAL_KEY) { showToast('⚠️ Для распознавания нужен Mistral ключ! Нажми 🔑 в чате.'); return; }
+  var btn = document.getElementById('importPhotoBtn');
+  btn.textContent = '⏳ Распознаю...'; btn.disabled = true;
+  var resultDiv = document.getElementById('importPhotoResult');
+  resultDiv.innerHTML = '<div style="color:var(--muted);font-size:13px;margin-top:8px;">⏳ ИИ читает файл, подожди...</div>';
+
+  var isPDF = importPhotoMime === 'application/pdf';
+  var prompt = 'В этом ' + (isPDF ? 'PDF' : 'изображении') + ' есть немецкие слова. Извлеки ВСЕ немецкие слова и их переводы на русский язык.\n\nОтвечай ТОЛЬКО в формате JSON без лишнего текста и без markdown:\n{"words":[{"word":"немецкое слово","translation":"перевод на русский","topic":"тема если видна, иначе Импорт"}]}\n\nПравила:\n- Извлеки все слова которые видишь\n- Если нет перевода в файле — переведи сам на русский\n- Если есть тема/раздел — укажи её';
+
+  try {
+    var contentArr;
+    if (isPDF) {
+      contentArr = [
+        { type: 'text', text: prompt },
+        { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: importPhotoBase64 } }
+      ];
+    } else {
+      contentArr = [
+        { type: 'image_url', image_url: { url: 'data:' + importPhotoMime + ';base64,' + importPhotoBase64 } },
+        { type: 'text', text: prompt }
+      ];
+    }
+
+    var response = await fetch('https://api.mistral.ai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY },
+      body: JSON.stringify({
+        model: isPDF ? 'mistral-small-latest' : 'pixtral-12b-2409',
+        messages: [{ role: 'user', content: contentArr }],
+        max_tokens: 2000
+      })
+    });
+
+    var rawText = await response.text();
+    var data; try { data = JSON.parse(rawText); } catch(e) { data = {}; }
+
+    if (response.status === 429) {
+      resultDiv.innerHTML = '<div style="color:orange;font-size:13px;margin-top:8px;">⏳ Лимит запросов. Подожди минуту и попробуй снова.</div>';
+      btn.textContent = '✨ Распознать и добавить слова'; btn.disabled = false; return;
+    }
+
+    var text = data.choices && data.choices[0] ? data.choices[0].message.content : '';
+    var clean = text.replace(/```json|```/g, '').trim();
+    // find JSON object in response
+    var jsonMatch = clean.match(/\{[\s\S]*\}/);
+    var parsed = null;
+    if (jsonMatch) { try { parsed = JSON.parse(jsonMatch[0]); } catch(e) { parsed = null; } }
+
+    if (parsed && parsed.words && parsed.words.length > 0) {
+      var added = 0;
+      parsed.words.forEach(function(w) {
+        if (w.word && w.translation) {
+          words.push({ id: Date.now() + Math.random(), word: w.word, translation: w.translation, topic: w.topic || 'Импорт', srs: 0, nextReview: Date.now() });
+          added++;
+        }
+      });
+      save();
+      var preview = parsed.words.slice(0,6).map(function(w) { return '<div style="padding:2px 0;">📌 <strong>' + w.word + '</strong> → ' + w.translation + '</div>'; }).join('');
+      resultDiv.innerHTML = '<div style="background:rgba(67,233,123,0.1);border:1px solid var(--success);border-radius:12px;padding:14px;margin-top:10px;font-size:13px;">' +
+        '<div style="color:var(--success);font-weight:700;margin-bottom:8px;">✅ Добавлено ' + added + ' слов!</div>' + preview +
+        (parsed.words.length > 6 ? '<div style="color:var(--muted);margin-top:4px;">...и ещё ' + (parsed.words.length-6) + ' слов</div>' : '') + '</div>';
+      showToast('✅ Добавлено ' + added + ' слов!');
+      importPhotoBase64 = null;
+      document.getElementById('importPhotoPreview').style.display = 'none';
+      document.getElementById('importFileInfo').style.display = 'none';
+      document.getElementById('importUploadZone').style.display = 'block';
+      document.getElementById('importPhotoBtn').style.display = 'none';
+    } else if (data.error) {
+      resultDiv.innerHTML = '<div style="color:var(--danger);font-size:13px;margin-top:8px;">⚠️ Ошибка API: ' + (data.error.message || JSON.stringify(data.error)) + '</div>';
+    } else {
+      resultDiv.innerHTML = '<div style="color:var(--danger);font-size:13px;margin-top:8px;">⚠️ Не удалось распознать слова. Попробуй другой файл или фото получше.<br><small style="color:var(--muted)">Ответ ИИ: ' + text.slice(0,100) + '</small></div>';
+    }
+  } catch(e) {
+    resultDiv.innerHTML = '<div style="color:var(--danger);font-size:13px;margin-top:8px;">⚠️ Ошибка: ' + e.message + '</div>';
+  }
+  btn.textContent = '✨ Распознать и добавить слова'; btn.disabled = false;
 }
 
 // ── INIT ──
