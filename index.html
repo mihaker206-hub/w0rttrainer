@@ -1039,6 +1039,7 @@ async function sendMessage() {
 
     // Check if message has images
     var hasImages = imgs.length > 0;
+    var hasPDF = imgs.some(function(i) { return i.isPDF; });
 
     // Build Mistral messages
     var mistralMessages = [{ role: 'system', content: systemPrompt }];
