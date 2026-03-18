@@ -1000,21 +1000,31 @@ function appendAIMessage(text) {
 
 async function sendMessage() {
   if (isAITyping) return;
-  const input = document.getElementById('chatInput');
-  const text = input.value.trim();
-  const imgs = pendingImages.slice();
+  var input = document.getElementById('chatInput');
+  var text = input.value.trim();
+  var imgs = pendingImages.slice();
   if (!text && imgs.length === 0) return;
   if (!currentChatId) newChat();
 
-  appendUserMessage(text || '(фото)', imgs);
-  input.value = ''; input.style.height = 'auto';
-  pendingImages = []; renderImgPreviews();
+  // Declare ALL variables first — Safari requires this
+  var hasImages = imgs.length > 0;
+  var hasPDF = imgs.some(function(i) { return i.isPDF; });
 
-  const userContent = [];
+  // Clear input immediately
+  input.value = '';
+  input.style.height = 'auto';
+  pendingImages = [];
+  renderImgPreviews();
+
+  appendUserMessage(text || (hasPDF ? '(PDF файл)' : '(фото)'), imgs);
+
+  // Build API content for history
+  var userContent = [];
   imgs.forEach(function(img) {
     userContent.push({ type: 'image', source: { type: 'base64', media_type: img.mime, data: img.base64 } });
   });
   if (text) userContent.push({ type: 'text', text: text });
+  if (userContent.length === 0) userContent.push({ type: 'text', text: '...' });
 
   chatHistory.push({ role: 'user', content: userContent });
   if (allChats[currentChatId]) allChats[currentChatId].history = chatHistory.slice();
@@ -1023,23 +1033,18 @@ async function sendMessage() {
   showTyping();
 
   try {
-    const systemPrompt = chatModePrompts[chatMode] || chatModePrompts.tutor;
-    var _unused = 'Ты ИИ-репетитор по немецкому языку. Всегда общаешься на русском языке.\n\nКогда пользователь присылает фото, определи что на нём:\n1. ФОТО С ВОПРОСАМИ И ОТВЕТАМИ — используй правильные ответы с фото, задавай вопросы по одному и жди ответа пользователя. После каждого ответа — проверяй и объясняй.\n2. ФОТО ТОЛЬКО С ВОПРОСАМИ — задавай эти вопросы по одному, оценивай ответы как репетитор.\n3. ФОТО ТЕКСТА ИЛИ УЧЕБНИКА — придумай 3-5 вопросов по содержимому, задавай по очереди.\n\nПри нескольких фото — обработай все и составь общий тест.\n\nПроверка ответов:\n- Правильный: кратко похвали, задай следующий вопрос\n- Неправильный: объясни ошибку, покажи правильный ответ\n- Будь дружелюбным и мотивирующим';
+    var systemPrompt = chatModePrompts[chatMode] || chatModePrompts.tutor;
 
     if (!MISTRAL_KEY && !GROQ_KEY) {
-      appendAIMessage('⚠️ Вставь API ключ! Нажми 🔑 внизу.\n\nMistral (с фото): console.mistral.ai\nGroq (без фото, быстрый): console.groq.com');
+      appendAIMessage('⚠️ Вставь API ключ! Нажми 🔑 внизу.\n\nMistral (с фото): console.mistral.ai\nGroq (только текст): console.groq.com');
       isAITyping = false;
       return;
     }
     if (!MISTRAL_KEY && hasImages) {
-      appendAIMessage('⚠️ Для фото нужен Mistral ключ. Нажми 🔑 и выбери Mistral.\nПолучить: console.mistral.ai');
+      appendAIMessage('⚠️ Для фото и PDF нужен Mistral ключ.\nНажми 🔑 → OK → вставь ключ от console.mistral.ai');
       isAITyping = false;
       return;
     }
-
-    // Check if message has images
-    var hasImages = imgs.length > 0;
-    var hasPDF = imgs.some(function(i) { return i.isPDF; });
 
     // Build Mistral messages
     var mistralMessages = [{ role: 'system', content: systemPrompt }];
@@ -1050,7 +1055,12 @@ async function sendMessage() {
       } else {
         var parts = msg.content.map(function(part) {
           if (part.type === 'text') return { type: 'text', text: part.text };
-          if (part.type === 'image') return { type: 'image_url', image_url: { url: 'data:' + part.source.media_type + ';base64,' + part.source.data } };
+          if (part.type === 'image') {
+            if (part.source.media_type === 'application/pdf') {
+              return { type: 'document_url', document_url: 'data:application/pdf;base64,' + part.source.data };
+            }
+            return { type: 'image_url', image_url: { url: 'data:' + part.source.media_type + ';base64,' + part.source.data } };
+          }
           return null;
         }).filter(Boolean);
         if (parts.length > 0) mistralMessages.push({ role: role, content: parts });
@@ -1061,62 +1071,50 @@ async function sendMessage() {
     var groqMessages = [{ role: 'system', content: systemPrompt }];
     chatHistory.forEach(function(msg) {
       var role = msg.role === 'assistant' ? 'assistant' : 'user';
-      var text = typeof msg.content === 'string' ? msg.content : msg.content.map(function(p) { return p.type === 'text' ? p.text : p.type === 'image' ? '[фото]' : ''; }).join(' ');
-      if (text.trim()) groqMessages.push({ role: role, content: text });
+      var t = typeof msg.content === 'string' ? msg.content : msg.content.map(function(p) {
+        return p.type === 'text' ? p.text : '[файл]';
+      }).join(' ');
+      if (t.trim()) groqMessages.push({ role: role, content: t });
     });
 
-    async function callMistral() {
-      var model = (hasPDF || !hasImages) ? 'mistral-small-latest' : 'pixtral-12b-2409';
-      var r = await fetch('https://api.mistral.ai/v1/chat/completions', {
+    var mistralModel = (hasPDF || !hasImages) ? 'mistral-small-latest' : 'pixtral-12b-2409';
+
+    function callMistral() {
+      return fetch('https://api.mistral.ai/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY },
-        body: JSON.stringify({ model: model, messages: mistralMessages, max_tokens: 1000 })
+        body: JSON.stringify({ model: mistralModel, messages: mistralMessages, max_tokens: 1000 })
       });
-      return r;
     }
 
-    async function callGroq() {
-      var r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    function callGroq() {
+      return fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY },
         body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: groqMessages, max_tokens: 1000 })
       });
-      return r;
     }
 
     var response, usedGroq = false;
-    if (!MISTRAL_KEY && GROQ_KEY && !hasImages) {
-      response = await callGroq(); usedGroq = true;
-    } else {
+    if (MISTRAL_KEY) {
       response = await callMistral();
+    } else {
+      response = await callGroq();
+      usedGroq = true;
     }
 
-    var rawText = await response.text();
-    var data;
-    try { data = JSON.parse(rawText); } catch(e) { data = {}; }
-    var aiText;
-
-    // Mistral rate limit — try Groq if available
-    if (response.status === 429 && GROQ_KEY) {
+    // Rate limit — fallback to Groq or wait
+    if (response.status === 429 && GROQ_KEY && !hasImages) {
       removeTyping();
       appendAIMessage('⚡ Mistral занят — переключаюсь на Groq...');
       showTyping();
-      try {
-        response = await callGroq(); usedGroq = true;
-        rawText = await response.text();
-        try { data = JSON.parse(rawText); } catch(e) { data = {}; }
-      } catch(groqErr) {
-        removeTyping();
-        appendAIMessage('⚠️ Groq ошибка: ' + groqErr.message + '\nПроверь ключ через 🔑');
-        isAITyping = false;
-        return;
-      }
+      try { response = await callGroq(); usedGroq = true; }
+      catch(e) { appendAIMessage('⚠️ Groq ошибка: ' + e.message); isAITyping = false; return; }
     } else if (response.status === 429) {
-      // No Groq key or has images — wait and retry Mistral
       removeTyping();
       var countEl = document.createElement('div');
       countEl.className = 'msg ai'; countEl.id = 'countdownMsg';
-      countEl.innerHTML = '<div class="msg-bubble">⏳ Лимит Mistral. Повторяю через <strong id="cdNum">60</strong> сек...<br><small style="color:var(--muted)">Совет: добавь Groq ключ чтобы не ждать!</small></div>';
+      countEl.innerHTML = '<div class="msg-bubble">⏳ Лимит. Повторяю через <strong id="cdNum">60</strong> сек...</div>';
       document.getElementById('chatMessages').appendChild(countEl);
       document.getElementById('chatMessages').scrollTop = 99999;
       var secs = 60;
@@ -1131,283 +1129,30 @@ async function sendMessage() {
       var cm = document.getElementById('countdownMsg'); if (cm) cm.remove();
       showTyping();
       response = await callMistral();
-      rawText = await response.text();
-      try { data = JSON.parse(rawText); } catch(e) { data = {}; }
     }
 
+    var rawText = await response.text();
+    var data;
+    try { data = JSON.parse(rawText); } catch(e) { data = {}; }
+
+    var aiText;
     if (data.choices && data.choices[0] && data.choices[0].message) {
       aiText = data.choices[0].message.content.trim();
-      if (usedGroq) aiText = '⚡ [Groq] ' + aiText;
+      if (usedGroq) aiText = '⚡ ' + aiText;
     } else if (data.error) {
       aiText = '⚠️ Ошибка: ' + (data.error.message || JSON.stringify(data.error));
-    } else if (data.message) {
-      aiText = '⚠️ ' + data.message;
     } else {
-      aiText = '⚠️ Ответ: ' + rawText.slice(0, 200);
+      aiText = '⚠️ Нет ответа: ' + rawText.slice(0, 150);
     }
+
     chatHistory.push({ role: 'assistant', content: aiText });
     if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
     if (allChats[currentChatId]) { allChats[currentChatId].history = chatHistory.slice(); saveChats(); }
     appendAIMessage(aiText);
   } catch(e) {
-    appendAIMessage('⚠️ Ошибка: ' + e.message + '\nПопробуй ещё раз или нажми 🔑 и проверь ключи.');
+    appendAIMessage('⚠️ Ошибка: ' + e.message);
   }
   isAITyping = false;
-}
-
-// ── API KEY SETUP ──
-function setupApiKey() {
-  var choice = confirm('Нажми OK чтобы вставить Mistral ключ\nНажми Отмена чтобы вставить Groq ключ');
-  if (choice) {
-    var key = prompt('Mistral API ключ:\n\nПолучить бесплатно: console.mistral.ai → API Keys');
-    if (key && key.trim()) {
-      MISTRAL_KEY = key.trim();
-      localStorage.setItem('mistral_key', MISTRAL_KEY);
-      showToast('✅ Mistral ключ сохранён!');
-      if (currentChatId) loadChat(currentChatId);
-    }
-  } else {
-    var key2 = prompt('Groq API ключ:\n\nПолучить бесплатно: console.groq.com → API Keys');
-    if (key2 && key2.trim()) {
-      GROQ_KEY = key2.trim();
-      localStorage.setItem('groq_key', GROQ_KEY);
-      showToast('✅ Groq ключ сохранён!');
-    }
-  }
-}
-
-// ── CHAT MODES ──
-var chatMode = 'tutor';
-var chatModePrompts = {
-  tutor: 'Ты ИИ-репетитор по немецкому языку. Всегда общаешься на русском языке.\n\nКогда пользователь присылает фото, определи что на нём:\n1. ФОТО С ВОПРОСАМИ И ОТВЕТАМИ — задавай вопросы по одному и проверяй ответы\n2. ФОТО ТОЛЬКО С ВОПРОСАМИ — задавай эти вопросы по одному\n3. ФОТО ТЕКСТА — придумай 3-5 вопросов\n\nПроверка: правильный — похвали и следующий вопрос; неправильный — объясни ошибку.',
-  grammar: 'Ты эксперт по немецкой грамматике. Общаешься на русском. Объясняй правила немецкой грамматики понятно и с примерами. Используй таблицы когда нужно. Всегда давай примеры предложений.',
-  conversation: 'Ты собеседник для практики немецкого языка. Веди разговор НА НЕМЕЦКОМ языке, но если пользователь не понимает — объясняй на русском. Исправляй ошибки мягко. Темы: повседневная жизнь, путешествия, работа.'
-};
-
-function setChatMode(mode) {
-  chatMode = mode;
-  document.querySelectorAll('.mode-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('mode-' + mode).classList.add('active');
-  var hints = { tutor: '🎓 Режим репетитора — отправляй фото или задавай вопросы', grammar: '📖 Режим грамматики — спроси про артикли, падежи, времена...', conversation: '💬 Режим разговора — пиши на немецком, я отвечу и исправлю ошибки' };
-  showToast(hints[mode]);
-}
-
-// ── SOUND (Web Speech API) ──
-function speakWord(word) {
-  if (!('speechSynthesis' in window)) { showToast('⚠️ Браузер не поддерживает озвучку'); return; }
-  window.speechSynthesis.cancel();
-  var u = new SpeechSynthesisUtterance(word);
-  u.lang = 'de-DE'; u.rate = 0.85;
-  window.speechSynthesis.speak(u);
-}
-
-// ── ACTIVITY TRACKING ──
-function trackActivity(correct, wrong) {
-  var today = new Date().toISOString().slice(0,10);
-  var activity = JSON.parse(localStorage.getItem('activity_v1') || '{}');
-  if (!activity[today]) activity[today] = { correct: 0, wrong: 0, total: 0 };
-  activity[today].correct += correct;
-  activity[today].wrong += wrong;
-  activity[today].total += correct + wrong;
-  localStorage.setItem('activity_v1', JSON.stringify(activity));
-}
-
-// ── STATISTICS ──
-function renderStats() {
-  var activity = JSON.parse(localStorage.getItem('activity_v1') || '{}');
-  var totalAnswers = 0, totalCorrect = 0;
-  Object.values(activity).forEach(function(d) { totalAnswers += d.total; totalCorrect += d.correct; });
-  var accuracy = totalAnswers > 0 ? Math.round((totalCorrect/totalAnswers)*100) : 0;
-  var srsLevels = [0,0,0,0,0];
-  words.forEach(function(w) { srsLevels[Math.min(w.srs||0,4)]++; });
-
-  // Big stats
-  document.getElementById('bigStats').innerHTML =
-    '<div class="big-stat"><div class="big-stat-num">' + words.length + '</div><div class="big-stat-lbl">Всего слов</div></div>' +
-    '<div class="big-stat"><div class="big-stat-num">' + accuracy + '%</div><div class="big-stat-lbl">Точность</div></div>' +
-    '<div class="big-stat"><div class="big-stat-num">' + totalAnswers + '</div><div class="big-stat-lbl">Ответов</div></div>';
-
-  // Activity chart - last 7 days
-  var chart = document.getElementById('activityChart');
-  chart.innerHTML = '';
-  var days = [];
-  for (var i = 6; i >= 0; i--) {
-    var d = new Date(); d.setDate(d.getDate()-i);
-    days.push(d.toISOString().slice(0,10));
-  }
-  var maxVal = Math.max(1, Math.max.apply(null, days.map(function(d) { return activity[d] ? activity[d].total : 0; })));
-  days.forEach(function(day) {
-    var val = activity[day] ? activity[day].total : 0;
-    var pct = Math.round((val/maxVal)*100);
-    var label = day.slice(5).replace('-', '/');
-    var wrap = document.createElement('div'); wrap.className = 'bar-wrap';
-    wrap.innerHTML = '<div class="bar" style="height:' + Math.max(pct,2) + '%"></div><div class="bar-label">' + label + '</div>';
-    chart.appendChild(wrap);
-  });
-
-  // SRS chart
-  var srsChart = document.getElementById('srsChart');
-  srsChart.innerHTML = '';
-  var srsLabels = ['Новое','Знаю','Хорошо','Отлично','Мастер'];
-  var srsColors = ['var(--danger)','orange','#f0c040','var(--success)','var(--accent)'];
-  var maxSrs = Math.max(1, Math.max.apply(null, srsLevels));
-  srsLevels.forEach(function(val, i) {
-    var pct = Math.round((val/maxSrs)*100);
-    var wrap = document.createElement('div'); wrap.className = 'bar-wrap';
-    wrap.innerHTML = '<div class="bar" style="height:' + Math.max(pct,2) + '%;background:' + srsColors[i] + '"></div><div class="bar-label">' + srsLabels[i] + '</div>';
-    srsChart.appendChild(wrap);
-  });
-}
-
-// ── EXAM MODE ──
-var examQueue = [], examIndex = 0, examCorrect = 0, examWrong = 0;
-var examTimer = null, examSeconds = 0, examStartTime = 0;
-
-function startExam() {
-  var topic = document.getElementById('examTopicSelect').value;
-  var pool = topic ? words.filter(function(w) { return w.topic === topic; }) : words.slice();
-  if (pool.length === 0) { showToast('⚠️ Нет слов для экзамена!'); return; }
-  examQueue = pool.sort(function() { return Math.random()-0.5; });
-  examIndex = 0; examCorrect = 0; examWrong = 0;
-  examStartTime = Date.now(); examSeconds = 0;
-  renderExamQuestion();
-  examTimer = setInterval(function() {
-    examSeconds++;
-    var el = document.getElementById('examTimerDisplay');
-    if (el) {
-      var mins = Math.floor(examSeconds/60);
-      var secs = examSeconds % 60;
-      el.textContent = (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
-      el.parentElement.className = 'exam-timer ' + (examSeconds < 60 ? 'ok' : examSeconds < 120 ? 'warn' : 'danger');
-    }
-  }, 1000);
-}
-
-function renderExamQuestion() {
-  if (examIndex >= examQueue.length) { finishExam(); return; }
-  var w = examQueue[examIndex];
-  var content = document.getElementById('examContent');
-  content.innerHTML =
-    '<div class="exam-timer ok" id="examTimerWrap"><span id="examTimerDisplay">00:00</span></div>' +
-    '<div class="progress-bar-wrap"><div class="progress-bar" id="examBar" style="width:' + Math.round((examIndex/examQueue.length)*100) + '%"></div></div>' +
-    '<div class="card" id="examCard"></div>' +
-    '<div class="stats-row">' +
-      '<div class="stat-box stat-ok"><div class="stat-num">' + examCorrect + '</div><div class="stat-label">Правильно</div></div>' +
-      '<div class="stat-box stat-fail"><div class="stat-num">' + examWrong + '</div><div class="stat-label">Ошибки</div></div>' +
-    '</div>';
-  var card = document.getElementById('examCard');
-  var counter = document.createElement('div');
-  counter.style.cssText = 'text-align:center;font-size:11px;color:var(--muted);margin-bottom:6px;';
-  counter.textContent = (examIndex+1) + ' / ' + examQueue.length;
-  var wordEl = document.createElement('div');
-  wordEl.className = 'test-word-big';
-  wordEl.textContent = w.word;
-  var soundBtn = document.createElement('button');
-  soundBtn.className = 'sound-btn';
-  soundBtn.textContent = '🔊';
-  soundBtn.style.cssText = 'display:block;margin:0 auto 10px;';
-  soundBtn.onclick = function() { speakWord(w.word); };
-  var inp = document.createElement('input');
-  inp.id = 'examInput';
-  inp.placeholder = 'Введи перевод...';
-  inp.onkeydown = function(e) { if (e.key === 'Enter') checkExam(); };
-  var btn = document.createElement('button');
-  btn.textContent = 'Ответить';
-  btn.onclick = checkExam;
-  var fb = document.createElement('div');
-  fb.className = 'feedback-box'; fb.id = 'examFeedback';
-  card.appendChild(counter); card.appendChild(wordEl); card.appendChild(soundBtn);
-  card.appendChild(inp); card.appendChild(btn); card.appendChild(fb);
-  setTimeout(function() { inp.focus(); }, 100);
-}
-
-function checkExam() {
-  var inp = document.getElementById('examInput');
-  if (!inp) return;
-  var user = inp.value.trim().toLowerCase();
-  var w = examQueue[examIndex];
-  var ca = w.translation.toLowerCase();
-  var fb = document.getElementById('examFeedback');
-  if (user === ca) {
-    examCorrect++;
-    fb.innerHTML = '✓ Правильно!'; fb.className = 'feedback-box feedback-ok';
-  } else {
-    examWrong++;
-    fb.innerHTML = '✗ ' + ca; fb.className = 'feedback-box feedback-fail';
-  }
-  examIndex++;
-  setTimeout(renderExamQuestion, 1000);
-}
-
-function finishExam() {
-  clearInterval(examTimer);
-  var total = examQueue.length;
-  var pct = Math.round((examCorrect/total)*100);
-  var mins = Math.floor(examSeconds/60);
-  var secs = examSeconds % 60;
-  var timeStr = (mins > 0 ? mins + ' мин ' : '') + secs + ' сек';
-  var grade = pct >= 90 ? 'Отлично! 🏆' : pct >= 70 ? 'Хорошо! 👍' : pct >= 50 ? 'Неплохо 💪' : 'Нужно повторить 📚';
-  trackActivity(examCorrect, examWrong);
-  document.getElementById('examContent').innerHTML =
-    '<div class="card exam-result">' +
-      '<div class="score">' + pct + '%</div>' +
-      '<div class="grade">' + grade + '</div>' +
-      '<div style="font-size:13px;color:var(--muted);margin:12px 0;">' + examCorrect + ' из ' + total + ' · ' + timeStr + '</div>' +
-      '<button onclick="showPanel(&quot;exam&quot;)">Попробовать снова</button>' +
-    '</div>';
-}
-
-// ── EXPORT ──
-function exportCSV() {
-  if (words.length === 0) { showToast('⚠️ Нет слов для экспорта!'); return; }
-  var rows = ['слово,перевод,тема'];
-  words.forEach(function(w) { rows.push(w.word + ',' + w.translation + ',' + w.topic); });
-  var blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
-  var a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'worttrainer_слова.csv';
-  a.click();
-  showToast('✅ CSV скачан!');
-}
-
-function exportJSON() {
-  if (words.length === 0) { showToast('⚠️ Нет слов для экспорта!'); return; }
-  var blob = new Blob([JSON.stringify(words, null, 2)], { type: 'application/json' });
-  var a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'worttrainer_слова.json';
-  a.click();
-  showToast('✅ JSON скачан!');
-}
-
-// ── IMPORT FROM PHOTO ──
-var importPhotoBase64 = null, importPhotoMime = 'image/jpeg';
-
-function handleImportPhoto(event) {
-  var file = event.target.files[0];
-  if (!file) return;
-  importPhotoMime = file.type || 'image/jpeg';
-  var isPDF = file.type === 'application/pdf';
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    importPhotoBase64 = e.target.result.split(',')[1];
-    if (isPDF) {
-      var preview = document.getElementById('importPhotoPreview');
-      preview.style.display = 'none';
-      var info = document.getElementById('importFileInfo');
-      info.style.display = 'block';
-      info.innerHTML = '📄 <strong>' + file.name + '</strong> (' + Math.round(file.size/1024) + ' KB) — готов к распознаванию';
-    } else {
-      var preview = document.getElementById('importPhotoPreview');
-      preview.src = e.target.result; preview.style.display = 'block';
-      document.getElementById('importFileInfo').style.display = 'none';
-    }
-    document.getElementById('importPhotoBtn').style.display = 'block';
-    document.getElementById('importUploadZone').style.display = 'none';
-    document.getElementById('importPhotoResult').innerHTML = '';
-  };
-  reader.readAsDataURL(file);
-  event.target.value = '';
 }
 
 async function importWordsFromPhoto() {
