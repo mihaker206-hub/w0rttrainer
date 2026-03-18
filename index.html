@@ -1065,13 +1065,12 @@ async function sendMessage() {
       if (text.trim()) groqMessages.push({ role: role, content: text });
     });
 
-    var mistralModel = (hasPDF || !hasImages) ? 'mistral-small-latest' : 'pixtral-12b-2409';
-
     async function callMistral() {
+      var model = (hasPDF || !hasImages) ? 'mistral-small-latest' : 'pixtral-12b-2409';
       var r = await fetch('https://api.mistral.ai/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY },
-        body: JSON.stringify({ model: mistralModel, messages: mistralMessages, max_tokens: 1000 })
+        body: JSON.stringify({ model: model, messages: mistralMessages, max_tokens: 1000 })
       });
       return r;
     }
