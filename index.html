@@ -2,10 +2,14 @@
 <html lang="ru" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>WortTrainer Pro</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1a0a10">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+
 
 
 
@@ -28,16 +32,16 @@
   --user-bubble: #1a1a1a; --ai-bubble: #0d0d0d;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Syne', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; transition: background 0.3s, color 0.3s; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; transition: background 0.3s, color 0.3s; }
 [data-theme="dark"] body { background-image: radial-gradient(ellipse at 20% 20%, rgba(108,99,255,0.07) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(255,101,132,0.05) 0%, transparent 50%); }
 
 /* HEADER */
 header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px var(--shadow); }
-.logo { font-family: 'Space Mono', monospace; font-size: 16px; font-weight: 700; }
+.logo { font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; }
 .logo span { color: var(--accent); }
 .header-right { display: flex; align-items: center; gap: 8px; }
 #nicknameDisplay { background: var(--card); border: 1px solid var(--border); padding: 4px 12px; border-radius: 20px; color: var(--text); font-size: 12px; }
-.btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 5px 10px; border-radius: 20px; cursor: pointer; font-size: 11px; font-family: 'Syne', sans-serif; transition: all 0.2s; width: auto; }
+.btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 5px 10px; border-radius: 20px; cursor: pointer; font-size: 11px; font-family: 'Inter', sans-serif; transition: all 0.2s; width: auto; }
 .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
 .theme-btn { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 5px 9px; cursor: pointer; font-size: 15px; width: auto; transition: border-color 0.2s; }
 .theme-btn:hover { border-color: var(--accent); transform: none; }
@@ -50,11 +54,11 @@ header { display: flex; align-items: center; justify-content: space-between; pad
 .sidebar { background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
 .sidebar-section { padding: 14px; border-bottom: 1px solid var(--border); }
 .sidebar-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); margin-bottom: 10px; }
-.nav-btn { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.2s; color: var(--muted); border: none; background: transparent; width: 100%; text-align: left; font-family: 'Syne', sans-serif; margin-bottom: 2px; }
+.nav-btn { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.2s; color: var(--muted); border: none; background: transparent; width: 100%; text-align: left; font-family: 'Inter', sans-serif; margin-bottom: 2px; }
 .nav-btn:hover { background: var(--card); color: var(--text); transform: none; opacity: 1; }
 .nav-btn.active { background: rgba(108,99,255,0.12); color: var(--accent); }
 .nav-btn .icon { font-size: 16px; width: 20px; text-align: center; }
-.word-count { font-family: 'Space Mono', monospace; font-size: 10px; background: var(--card); border: 1px solid var(--border); padding: 2px 7px; border-radius: 10px; color: var(--muted); margin-left: auto; }
+.word-count { font-family: 'JetBrains Mono', monospace; font-size: 10px; background: var(--card); border: 1px solid var(--border); padding: 2px 7px; border-radius: 10px; color: var(--muted); margin-left: auto; }
 
 /* MAIN CONTENT */
 .main { display: flex; flex-direction: column; overflow: hidden; }
@@ -71,10 +75,10 @@ header { display: flex; align-items: center; justify-content: space-between; pad
 .card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 20px; margin-bottom: 12px; box-shadow: 0 4px 20px var(--shadow); transition: background 0.3s; }
 
 /* INPUTS */
-input, select, textarea { width: 100%; padding: 11px 14px; margin-top: 8px; border-radius: 11px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 14px; font-family: 'Syne', sans-serif; outline: none; transition: border-color 0.2s; }
+input, select, textarea { width: 100%; padding: 11px 14px; margin-top: 8px; border-radius: 11px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 14px; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s; }
 input:focus, select:focus, textarea:focus { border-color: var(--accent); }
 input::placeholder, textarea::placeholder { color: var(--muted); }
-button { width: 100%; padding: 11px 18px; margin-top: 8px; border-radius: 11px; border: none; background: var(--accent); color: white; font-size: 14px; font-weight: 600; font-family: 'Syne', sans-serif; cursor: pointer; transition: all 0.2s; }
+button { width: 100%; padding: 11px 18px; margin-top: 8px; border-radius: 11px; border: none; background: var(--accent); color: white; font-size: 14px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; transition: all 0.2s; }
 button:hover { opacity: 0.88; transform: translateY(-1px); }
 button:active { transform: translateY(0); }
 .btn-s { background: var(--surface); border: 1px solid var(--border); color: var(--text); }
@@ -91,7 +95,7 @@ button:active { transform: translateY(0); }
 .word-de { font-weight: 700; font-size: 14px; flex: 1; }
 .word-ru { color: var(--muted); font-size: 12px; flex: 1; }
 .word-topic { font-size: 10px; background: rgba(108,99,255,0.12); color: var(--accent); padding: 2px 8px; border-radius: 20px; font-weight: 600; white-space: nowrap; }
-.srs-badge { font-size: 9px; padding: 2px 7px; border-radius: 20px; font-weight: 700; font-family: 'Space Mono', monospace; white-space: nowrap; }
+.srs-badge { font-size: 9px; padding: 2px 7px; border-radius: 20px; font-weight: 700; font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
 .srs-0 { background: rgba(255,71,87,0.15); color: var(--danger); }
 .srs-1 { background: rgba(255,165,0,0.15); color: orange; }
 .srs-2 { background: rgba(255,220,0,0.15); color: #d4a800; }
@@ -104,13 +108,13 @@ button:active { transform: translateY(0); }
 .progress-bar-wrap { background: var(--surface); border-radius: 10px; height: 3px; margin-bottom: 16px; overflow: hidden; border: 1px solid var(--border); }
 .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 10px; transition: width 0.4s; }
 .test-word-big { font-size: 34px; font-weight: 800; text-align: center; padding: 24px 10px 14px; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.test-counter { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); text-align: center; margin-bottom: 10px; }
+.test-counter { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); text-align: center; margin-bottom: 10px; }
 .feedback-box { text-align: center; padding: 10px; border-radius: 10px; font-size: 14px; font-weight: 600; margin-top: 8px; min-height: 40px; display: flex; align-items: center; justify-content: center; }
 .feedback-ok { background: rgba(67,233,123,0.12); color: var(--success); }
 .feedback-fail { background: rgba(255,71,87,0.12); color: var(--danger); }
 .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
 .stat-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center; }
-.stat-num { font-family: 'Space Mono', monospace; font-size: 24px; font-weight: 700; }
+.stat-num { font-family: 'JetBrains Mono', monospace; font-size: 24px; font-weight: 700; }
 .stat-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
 .stat-ok .stat-num { color: var(--success); }
 .stat-fail .stat-num { color: var(--danger); }
@@ -119,8 +123,8 @@ button:active { transform: translateY(0); }
 .flashcard { background: linear-gradient(135deg, var(--card), var(--surface)); border: 1px solid var(--border); border-radius: 20px; padding: 44px 28px; text-align: center; cursor: pointer; transition: transform 0.2s; margin-bottom: 12px; }
 .flashcard:hover { transform: translateY(-2px); }
 .flashcard-word { font-size: 34px; font-weight: 800; }
-.flashcard-hint { font-size: 11px; color: var(--muted); margin-top: 12px; font-family: 'Space Mono', monospace; }
-.flashcard-progress { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); text-align: center; margin-bottom: 10px; }
+.flashcard-hint { font-size: 11px; color: var(--muted); margin-top: 12px; font-family: 'JetBrains Mono', monospace; }
+.flashcard-progress { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); text-align: center; margin-bottom: 10px; }
 
 /* ========== AI CHAT ========== */
 .chat-panel { display: none; flex-direction: column; height: 100%; }
@@ -136,12 +140,12 @@ button:active { transform: translateY(0); }
 
 .msg-bubble { padding: 12px 16px; border-radius: 18px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
 .msg.user .msg-bubble { background: var(--accent); color: white; border-bottom-right-radius: 4px; }
-.msg.ai .msg-bubble { background: var(--ai-bubble); border: 1px solid var(--border); color: var(--text); border-bottom-left-radius: 4px; font-family: 'Syne', sans-serif; font-size: 14px; line-height: 1.7; font-weight: 500; letter-spacing: 0.1px; }
-.msg-time { font-size: 10px; color: var(--muted); margin-top: 4px; font-family: 'Space Mono', monospace; padding: 0 4px; }
+.msg.ai .msg-bubble { background: var(--ai-bubble); border: 1px solid var(--border); color: var(--text); border-bottom-left-radius: 4px; font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.7; font-weight: 500; letter-spacing: 0.1px; }
+.msg-time { font-size: 10px; color: var(--muted); margin-top: 4px; font-family: 'JetBrains Mono', monospace; padding: 0 4px; }
 
 /* image in chat */
 .msg-img { max-width: 100%; border-radius: 12px; margin-bottom: 6px; max-height: 200px; object-fit: cover; border: 1px solid var(--border); }
-.img-label { font-size: 10px; color: var(--muted); margin-bottom: 4px; font-family: 'Space Mono', monospace; }
+.img-label { font-size: 10px; color: var(--muted); margin-bottom: 4px; font-family: 'JetBrains Mono', monospace; }
 
 /* AI typing */
 .typing-dots { display: flex; gap: 5px; align-items: center; padding: 14px 16px; background: var(--ai-bubble); border: 1px solid var(--border); border-radius: 18px; border-bottom-left-radius: 4px; width: fit-content; }
@@ -161,7 +165,7 @@ button:active { transform: translateY(0); }
 .img-remove:hover { opacity: 0.8; transform: none; }
 
 .chat-input-row { display: flex; gap: 8px; align-items: flex-end; }
-.chat-textarea { flex: 1; resize: none; padding: 10px 14px; border-radius: 14px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 14px; font-family: 'Syne', sans-serif; outline: none; transition: border-color 0.2s; max-height: 120px; overflow-y: auto; margin: 0; }
+.chat-textarea { flex: 1; resize: none; padding: 10px 14px; border-radius: 14px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 14px; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s; max-height: 120px; overflow-y: auto; margin: 0; }
 .chat-textarea:focus { border-color: var(--accent); }
 .chat-actions { display: flex; flex-direction: column; gap: 6px; }
 .icon-btn { background: var(--card); border: 1px solid var(--border); border-radius: 12px; width: 40px; height: 40px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; padding: 0; margin: 0; color: var(--muted); flex-shrink: 0; }
@@ -173,7 +177,7 @@ button:active { transform: translateY(0); }
 #photoInput { display: none; }
 
 /* CSV */
-.csv-hint { font-size: 11px; color: var(--muted); margin-top: 6px; font-family: 'Space Mono', monospace; background: var(--surface); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); line-height: 1.6; }
+.csv-hint { font-size: 11px; color: var(--muted); margin-top: 6px; font-family: 'JetBrains Mono', monospace; background: var(--surface); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); line-height: 1.6; }
 
 /* TOAST */
 #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 10px 22px; border-radius: 30px; font-size: 13px; font-weight: 600; z-index: 9999; transition: transform 0.3s; pointer-events: none; box-shadow: 0 8px 30px var(--shadow); }
@@ -218,7 +222,7 @@ button:active { transform: translateY(0); }
   flex: 1; display: flex; flex-direction: column; align-items: center;
   justify-content: center; gap: 2px; background: none; border: none;
   color: var(--muted); font-size: 10px; font-weight: 600;
-  font-family: 'Syne', sans-serif; cursor: pointer;
+  font-family: 'Inter', sans-serif; cursor: pointer;
   transition: color 0.2s; padding: 0; margin: 0; width: auto;
 }
 .bottom-nav-btn .bn-icon { font-size: 20px; line-height: 1; }
@@ -240,8 +244,167 @@ button:active { transform: translateY(0); }
 .sentence-loading { text-align: center; padding: 20px; color: var(--muted); font-size: 13px; }
 .sentence-spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 8px; vertical-align: middle; }
 
+/* READING PANEL */
+.reading-topic-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin-bottom: 16px; }
+@media(max-width:500px) { .reading-topic-grid { grid-template-columns: 1fr; } }
+.topic-card {
+  background: var(--card); border: 2px solid var(--border); border-radius: 16px;
+  padding: 16px 14px; cursor: pointer; transition: all 0.2s; text-align: center;
+}
+.topic-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.topic-card .tc-emoji { font-size: 28px; margin-bottom: 6px; }
+.topic-card .tc-name { font-size: 13px; font-weight: 700; color: var(--text); }
+.reading-text-box {
+  background: var(--card); border: 1px solid var(--border); border-radius: 18px;
+  padding: 22px; line-height: 2; font-size: 15px; margin-bottom: 14px;
+}
+.word-de-inline {
+  color: var(--accent); font-weight: 700; cursor: pointer;
+  border-bottom: 2px dotted var(--accent); transition: background 0.15s;
+  padding: 0 2px; border-radius: 3px;
+}
+.word-de-inline:hover { background: rgba(108,99,255,0.12); }
+.word-tooltip {
+  position: fixed; background: var(--card); border: 1px solid var(--accent);
+  border-radius: 10px; padding: 6px 12px; font-size: 13px; color: var(--text);
+  z-index: 9999; pointer-events: none; box-shadow: 0 4px 20px var(--shadow);
+  max-width: 200px;
+}
+.reading-loading { text-align:center; padding:40px; color:var(--muted); font-size:14px; }
+
+/* CONFETTI */
+.confetti-container { position:fixed; inset:0; pointer-events:none; z-index:9998; overflow:hidden; }
+.confetti-piece { position:absolute; width:10px; height:10px; top:-10px; border-radius:2px; animation: confettiFall linear forwards; }
+@keyframes confettiFall {
+  0% { transform: translateY(0) rotate(0deg); opacity:1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity:0; }
+}
+
+/* ── MOBILE PHONES (≤480px) ── */
+@media (max-width: 480px) {
+  /* Layout */
+  .app { height: calc(100vh - 53px - 56px); }
+  .panel, .chat-panel { height: calc(100vh - 53px - 56px); }
+  .panel-scroll { padding: 12px; }
+
+  /* Header */
+  header { padding: 10px 14px; }
+  .logo { font-size: 15px; }
+  #nicknameDisplay { display: none; }
+  .btn-ghost { display: none; }
+  .theme-btn { padding: 5px 8px; font-size: 14px; }
+
+  /* Bottom nav - bigger tap targets */
+  .bottom-nav { height: 60px; }
+  .bottom-nav-btn { font-size: 10px; }
+  .bottom-nav-btn .bn-icon { font-size: 22px; }
+
+  /* Cards and inputs */
+  .card { padding: 16px; border-radius: 16px; }
+  input, select, textarea { font-size: 16px !important; } /* prevents iOS zoom */
+  button { padding: 14px; font-size: 15px; }
+
+  /* Test word */
+  .test-word-big { font-size: 28px; }
+
+  /* Flashcard */
+  .flashcard { padding: 36px 20px; }
+  .flashcard-word { font-size: 28px; }
+
+  /* Chat */
+  .chat-mode-row { padding: 8px 10px; gap: 4px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .mode-btn { font-size: 11px; padding: 6px 10px; white-space: nowrap; flex-shrink: 0; width: auto; margin: 0; }
+  .msg-bubble { font-size: 14px; padding: 10px 13px; line-height: 1.6; }
+  .chat-input-area { padding: 10px 12px; padding-bottom: max(10px, env(safe-area-inset-bottom)); }
+  .chat-textarea { font-size: 16px !important; border-radius: 12px; }
+  .icon-btn { width: 44px; height: 44px; font-size: 20px; }
+  .img-preview-item { width: 46px; height: 46px; }
+  .chat-hint { font-size: 10px; }
+
+  /* Word list */
+  .word-item { flex-wrap: wrap; gap: 6px; }
+  .word-ru { font-size: 12px; }
+  .word-topic { font-size: 10px; }
+
+  /* Sidebar hidden on mobile */
+  .sidebar { display: none; }
+
+  /* Stats */
+  .big-stats { grid-template-columns: repeat(3,1fr); gap: 8px; }
+  .big-stat-num { font-size: 18px; }
+
+  /* Reading */
+  .reading-topic-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .topic-card { padding: 12px 8px; }
+  .tc-emoji { font-size: 24px; }
+  .tc-name { font-size: 12px; }
+  .reading-text-box { font-size: 14px; line-height: 1.9; padding: 16px; }
+
+  /* Level badge */
+  .level-badge { font-size: 11px; padding: 3px 8px; }
+
+  /* Onboarding */
+  .onboarding-box { padding: 28px 20px; }
+  .level-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .level-card { padding: 12px 8px; }
+  .lc-emoji { font-size: 24px; }
+  .lc-name { font-size: 12px; }
+}
+
+/* ── SAFE AREA (iPhone notch/home bar) ── */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .bottom-nav { padding-bottom: env(safe-area-inset-bottom); height: calc(56px + env(safe-area-inset-bottom)); }
+  .app { height: calc(100vh - 53px - 56px - env(safe-area-inset-bottom)); }
+  header { padding-top: max(14px, env(safe-area-inset-top)); }
+}
+
+/* ── TABLET (481px - 700px) ── */
+@media (min-width: 481px) and (max-width: 700px) {
+  .sidebar { display: none; }
+  .bottom-nav { display: flex; }
+  .app { height: calc(100vh - 53px - 56px); }
+  .chat-mode-row { overflow-x: auto; }
+  .mode-btn { white-space: nowrap; flex-shrink: 0; width: auto; margin: 0; }
+  input, select, textarea { font-size: 16px !important; }
+  .chat-textarea { font-size: 16px !important; }
+}
+
+/* ONBOARDING */
+.onboarding-overlay {
+  position: fixed; inset: 0; background: var(--bg); z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.onboarding-box {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 28px; padding: 40px 32px; max-width: 460px;
+  width: 100%; text-align: center;
+  box-shadow: 0 20px 60px var(--shadow);
+  animation: fadeInUp 0.4s ease;
+}
+@keyframes fadeInUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+.onboarding-emoji { font-size: 52px; margin-bottom: 16px; }
+.onboarding-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+.onboarding-sub { font-size: 14px; color: var(--muted); margin-bottom: 28px; line-height: 1.6; }
+.level-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+.level-card {
+  background: var(--surface); border: 2px solid var(--border);
+  border-radius: 16px; padding: 16px 12px; cursor: pointer;
+  transition: all 0.2s; text-align: center;
+}
+.level-card:hover { border-color: var(--accent); background: rgba(108,99,255,0.06); transform: translateY(-2px); }
+.level-card.selected { border-color: var(--accent); background: rgba(108,99,255,0.12); }
+.level-card .lc-emoji { font-size: 28px; margin-bottom: 6px; }
+.level-card .lc-name { font-size: 14px; font-weight: 700; color: var(--text); }
+.level-card .lc-desc { font-size: 11px; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+.onboarding-btn { width: 100%; padding: 14px; border-radius: 14px; background: var(--accent); color: white; font-size: 16px; font-weight: 700; border: none; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; opacity: 0.4; pointer-events: none; }
+.onboarding-btn.ready { opacity: 1; pointer-events: all; }
+.onboarding-btn.ready:hover { opacity: 0.88; transform: translateY(-1px); }
+.level-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(108,99,255,0.12); color: var(--accent); border: 1px solid rgba(108,99,255,0.25); border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 600; cursor: pointer; margin-left: 8px; }
+.level-badge:hover { background: rgba(108,99,255,0.2); }
+
 /* EXAM MODE */
-.exam-timer { font-family: 'Space Mono', monospace; font-size: 32px; font-weight: 700; text-align: center; padding: 10px; border-radius: 14px; margin-bottom: 10px; }
+.exam-timer { font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 700; text-align: center; padding: 10px; border-radius: 14px; margin-bottom: 10px; }
 .exam-timer.ok { color: var(--success); background: rgba(67,233,123,0.08); border: 1px solid rgba(67,233,123,0.2); }
 .exam-timer.warn { color: orange; background: rgba(255,165,0,0.08); border: 1px solid rgba(255,165,0,0.2); }
 .exam-timer.danger { color: var(--danger); background: rgba(255,71,87,0.08); border: 1px solid rgba(255,71,87,0.2); animation: pulse 0.5s infinite alternate; }
@@ -253,10 +416,10 @@ button:active { transform: translateY(0); }
 .bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 80px; }
 .bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .bar { width: 100%; border-radius: 6px 6px 0 0; background: linear-gradient(180deg, var(--accent), rgba(108,99,255,0.4)); transition: height 0.5s ease; min-height: 2px; }
-.bar-label { font-size: 9px; color: var(--muted); font-family: 'Space Mono', monospace; }
+.bar-label { font-size: 9px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
 .big-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 12px; }
 .big-stat { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; text-align: center; }
-.big-stat-num { font-family: 'Space Mono', monospace; font-size: 22px; font-weight: 700; color: var(--accent); }
+.big-stat-num { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700; color: var(--accent); }
 .big-stat-lbl { font-size: 10px; color: var(--muted); margin-top: 3px; }
 
 /* SOUND BTN */
@@ -268,11 +431,11 @@ button:active { transform: translateY(0); }
 .grammar-btn:hover { background: rgba(108,99,255,0.2); }
 
 /* Chat model indicator */
-.model-badge { font-size: 10px; font-family: 'Space Mono', monospace; color: var(--muted); padding: 2px 7px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-left: 6px; }
+.model-badge { font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--muted); padding: 2px 7px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-left: 6px; }
 
 /* Chat system prompt toggle */
 .chat-mode-row { display: flex; gap: 6px; padding: 8px 16px; background: var(--surface); border-bottom: 1px solid var(--border); }
-.mode-btn { background: var(--card); border: 1px solid var(--border); color: var(--muted); padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; cursor: pointer; font-family: 'Syne', sans-serif; transition: all 0.2s; width: auto; margin: 0; }
+.mode-btn { background: var(--card); border: 1px solid var(--border); color: var(--muted); padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; width: auto; margin: 0; }
 .mode-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
 .mode-btn:hover { border-color: var(--accent); color: var(--accent); opacity: 1; transform: none; }
 .mode-btn.active:hover { color: white; }
@@ -314,6 +477,7 @@ button:active { transform: translateY(0); }
 .btn-new-chat:hover { opacity:0.85; transform:none; }
 
 
+
 </style>
 </head>
 <body>
@@ -322,6 +486,7 @@ button:active { transform: translateY(0); }
   <div class="logo">Wort<span>Trainer</span></div>
   <div class="header-right">
     <span id="nicknameDisplay"></span>
+    <span class="level-badge" id="levelBadge" onclick="changeLevel()">🎓 Уровень</span>
     <button class="btn-ghost" onclick="changeNickname()">Сменить ник</button>
     <button class="theme-btn" onclick="toggleTheme()">☀️</button>
   </div>
@@ -335,9 +500,11 @@ button:active { transform: translateY(0); }
       <button class="nav-btn" onclick="showPanel('list')" id="nb-list"><span class="icon">📋</span> Слова <span class="word-count" id="wordCountBadge">0</span></button>
       <button class="nav-btn" onclick="showPanel('test')" id="nb-test"><span class="icon">✅</span> Тест</button>
       <button class="nav-btn" onclick="showPanel('cards')" id="nb-cards"><span class="icon">🃏</span> Карточки</button>
-      <button class="nav-btn" onclick="showPanel('stats')" id="nb-stats"><span class="icon">📊</span> Статистика</button>
       <button class="nav-btn" onclick="showPanel('exam')" id="nb-exam"><span class="icon">⏱️</span> Экзамен</button>
       <button class="nav-btn" onclick="showPanel('artikel')" id="nb-artikel"><span class="icon">🇩🇪</span> Артикли</button>
+      <button class="nav-btn" onclick="showPanel('stats')" id="nb-stats"><span class="icon">📊</span> Статистика</button>
+      <button class="nav-btn" onclick="showPanel('plan')" id="nb-plan"><span class="icon">🗓️</span> План учёбы</button>
+      <button class="nav-btn" onclick="showPanel('reading')" id="nb-reading"><span class="icon">📖</span> Чтение</button>
     </div>
     <div class="sidebar-section" style="flex:1;overflow:hidden;display:flex;flex-direction:column;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
@@ -496,15 +663,47 @@ button:active { transform: translateY(0); }
       </div>
     </div>
 
+    <!-- READING PANEL -->
+    <div class="panel" id="panel-reading">
+      <div class="panel-scroll">
+        <div id="readingTopics">
+          <div style="font-size:15px;font-weight:800;margin-bottom:4px;">📖 Чтение</div>
+          <div style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6;">Текст на смеси русского и немецкого — немецкие слова подсвечены, нажми на любое чтобы увидеть перевод</div>
+          <div class="reading-topic-grid">
+            <div class="topic-card" onclick="generateReading('путешествия')"><div class="tc-emoji">✈️</div><div class="tc-name">Путешествия</div></div>
+            <div class="topic-card" onclick="generateReading('еда и кафе')"><div class="tc-emoji">🍕</div><div class="tc-name">Еда и кафе</div></div>
+            <div class="topic-card" onclick="generateReading('работа и учёба')"><div class="tc-emoji">💼</div><div class="tc-name">Работа и учёба</div></div>
+            <div class="topic-card" onclick="generateReading('город и транспорт')"><div class="tc-emoji">🚇</div><div class="tc-name">Город и транспорт</div></div>
+            <div class="topic-card" onclick="generateReading('семья и дом')"><div class="tc-emoji">🏠</div><div class="tc-name">Семья и дом</div></div>
+            <div class="topic-card" onclick="generateReading('хобби и спорт')"><div class="tc-emoji">⚽</div><div class="tc-name">Хобби и спорт</div></div>
+            <div class="topic-card" onclick="generateReading('природа и погода')"><div class="tc-emoji">🌤️</div><div class="tc-name">Природа и погода</div></div>
+            <div class="topic-card" onclick="generateReading('покупки и деньги')"><div class="tc-emoji">🛍️</div><div class="tc-name">Покупки и деньги</div></div>
+          </div>
+        </div>
+        <div id="readingContent" style="display:none;">
+          <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;">
+            <button class="btn-s" onclick="showReadingTopics()" style="width:auto;padding:8px 14px;margin:0;font-size:13px;">← Темы</button>
+            <button class="btn-s" onclick="regenerateReading()" style="width:auto;padding:8px 14px;margin:0;font-size:13px;">🔄 Новый текст</button>
+            <button onclick="addReadingWordsToDict()" style="width:auto;padding:8px 14px;margin:0;font-size:13px;">➕ Добавить все слова</button>
+          </div>
+          <div class="reading-text-box" id="readingTextBox"></div>
+          <div id="readingWordList" style="display:none;" class="card">
+            <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Немецкие слова в тексте</div>
+            <div id="readingWordItems"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- PLAN PANEL -->
     <div class="panel" id="panel-plan">
       <div class="panel-scroll">
         <div class="card">
           <div style="font-size:15px;font-weight:800;margin-bottom:6px;">🗓️ План учёбы от ИИ</div>
-          <div style="font-size:13px;color:var(--muted);margin-bottom:10px;line-height:1.6;">ИИ проанализирует твои слова и составит персональный план на неделю</div>
+          <div style="font-size:13px;color:var(--muted);margin-bottom:10px;line-height:1.6;">ИИ проанализирует твои слова и составит план на неделю</div>
           <button class="btn-ai" onclick="generatePlan()">✨ Составить план</button>
         </div>
-        <div id="planResult"></div>
+        <div id="planResult" style="font-size:13px;line-height:1.8;"></div>
       </div>
     </div>
 
@@ -527,45 +726,106 @@ button:active { transform: translateY(0); }
 </div>
 
 
+
 <div id="toast"></div>
+<div class="confetti-container" id="confettiContainer"></div>
+
+<div class="onboarding-overlay" id="onboarding" style="display:none;">
+  <div class="onboarding-box">
+    <div class="onboarding-emoji">🇩🇪</div>
+    <div class="onboarding-title">Добро пожаловать!</div>
+    <div class="onboarding-sub">Выбери свой уровень немецкого — ИИ адаптирует сложность объяснений и вопросов под тебя</div>
+    <div class="level-grid">
+      <div class="level-card" onclick="selectLevel('A1')">
+        <div class="lc-emoji">🌱</div>
+        <div class="lc-name">A1 — Начинающий</div>
+        <div class="lc-desc">Только начинаю учить немецкий</div>
+      </div>
+      <div class="level-card" onclick="selectLevel('A2')">
+        <div class="lc-emoji">📚</div>
+        <div class="lc-name">A2 — Элементарный</div>
+        <div class="lc-desc">Знаю базовые слова и фразы</div>
+      </div>
+      <div class="level-card" onclick="selectLevel('B1')">
+        <div class="lc-emoji">💬</div>
+        <div class="lc-name">B1 — Средний</div>
+        <div class="lc-desc">Могу общаться на простые темы</div>
+      </div>
+      <div class="level-card" onclick="selectLevel('B2')">
+        <div class="lc-emoji">🎓</div>
+        <div class="lc-name">B2 — Выше среднего</div>
+        <div class="lc-desc">Готовлюсь к экзамену B2</div>
+      </div>
+      <div class="level-card" onclick="selectLevel('C1')">
+        <div class="lc-emoji">⭐</div>
+        <div class="lc-name">C1 — Продвинутый</div>
+        <div class="lc-desc">Свободно читаю и пишу</div>
+      </div>
+      <div class="level-card" onclick="selectLevel('C2')">
+        <div class="lc-emoji">🏆</div>
+        <div class="lc-name">C2 — Мастер</div>
+        <div class="lc-desc">Владею немецким свободно</div>
+      </div>
+    </div>
+    <button class="onboarding-btn" id="onboardingBtn" onclick="finishOnboarding()">Начать обучение →</button>
+  </div>
+</div>
 
 <nav class="bottom-nav" id="bottomNav">
   <button class="bottom-nav-btn active" onclick="showPanel('add')" id="bn-add"><span class="bn-icon">➕</span>Добавить</button>
   <button class="bottom-nav-btn" onclick="showPanel('list')" id="bn-list"><span class="bn-icon">📋</span>Слова</button>
   <button class="bottom-nav-btn" onclick="showPanel('test')" id="bn-test"><span class="bn-icon">✅</span>Тест</button>
-  <button class="bottom-nav-btn" onclick="showPanel('exam')" id="bn-exam"><span class="bn-icon">⏱️</span>Экзамен</button>
-  <button class="bottom-nav-btn" onclick="showPanel('chat')" id="bn-chat"><span class="bn-icon">📸</span>ИИ</button>
-  <button class="bottom-nav-btn" onclick="showPanel('stats')" id="bn-stats"><span class="bn-icon">📊</span>Стат</button>
-  <button class="bottom-nav-btn" onclick="showPanel('artikel')" id="bn-artikel"><span class="bn-icon">🇩🇪</span>Арт.</button>
-  <button class="bottom-nav-btn" onclick="showPanel('plan')" id="bn-plan"><span class="bn-icon">🗓️</span>План</button>
+  <button class="bottom-nav-btn" onclick="showPanel('chat')" id="bn-chat"><span class="bn-icon">🤖</span>ИИ чат</button>
+  <button class="bottom-nav-btn" onclick="showPanel('stats')" id="bn-stats"><span class="bn-icon">📊</span>Статы</button>
+  <button class="bottom-nav-btn" onclick="showPanel('reading')" id="bn-reading"><span class="bn-icon">📖</span>Чтение</button>
 </nav>
 
 <script>
-
-
-// ── CONFIG ── замени на свой ключ с https://aistudio.google.com
+// ── CONFIG ──
 var MISTRAL_KEY = localStorage.getItem('mistral_key') || '';
 var GROQ_KEY = localStorage.getItem('groq_key') || '';
-// legacy support
 if (!MISTRAL_KEY) MISTRAL_KEY = localStorage.getItem('ai_key') || '';
 
 // ── CHAT MODES ──
 var chatMode = 'tutor';
 var chatModePrompts = {
-  tutor: 'Ты ИИ-репетитор по немецкому языку. Всегда общаешься на русском языке. Когда пользователь присылает фото, определи что на нём: 1. ФОТО С ВОПРОСАМИ И ОТВЕТАМИ — задавай вопросы по одному и проверяй. 2. ФОТО ТОЛЬКО С ВОПРОСАМИ — задавай эти вопросы по одному. 3. ФОТО ТЕКСТА — придумай 3-5 вопросов. Проверяй ответы, объясняй ошибки, будь дружелюбным.',
+  tutor: 'Ты ИИ-репетитор по немецкому языку. Всегда общаешься на русском языке. Когда пользователь присылает фото или PDF, определи что там: 1. ВОПРОСЫ И ОТВЕТЫ — задавай по одному и проверяй. 2. ТОЛЬКО ВОПРОСЫ — задавай по одному, оценивай как репетитор. 3. ТЕКСТ/УЧЕБНИК — придумай 3-5 вопросов. Проверяй ответы, объясняй ошибки, будь дружелюбным.',
   grammar: 'Ты эксперт по немецкой грамматике. Общаешься на русском. Объясняй правила понятно и с примерами. Используй таблицы когда нужно. Всегда давай примеры предложений.',
   conversation: 'Ты собеседник для практики немецкого. Веди разговор НА НЕМЕЦКОМ языке, но если пользователь не понимает — объясняй на русском. Исправляй ошибки мягко.'
 };
 
+function getChatPrompt(mode) {
+  var lvl = localStorage.getItem('user_level') || 'B1';
+  var levelInstructions = {
+    'A1': 'Пиши ОЧЕНЬ просто. Короткие предложения. Всегда переводи немецкие слова на русский. Объясняй как ребёнку. Никаких сложных грамматических терминов без объяснения.',
+    'A2': 'Пиши просто и понятно. Переводи незнакомые слова. Давай много примеров. Объясняй грамматику простыми словами.',
+    'B1': 'Пиши на среднем уровне. Можешь использовать грамматические термины, но объясняй их. Давай примеры с переводом.',
+    'B2': 'Пиши на академическом уровне. Используй правильную терминологию. Готовь к экзамену B2. Объясняй тонкости языка.',
+    'C1': 'Пиши на продвинутом уровне. Объясняй нюансы, стилистику, идиомы. Можешь использовать сложные конструкции.',
+    'C2': 'Пиши на уровне носителя. Обсуждай тонкости языка, диалекты, стиль. Максимальная сложность.'
+  };
+  var levelLine = levelInstructions[lvl] || levelInstructions['B1'];
+
+  var wordSaveInstruction = '\n\nУПРАВЛЕНИЕ СЛОВАРЁМ:\n1. ДОБАВИТЬ: если просят добавить/сохранить слово — [ADD_WORD]{"word":"слово","translation":"перевод","topic":"тема"}[/ADD_WORD]\n2. УДАЛИТЬ: если просят удалить слово — [DELETE_WORD]{"word":"слово"}[/DELETE_WORD]\nЭти блоки обрабатываются системой автоматически.\n\nЕСЛИ УЧЕНИК СПРАШИВАЕТ КАКОЙ У НЕГО УРОВЕНЬ — просто ответи: "Твой уровень немецкого — ' + lvl + '. Именно под этот уровень я адаптирую свои объяснения." Не анализируй его сообщения.';
+
+  var base = chatModePrompts[mode] || chatModePrompts.tutor;
+  return base + '\n\nУРОВЕНЬ УЧЕНИКА: ' + lvl + '. ' + levelLine + wordSaveInstruction;
+}
+
 // ── STATE ──
-let words = JSON.parse(localStorage.getItem('words_v2') || '[]');
-let testQueue = [], currentIndex = 0, correct = 0, wrong = 0;
-let cardIndex = 0, showFront = true;
-let pendingImages = [];
-let chatHistory = [];
-let isAITyping = false;
-let currentChatId = null;
-let allChats = JSON.parse(localStorage.getItem('chats_v1') || '{}');
+var words = JSON.parse(localStorage.getItem('words_v2') || '[]');
+var testQueue = [], currentIndex = 0, correct = 0, wrong = 0;
+var cardIndex = 0, showFront = true;
+var pendingImages = [];
+var chatHistory = [];
+var isAITyping = false;
+var currentChatId = null;
+var allChats = JSON.parse(localStorage.getItem('chats_v1') || '{}');
+var selectedSentence = null;
+var artikelQueue = [], artikelIndex = 0, artikelCorrect = 0, artikelWrong = 0;
+var examQueue = [], examIndex = 0, examCorrect = 0, examWrong = 0;
+var examTimer = null, examSeconds = 0;
+var importPhotoBase64 = null, importPhotoMime = 'image/jpeg';
 
 // ── THEME ──
 var savedTheme = localStorage.getItem('theme') || 'dark';
@@ -586,275 +846,245 @@ function updateThemeIcon() {
 }
 
 // ── PROFILE ──
-let nickname = localStorage.getItem('nickname');
-if (!nickname) {
-  nickname = prompt('Введите ваш ник:') || 'Пользователь';
-  localStorage.setItem('nickname', nickname);
-}
+var nickname = localStorage.getItem('nickname');
+if (!nickname) { nickname = prompt('Введите ваш ник:') || 'Пользователь'; localStorage.setItem('nickname', nickname); }
 document.getElementById('nicknameDisplay').innerText = '👤 ' + nickname;
 function changeNickname() { localStorage.removeItem('nickname'); location.reload(); }
 
 // ── SAVE ──
 function save() { localStorage.setItem('words_v2', JSON.stringify(words)); updateTopics(); updateWordCount(); }
 function saveChats() { localStorage.setItem('chats_v1', JSON.stringify(allChats)); }
-function updateWordCount() { document.getElementById('wordCountBadge').textContent = words.length; }
+function updateWordCount() { var el = document.getElementById('wordCountBadge'); if (el) el.textContent = words.length; }
 
 function showToast(msg) {
-  const t = document.getElementById('toast');
+  var t = document.getElementById('toast');
   t.innerText = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+  setTimeout(function() { t.classList.remove('show'); }, 2500);
+}
+
+// ── API KEY SETUP ──
+function setupApiKey() {
+  var choice = confirm('OK — вставить Mistral ключ (фото/PDF)\nОтмена — вставить Groq ключ (только текст, быстрый)');
+  if (choice) {
+    var key = prompt('Mistral API ключ:\n\nПолучить бесплатно: console.mistral.ai → API Keys');
+    if (key && key.trim()) {
+      MISTRAL_KEY = key.trim();
+      localStorage.setItem('mistral_key', MISTRAL_KEY);
+      showToast('✅ Mistral ключ сохранён!');
+      if (currentChatId) loadChat(currentChatId);
+    }
+  } else {
+    var key2 = prompt('Groq API ключ:\n\nПолучить бесплатно: console.groq.com → API Keys');
+    if (key2 && key2.trim()) {
+      GROQ_KEY = key2.trim();
+      localStorage.setItem('groq_key', GROQ_KEY);
+      showToast('✅ Groq ключ сохранён!');
+    }
+  }
+}
+
+// ── CHAT MODE SWITCHER ──
+function setChatMode(mode) {
+  chatMode = mode;
+  document.querySelectorAll('.mode-btn').forEach(function(b) { b.classList.remove('active'); });
+  var btn = document.getElementById('mode-' + mode);
+  if (btn) btn.classList.add('active');
+  var hints = { tutor: '🎓 Репетитор', grammar: '📖 Грамматика', conversation: '💬 Разговор' };
+  showToast(hints[mode] || mode);
 }
 
 // ── PANELS ──
 function showPanel(name) {
-  document.querySelectorAll('.panel, .chat-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  const panel = document.getElementById('panel-' + name);
-  if (panel) panel.classList.add('active');
-  const nb = document.getElementById('nb-' + name);
-  if (nb) nb.classList.add('active');
-  // Update bottom nav
+  document.querySelectorAll('.panel, .chat-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
   document.querySelectorAll('.bottom-nav-btn').forEach(function(b) { b.classList.remove('active'); });
+  var panel = document.getElementById('panel-' + name);
+  if (panel) panel.classList.add('active');
+  var nb = document.getElementById('nb-' + name);
+  if (nb) nb.classList.add('active');
   var bn = document.getElementById('bn-' + name);
   if (bn) bn.classList.add('active');
-
   if (name === 'list') renderList();
   if (name === 'test') startTest();
   if (name === 'cards') startCards();
   if (name === 'stats') renderStats();
   if (name === 'artikel') startArtikel();
+  if (name === 'reading') showReadingTopics();
   if (name === 'exam') {
     var sel = document.getElementById('examTopicSelect');
     if (sel) {
       sel.innerHTML = '<option value="">Все темы</option>';
-      var unique = [...new Set(words.map(function(w) { return w.topic; }))];
+      var unique = Array.from(new Set(words.map(function(w) { return w.topic; })));
       unique.forEach(function(t) { sel.innerHTML += '<option value="' + t + '">' + t + '</option>'; });
     }
   }
 }
 
-// ── CHAT STORAGE ──
-function newChat() {
-  const id = 'chat_' + Date.now();
-  const now = new Date();
-  const title = 'Чат ' + now.toLocaleDateString('ru', {day:'2-digit', month:'2-digit'})
-              + ' ' + now.toLocaleTimeString('ru', {hour:'2-digit', minute:'2-digit'});
-  allChats[id] = { id: id, title: title, history: [], messages: [], createdAt: Date.now() };
-  saveChats();
-  loadChat(id);
-  renderChatList();
-}
-
-function deleteChat(id) {
-  delete allChats[id];
-  saveChats();
-  if (currentChatId === id) {
-    currentChatId = null;
-    chatHistory = [];
-    const container = document.getElementById('chatMessages');
-    container.innerHTML = '<div class="msg ai"><div class="welcome-msg">👋 Выбери чат слева или нажми <strong>+ Новый</strong>!</div></div>';
-  }
-  renderChatList();
-}
-
-function loadChat(id) {
-  currentChatId = id;
-  chatHistory = (allChats[id].history || []).slice();
-  showPanel('chat');
-  const container = document.getElementById('chatMessages');
-  container.innerHTML = '';
-  const msgs = allChats[id].messages || [];
-  if (msgs.length === 0) {
-    var keyStatus = (MISTRAL_KEY ? '✅ Mistral' : '❌ Mistral') + ' · ' + (GROQ_KEY ? '✅ Groq' : '❌ Groq') + ' · <a href="#" onclick="setupApiKey()" style="color:var(--accent);">🔑 Настроить</a>';
-    container.innerHTML = '<div class="msg ai"><div class="welcome-msg">👋 Привет! Я твой ИИ-репетитор по немецкому.<br><br><strong>Что я умею:</strong><br>📸 Читать фото учебников и заметок<br>📝 Задавать вопросы (с ответами или без)<br>✅ Проверять ответы и объяснять ошибки<br>💬 Отвечать на вопросы по немецкому<br><br><strong>Статус:</strong> ' + keyStatus + '</div><div class="msg-time">сейчас</div></div>';
-  } else {
-    msgs.forEach(function(m) {
-      const div = document.createElement('div');
-      div.className = 'msg ' + m.role;
-      const imgHtml = (m.images || []).map(function(url) {
-        return '<div class="img-label">📎 Фото</div><img class="msg-img" src="' + url + '">';
-      }).join('');
-      const safeText = String(m.text).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-      div.innerHTML = imgHtml + '<div class="msg-bubble">' + safeText + '</div><div class="msg-time">' + m.time + '</div>';
-      container.appendChild(div);
-    });
-  }
-  container.scrollTop = container.scrollHeight;
-  renderChatList();
-}
-
-function renderChatList() {
-  const list = document.getElementById('chatList');
-  list.innerHTML = '';
-  const ids = Object.keys(allChats).sort(function(a, b) {
-    return allChats[b].createdAt - allChats[a].createdAt;
-  });
-  if (ids.length === 0) {
-    const hint = document.createElement('div');
-    hint.style.cssText = 'font-size:11px;color:var(--muted);padding:8px 4px;line-height:1.6;';
-    hint.textContent = 'Нажми "+ Новый" чтобы начать разговор с репетитором';
-    list.appendChild(hint);
-    return;
-  }
-  ids.forEach(function(id) {
-    const chat = allChats[id];
-    const isActive = id === currentChatId;
-    const item = document.createElement('div');
-    item.className = 'chat-item' + (isActive ? ' active' : '');
-
-    const titleDiv = document.createElement('div');
-    titleDiv.className = 'chat-item-title';
-
-    const nameDiv = document.createElement('div');
-    nameDiv.className = 'chat-item-name';
-    nameDiv.textContent = chat.title;
-
-    const countDiv = document.createElement('div');
-    countDiv.className = 'chat-item-count';
-    countDiv.textContent = (chat.messages || []).length + ' сообщ.';
-
-    titleDiv.appendChild(nameDiv);
-    titleDiv.appendChild(countDiv);
-
-    const delBtn = document.createElement('button');
-    delBtn.className = 'chat-item-del';
-    delBtn.textContent = '✕';
-    delBtn.title = 'Удалить чат';
-    delBtn.onclick = function(e) { e.stopPropagation(); deleteChat(id); };
-
-    item.appendChild(titleDiv);
-    item.appendChild(delBtn);
-    item.onclick = function(e) { if (e.target !== delBtn) loadChat(id); };
-    list.appendChild(item);
-  });
-}
-
 // ── TRANSLATE ──
 async function translateWord(word) {
-  const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=de&tl=ru&dt=t&q=' + encodeURIComponent(word);
-  const res = await fetch(url);
-  const data = await res.json();
+  var url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=de&tl=ru&dt=t&q=' + encodeURIComponent(word);
+  var res = await fetch(url);
+  var data = await res.json();
   return data[0][0][0];
 }
+
 document.getElementById('word').addEventListener('blur', async function() {
-  const w = document.getElementById('word').value.trim();
+  var w = document.getElementById('word').value.trim();
   if (!w) return;
   document.getElementById('translation').value = 'Перевод...';
-  try { document.getElementById('translation').value = await translateWord(w); }
-  catch(e) { document.getElementById('translation').value = ''; }
+  try {
+    var translated = await translateWord(w);
+    document.getElementById('translation').value = translated;
+    if (!/^(der|die|das) /i.test(w)) autoAddArtikel(w);
+    generateSentences(w);
+  } catch(e) { document.getElementById('translation').value = ''; }
 });
+
+async function autoAddArtikel(word) {
+  try {
+    var url = 'https://de.wiktionary.org/api/rest_v1/page/summary/' + encodeURIComponent(word);
+    var res = await fetch(url);
+    if (!res.ok) return;
+    var data = await res.json();
+    var desc = (data.description || '') + ' ' + (data.extract || '');
+    var match = desc.match(/\b(der|die|das)\b/i);
+    if (match) {
+      var inp = document.getElementById('word');
+      var cur = inp.value.trim();
+      if (!/^(der|die|das) /i.test(cur)) {
+        inp.value = match[1].toLowerCase() + ' ' + cur;
+        showToast('🇩🇪 Артикль: ' + match[1].toLowerCase());
+      }
+    }
+  } catch(e) {}
+}
 
 // ── VOICE ──
 function startVoiceInput() {
   if (!('webkitSpeechRecognition' in window)) { alert('Используйте Chrome или Edge'); return; }
-  const r = new webkitSpeechRecognition();
+  var r = new webkitSpeechRecognition();
   r.lang = 'de-DE'; r.start();
   r.onresult = async function(e) {
-    const w = e.results[0][0].transcript;
+    var w = e.results[0][0].transcript;
     document.getElementById('word').value = w;
     document.getElementById('translation').value = 'Перевод...';
-    try { document.getElementById('translation').value = await translateWord(w); }
-    catch(err) { document.getElementById('translation').value = ''; }
+    try { document.getElementById('translation').value = await translateWord(w); } catch(err) { document.getElementById('translation').value = ''; }
   };
+}
+
+// ── SOUND ──
+function speakWord(word) {
+  if (!('speechSynthesis' in window)) { showToast('⚠️ Браузер не поддерживает озвучку'); return; }
+  window.speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(word);
+  u.lang = 'de-DE'; u.rate = 0.85;
+  window.speechSynthesis.speak(u);
 }
 
 // ── ADD WORD ──
 function addWord() {
-  const word = document.getElementById('word').value.trim();
-  const translation = document.getElementById('translation').value.trim();
-  const topic = document.getElementById('topic').value.trim() || 'Без темы';
+  var word = document.getElementById('word').value.trim();
+  var translation = document.getElementById('translation').value.trim();
+  var topic = document.getElementById('topic').value.trim() || 'Без темы';
   if (!word || !translation || translation === 'Перевод...') { showToast('⚠️ Заполни слово и перевод!'); return; }
-  words.push({ id: Date.now(), word: word, translation: translation, topic: topic, srs: 0, nextReview: Date.now() });
+  var newWord = { id: Date.now(), word: word, translation: translation, topic: topic, srs: 0, nextReview: Date.now() };
+  if (selectedSentence) newWord.example = selectedSentence;
+  words.push(newWord);
   save();
   document.getElementById('word').value = '';
   document.getElementById('translation').value = '';
   document.getElementById('topic').value = '';
+  var picker = document.getElementById('sentencePicker');
+  if (picker) picker.style.display = 'none';
+  document.getElementById('sentenceList').innerHTML = '';
+  selectedSentence = null;
   showToast('✅ Слово добавлено!');
 }
 
 // ── CSV ──
 function importCSV() {
-  const raw = document.getElementById('csvInput').value.trim();
+  var raw = document.getElementById('csvInput').value.trim();
   if (!raw) { showToast('⚠️ Введи данные в формате CSV'); return; }
-  let count = 0;
+  var count = 0;
   raw.split('\n').forEach(function(line) {
-    const parts = line.split(',');
+    var parts = line.split(',');
     if (parts.length >= 2) {
-      const word = parts[0].trim(), translation = parts[1].trim();
-      const topic = parts[2] ? parts[2].trim() : 'Импорт';
-      if (word && translation) {
-        words.push({ id: Date.now() + Math.random(), word: word, translation: translation, topic: topic, srs: 0, nextReview: Date.now() });
-        count++;
-      }
+      var word = parts[0].trim(), translation = parts[1].trim(), topic = parts[2] ? parts[2].trim() : 'Импорт';
+      if (word && translation) { words.push({ id: Date.now() + Math.random(), word: word, translation: translation, topic: topic, srs: 0, nextReview: Date.now() }); count++; }
     }
   });
-  save();
-  document.getElementById('csvInput').value = '';
+  save(); document.getElementById('csvInput').value = '';
   showToast('✅ Импортировано ' + count + ' слов!');
+}
+
+// ── EXPORT ──
+function exportCSV() {
+  if (words.length === 0) { showToast('⚠️ Нет слов для экспорта!'); return; }
+  var rows = ['слово,перевод,тема'];
+  words.forEach(function(w) { rows.push(w.word + ',' + w.translation + ',' + w.topic); });
+  var blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+  var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'worttrainer_слова.csv'; a.click();
+  showToast('✅ CSV скачан!');
+}
+function exportJSON() {
+  if (words.length === 0) { showToast('⚠️ Нет слов!'); return; }
+  var blob = new Blob([JSON.stringify(words, null, 2)], { type: 'application/json' });
+  var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'worttrainer_слова.json'; a.click();
+  showToast('✅ JSON скачан!');
 }
 
 // ── TOPICS ──
 function updateTopics() {
-  const filter = document.getElementById('filterTopic');
-  const selected = filter.value;
-  const unique = [...new Set(words.map(function(w) { return w.topic; }))];
+  var filter = document.getElementById('filterTopic');
+  var selected = filter.value;
+  var unique = Array.from(new Set(words.map(function(w) { return w.topic; })));
   filter.innerHTML = '<option value="">Все темы</option>';
-  unique.forEach(function(t) {
-    const opt = document.createElement('option');
-    opt.value = t; opt.textContent = t;
-    if (t === selected) opt.selected = true;
-    filter.appendChild(opt);
-  });
+  unique.forEach(function(t) { var opt = document.createElement('option'); opt.value = t; opt.textContent = t; if (t === selected) opt.selected = true; filter.appendChild(opt); });
 }
 
 // ── LIST ──
 function renderList() {
-  const container = document.getElementById('wordListContainer');
-  const filter = document.getElementById('filterTopic').value;
-  const now = Date.now();
-  const filtered = words.filter(function(w) { return !filter || w.topic === filter; });
+  var container = document.getElementById('wordListContainer');
+  var filter = document.getElementById('filterTopic').value;
+  var searchEl = document.getElementById('searchWords');
+  var search = searchEl ? searchEl.value.trim().toLowerCase() : '';
+  var now = Date.now();
+  var filtered = words.filter(function(w) {
+    var matchTopic = !filter || w.topic === filter;
+    var matchSearch = !search || w.word.toLowerCase().includes(search) || w.translation.toLowerCase().includes(search) || w.topic.toLowerCase().includes(search);
+    return matchTopic && matchSearch;
+  });
   container.innerHTML = '';
-  if (filtered.length === 0) {
-    container.innerHTML = '<div class="empty-state"><div class="emoji">📭</div><p>Слов пока нет.<br>Добавь первое!</p></div>';
-    return;
-  }
-  const srsLabels = ['Новое','Знаю','Хорошо','Отлично'];
+  if (filtered.length === 0) { container.innerHTML = '<div class="empty-state"><div class="emoji">' + (search ? '🔍' : '📭') + '</div><p>' + (search ? 'Ничего не найдено' : 'Слов пока нет.<br>Добавь первое!') + '</p></div>'; return; }
+  var srsLabels = ['Новое','Знаю','Хорошо','Отлично'];
   filtered.forEach(function(w) {
-    const div = document.createElement('div');
+    var div = document.createElement('div');
     div.className = 'word-item' + ((w.nextReview||0) <= now ? ' due-now' : '');
-    div.innerHTML = '<div class="word-de">' + w.word + '</div>'
-      + '<div class="word-ru">' + w.translation + '</div>'
-      + '<div class="word-topic">' + w.topic + '</div>'
-      + '<span class="srs-badge srs-' + Math.min(w.srs||0,3) + '">' + srsLabels[Math.min(w.srs||0,3)] + '</span>'
-      + '<button class="del-btn" onclick="deleteWord(' + w.id + ')">✕</button>';
+    div.innerHTML = '<div class="word-de">' + w.word + '</div><div class="word-ru">' + w.translation + '</div><div class="word-topic">' + w.topic + '</div><span class="srs-badge srs-' + Math.min(w.srs||0,3) + '">' + srsLabels[Math.min(w.srs||0,3)] + '</span><button class="del-btn" onclick="editWord(' + w.id + ')" style="color:var(--accent);">✏️</button><button class="del-btn" onclick="deleteWord(' + w.id + ')">✕</button>';
+    if (w.example) div.innerHTML += '<div style="width:100%;margin-top:6px;padding-top:6px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);line-height:1.5;"><span style="color:var(--accent);">💬</span> ' + w.example.de + '<br><span style="padding-left:14px;">' + w.example.ru + '</span></div>';
     container.appendChild(div);
   });
 }
+
 function deleteWord(id) { words = words.filter(function(w) { return w.id !== id; }); save(); renderList(); showToast('🗑️ Слово удалено'); }
 
 function editWord(id) {
   var w = words.find(function(x) { return x.id === id; });
   if (!w) return;
-  var newWord = prompt('Немецкое слово:', w.word);
-  if (newWord === null) return;
-  var newTrans = prompt('Перевод:', w.translation);
-  if (newTrans === null) return;
-  var newTopic = prompt('Тема:', w.topic);
-  if (newTopic === null) return;
-  w.word = newWord.trim() || w.word;
-  w.translation = newTrans.trim() || w.translation;
-  w.topic = newTopic.trim() || w.topic;
-  save(); renderList();
-  showToast('✅ Слово обновлено!');
+  var nw = prompt('Немецкое слово:', w.word); if (nw === null) return;
+  var nt = prompt('Перевод:', w.translation); if (nt === null) return;
+  var ntp = prompt('Тема:', w.topic); if (ntp === null) return;
+  w.word = nw.trim() || w.word; w.translation = nt.trim() || w.translation; w.topic = ntp.trim() || w.topic;
+  save(); renderList(); showToast('✅ Слово обновлено!');
 }
 
 // ── TEST + SRS ──
-const SRS_INTERVALS = [0, 60000, 600000, 86400000, 259200000];
+var SRS_INTERVALS = [0, 60000, 600000, 86400000, 259200000];
 function startTest() {
   if (words.length === 0) { document.getElementById('testWord').innerText = 'Нет слов'; return; }
-  const now = Date.now();
-  const due = words.filter(function(w) { return (w.nextReview||0) <= now; }).sort(function() { return Math.random()-0.5; });
-  const notDue = words.filter(function(w) { return (w.nextReview||0) > now; }).sort(function() { return Math.random()-0.5; });
+  var now = Date.now();
+  var due = words.filter(function(w) { return (w.nextReview||0) <= now; }).sort(function() { return Math.random()-0.5; });
+  var notDue = words.filter(function(w) { return (w.nextReview||0) > now; }).sort(function() { return Math.random()-0.5; });
   testQueue = due.concat(notDue);
   currentIndex = 0; correct = 0; wrong = 0;
   updateStats(); nextWord();
@@ -864,40 +1094,37 @@ function nextWord() {
   document.getElementById('feedback').className = 'feedback-box';
   document.getElementById('answerInput').value = '';
   if (currentIndex >= testQueue.length) {
-    document.getElementById('testWord').innerText = 'Тест завершён! 🎉';
+    document.getElementById('testWord').innerHTML = 'Тест завершён! 🎉';
     document.getElementById('testCounter').innerText = correct + ' из ' + testQueue.length + ' правильно';
     document.getElementById('progressBar').style.width = '100%';
     return;
   }
   var tw = testQueue[currentIndex].word;
-  var twSafe = tw.replace(/"/g, '&quot;');
-  document.getElementById('testWord').innerHTML = twSafe + ' <button class="sound-btn" onclick="speakWord(this.dataset.w)" data-w="' + twSafe + '">🔊</button>';
+  document.getElementById('testWord').innerHTML = tw + ' <button class="sound-btn" onclick="speakWord(this.dataset.w)" data-w="' + tw.replace(/"/g,'&quot;') + '">🔊</button>';
   document.getElementById('testCounter').innerText = (currentIndex+1) + ' / ' + testQueue.length;
   document.getElementById('progressBar').style.width = ((currentIndex/testQueue.length)*100) + '%';
   setTimeout(function() { document.getElementById('answerInput').focus(); }, 100);
 }
 function checkAnswer() {
   if (currentIndex >= testQueue.length) return;
-  const user = document.getElementById('answerInput').value.trim().toLowerCase();
-  const w = testQueue[currentIndex];
-  const ca = w.translation.toLowerCase();
-  const fb = document.getElementById('feedback');
-  const wa = words.find(function(x) { return x.id === w.id; });
+  var user = document.getElementById('answerInput').value.trim().toLowerCase();
+  var w = testQueue[currentIndex];
+  var ca = w.translation.toLowerCase();
+  var fb = document.getElementById('feedback');
+  var wa = words.find(function(x) { return x.id === w.id; });
   if (user === ca) {
     correct++; fb.innerHTML = '✓ Правильно!'; fb.className = 'feedback-box feedback-ok';
     if (wa) { wa.srs = Math.min((wa.srs||0)+1,4); wa.nextReview = Date.now()+(SRS_INTERVALS[wa.srs]||SRS_INTERVALS[4]); }
+    if (correct % 3 === 0 || correct === 1) launchConfetti();
   } else {
-    wrong++; fb.innerHTML = '✗ Правильно: <strong>' + ca + '</strong>'; fb.className = 'feedback-box feedback-fail';
+    wrong++; fb.innerHTML = '✗ ' + ca; fb.className = 'feedback-box feedback-fail';
     if (wa) { wa.srs = 0; wa.nextReview = Date.now(); }
   }
   save(); currentIndex++; updateStats();
   if (currentIndex === testQueue.length) trackActivity(correct, wrong);
   setTimeout(nextWord, 1400);
 }
-function updateStats() {
-  document.getElementById('correct').innerText = correct;
-  document.getElementById('wrong').innerText = wrong;
-}
+function updateStats() { document.getElementById('correct').innerText = correct; document.getElementById('wrong').innerText = wrong; }
 
 // ── CARDS ──
 function startCards() {
@@ -905,13 +1132,8 @@ function startCards() {
   cardIndex = 0; showFront = true; showCard();
 }
 function showCard() {
-  if (cardIndex >= words.length) {
-    document.getElementById('cardWord').innerText = 'Готово! 🎉';
-    document.getElementById('cardHint').innerText = '';
-    document.getElementById('cardProgress').innerText = 'Все ' + words.length + ' карточек пройдено';
-    return;
-  }
-  const w = words[cardIndex];
+  if (cardIndex >= words.length) { document.getElementById('cardWord').innerText = 'Готово! 🎉'; document.getElementById('cardHint').innerText = ''; document.getElementById('cardProgress').innerText = 'Все ' + words.length + ' карточек пройдено'; return; }
+  var w = words[cardIndex];
   document.getElementById('cardWord').innerText = showFront ? w.word : w.translation;
   document.getElementById('cardHint').innerText = showFront ? 'нажми чтобы увидеть перевод' : 'перевод показан';
   document.getElementById('cardProgress').innerText = (cardIndex+1) + ' / ' + words.length;
@@ -919,15 +1141,304 @@ function showCard() {
 function flipCard() { showFront = !showFront; showCard(); }
 function nextCard() { cardIndex++; showFront = true; showCard(); }
 
+// ── ACTIVITY TRACKING ──
+function trackActivity(c, w) {
+  var today = new Date().toISOString().slice(0,10);
+  var activity = JSON.parse(localStorage.getItem('activity_v1') || '{}');
+  if (!activity[today]) activity[today] = { correct: 0, wrong: 0, total: 0 };
+  activity[today].correct += c; activity[today].wrong += w; activity[today].total += c + w;
+  localStorage.setItem('activity_v1', JSON.stringify(activity));
+}
+
+// ── STATISTICS ──
+function renderStats() {
+  var activity = JSON.parse(localStorage.getItem('activity_v1') || '{}');
+  var totalAnswers = 0, totalCorrect = 0;
+  Object.values(activity).forEach(function(d) { totalAnswers += d.total; totalCorrect += d.correct; });
+  var accuracy = totalAnswers > 0 ? Math.round((totalCorrect/totalAnswers)*100) : 0;
+  var srsLevels = [0,0,0,0,0];
+  words.forEach(function(w) { srsLevels[Math.min(w.srs||0,4)]++; });
+  document.getElementById('bigStats').innerHTML =
+    '<div class="big-stat"><div class="big-stat-num">' + words.length + '</div><div class="big-stat-lbl">Всего слов</div></div>' +
+    '<div class="big-stat"><div class="big-stat-num">' + accuracy + '%</div><div class="big-stat-lbl">Точность</div></div>' +
+    '<div class="big-stat"><div class="big-stat-num">' + totalAnswers + '</div><div class="big-stat-lbl">Ответов</div></div>';
+  var chart = document.getElementById('activityChart'); chart.innerHTML = '';
+  var days = [];
+  for (var i = 6; i >= 0; i--) { var d = new Date(); d.setDate(d.getDate()-i); days.push(d.toISOString().slice(0,10)); }
+  var maxVal = Math.max(1, Math.max.apply(null, days.map(function(d) { return activity[d] ? activity[d].total : 0; })));
+  days.forEach(function(day) {
+    var val = activity[day] ? activity[day].total : 0;
+    var pct = Math.round((val/maxVal)*100);
+    var label = day.slice(5).replace('-','/');
+    var wrap = document.createElement('div'); wrap.className = 'bar-wrap';
+    wrap.innerHTML = '<div class="bar" style="height:' + Math.max(pct,2) + '%"></div><div class="bar-label">' + label + '</div>';
+    chart.appendChild(wrap);
+  });
+  var srsChart = document.getElementById('srsChart'); srsChart.innerHTML = '';
+  var srsLabels = ['Новое','Знаю','Хорошо','Отлично','Мастер'];
+  var srsColors = ['var(--danger)','orange','#f0c040','var(--success)','var(--accent)'];
+  var maxSrs = Math.max(1, Math.max.apply(null, srsLevels));
+  srsLevels.forEach(function(val, i) {
+    var pct = Math.round((val/maxSrs)*100);
+    var wrap = document.createElement('div'); wrap.className = 'bar-wrap';
+    wrap.innerHTML = '<div class="bar" style="height:' + Math.max(pct,2) + '%;background:' + srsColors[i] + '"></div><div class="bar-label">' + srsLabels[i] + '</div>';
+    srsChart.appendChild(wrap);
+  });
+}
+
+// ── EXAM MODE ──
+function startExam() {
+  var topic = document.getElementById('examTopicSelect').value;
+  var pool = topic ? words.filter(function(w) { return w.topic === topic; }) : words.slice();
+  if (pool.length === 0) { showToast('⚠️ Нет слов для экзамена!'); return; }
+  examQueue = pool.sort(function() { return Math.random()-0.5; });
+  examIndex = 0; examCorrect = 0; examWrong = 0; examSeconds = 0;
+  if (examTimer) clearInterval(examTimer);
+  renderExamQuestion();
+  examTimer = setInterval(function() {
+    examSeconds++;
+    var el = document.getElementById('examTimerDisplay');
+    if (el) {
+      var mins = Math.floor(examSeconds/60), secs = examSeconds%60;
+      el.textContent = (mins<10?'0':'')+mins+':'+(secs<10?'0':'')+secs;
+      el.parentElement.className = 'exam-timer ' + (examSeconds<60?'ok':examSeconds<120?'warn':'danger');
+    }
+  }, 1000);
+}
+function renderExamQuestion() {
+  if (examIndex >= examQueue.length) { finishExam(); return; }
+  var w = examQueue[examIndex];
+  var content = document.getElementById('examContent');
+  content.innerHTML = '<div class="exam-timer ok" id="examTimerWrap"><span id="examTimerDisplay">00:00</span></div><div class="progress-bar-wrap"><div class="progress-bar" style="width:' + Math.round((examIndex/examQueue.length)*100) + '%"></div></div><div class="card" id="examCard"></div><div class="stats-row"><div class="stat-box stat-ok"><div class="stat-num">' + examCorrect + '</div><div class="stat-label">Правильно</div></div><div class="stat-box stat-fail"><div class="stat-num">' + examWrong + '</div><div class="stat-label">Ошибки</div></div></div>';
+  var card = document.getElementById('examCard');
+  var counter = document.createElement('div'); counter.style.cssText = 'text-align:center;font-size:11px;color:var(--muted);margin-bottom:6px;'; counter.textContent = (examIndex+1) + ' / ' + examQueue.length;
+  var wordEl = document.createElement('div'); wordEl.className = 'test-word-big'; wordEl.textContent = w.word;
+  var sb = document.createElement('button'); sb.className = 'sound-btn'; sb.textContent = '🔊'; sb.style.cssText = 'display:block;margin:0 auto 10px;'; sb.onclick = function() { speakWord(w.word); };
+  var inp = document.createElement('input'); inp.id = 'examInput'; inp.placeholder = 'Введи перевод...'; inp.onkeydown = function(e) { if (e.key === 'Enter') checkExam(); };
+  var btn = document.createElement('button'); btn.textContent = 'Ответить'; btn.onclick = checkExam;
+  var fb = document.createElement('div'); fb.className = 'feedback-box'; fb.id = 'examFeedback';
+  card.appendChild(counter); card.appendChild(wordEl); card.appendChild(sb); card.appendChild(inp); card.appendChild(btn); card.appendChild(fb);
+  setTimeout(function() { inp.focus(); }, 100);
+}
+function checkExam() {
+  var inp = document.getElementById('examInput'); if (!inp) return;
+  var user = inp.value.trim().toLowerCase();
+  var w = examQueue[examIndex];
+  var ca = w.translation.toLowerCase();
+  var fb = document.getElementById('examFeedback');
+  if (user === ca) { examCorrect++; fb.innerHTML = '✓ Правильно!'; fb.className = 'feedback-box feedback-ok'; if (examCorrect % 3 === 0 || examCorrect === 1) launchConfetti(); }
+  else { examWrong++; fb.innerHTML = '✗ ' + ca; fb.className = 'feedback-box feedback-fail'; }
+  examIndex++; setTimeout(renderExamQuestion, 1000);
+}
+function finishExam() {
+  clearInterval(examTimer);
+  var pct = Math.round((examCorrect/examQueue.length)*100);
+  var mins = Math.floor(examSeconds/60), secs = examSeconds%60;
+  var timeStr = (mins > 0 ? mins + ' мин ' : '') + secs + ' сек';
+  var grade = pct>=90?'Отлично! 🏆':pct>=70?'Хорошо! 👍':pct>=50?'Неплохо 💪':'Нужно повторить 📚';
+  trackActivity(examCorrect, examWrong);
+  document.getElementById('examContent').innerHTML = '<div class="card exam-result"><div class="score">' + pct + '%</div><div class="grade">' + grade + '</div><div style="font-size:13px;color:var(--muted);margin:12px 0;">' + examCorrect + ' из ' + examQueue.length + ' · ' + timeStr + '</div><button onclick="showPanel(&quot;exam&quot;)">Попробовать снова</button></div>';
+}
+
+// ── ARTIKEL MODE ──
+function startArtikel() {
+  var artikelWords = words.filter(function(w) { return /^(der|die|das) /i.test(w.word); });
+  if (artikelWords.length === 0) {
+    document.getElementById('artikelContent').innerHTML = '<div class="card" style="text-align:center;padding:30px;"><div style="font-size:40px;margin-bottom:12px;">😅</div><div style="font-size:15px;font-weight:700;margin-bottom:8px;">Нет слов с артиклями</div><div style="font-size:13px;color:var(--muted);">Добавь слова: "der Hund", "die Katze", "das Haus"</div></div>';
+    return;
+  }
+  artikelQueue = artikelWords.sort(function() { return Math.random()-0.5; });
+  artikelIndex = 0; artikelCorrect = 0; artikelWrong = 0;
+  renderArtikelQuestion();
+}
+function renderArtikelQuestion() {
+  var content = document.getElementById('artikelContent');
+  if (artikelIndex >= artikelQueue.length) {
+    var pct = Math.round((artikelCorrect/artikelQueue.length)*100);
+    var emoji = pct>=80?'🎉':pct>=50?'👍':'💪';
+    content.innerHTML = '<div class="card" style="text-align:center;padding:30px;"><div style="font-size:48px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">' + pct + '%</div><div style="font-size:16px;color:var(--muted);margin:8px 0;">' + emoji + ' ' + artikelCorrect + ' из ' + artikelQueue.length + '</div><button onclick="startArtikel()">Ещё раз</button></div>';
+    return;
+  }
+  var w = artikelQueue[artikelIndex];
+  var wordNoArt = w.word.replace(/^(der|die|das) /i, '');
+  content.innerHTML = '';
+  var progress = document.createElement('div'); progress.className = 'progress-bar-wrap'; progress.innerHTML = '<div class="progress-bar" style="width:' + Math.round((artikelIndex/artikelQueue.length)*100) + '%"></div>';
+  var card = document.createElement('div'); card.className = 'card'; card.style.textAlign = 'center';
+  var counter = document.createElement('div'); counter.style.cssText = 'font-size:11px;color:var(--muted);margin-bottom:16px;'; counter.textContent = (artikelIndex+1) + ' / ' + artikelQueue.length;
+  var wordEl = document.createElement('div'); wordEl.className = 'test-word-big'; wordEl.style.marginBottom = '8px'; wordEl.textContent = wordNoArt;
+  var transEl = document.createElement('div'); transEl.style.cssText = 'color:var(--muted);font-size:13px;margin-bottom:24px;'; transEl.textContent = w.translation;
+  var sb = document.createElement('button'); sb.className = 'sound-btn'; sb.textContent = '🔊'; sb.style.cssText = 'display:block;margin:0 auto 20px;'; sb.onclick = function() { speakWord(w.word); };
+  var btnRow = document.createElement('div'); btnRow.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px;';
+  ['der','die','das'].forEach(function(art) {
+    var btn = document.createElement('button'); btn.textContent = art; btn.style.cssText = 'font-size:18px;font-weight:800;font-family:JetBrains Mono,monospace;margin:0;';
+    btn.onclick = function() { checkArtikel(art, w); };
+    btnRow.appendChild(btn);
+  });
+  var fb = document.createElement('div'); fb.className = 'feedback-box'; fb.id = 'artikelFeedback';
+  var stats = document.createElement('div'); stats.className = 'stats-row'; stats.style.marginTop = '10px';
+  stats.innerHTML = '<div class="stat-box stat-ok"><div class="stat-num">' + artikelCorrect + '</div><div class="stat-label">Правильно</div></div><div class="stat-box stat-fail"><div class="stat-num">' + artikelWrong + '</div><div class="stat-label">Ошибки</div></div>';
+  card.appendChild(counter); card.appendChild(wordEl); card.appendChild(transEl); card.appendChild(sb); card.appendChild(btnRow); card.appendChild(fb);
+  content.appendChild(progress); content.appendChild(card); content.appendChild(stats);
+}
+function checkArtikel(chosen, w) {
+  var correct = w.word.toLowerCase().split(' ')[0];
+  var fb = document.getElementById('artikelFeedback');
+  document.querySelectorAll('#artikelContent button:not(.sound-btn)').forEach(function(b) { b.disabled = true; });
+  if (chosen === correct) { artikelCorrect++; fb.innerHTML = '✓ <strong>' + w.word + '</strong>'; fb.className = 'feedback-box feedback-ok'; launchConfetti(); }
+  else { artikelWrong++; fb.innerHTML = '✗ ' + w.word; fb.className = 'feedback-box feedback-fail'; }
+  artikelIndex++;
+  setTimeout(renderArtikelQuestion, 1400);
+}
+
+// ── SENTENCE GENERATOR ──
+async function generateSentences(word) {
+  if (!MISTRAL_KEY && !GROQ_KEY) return;
+  var picker = document.getElementById('sentencePicker');
+  var list = document.getElementById('sentenceList');
+  if (!picker || !list) return;
+  picker.style.display = 'block';
+  selectedSentence = null;
+  list.innerHTML = '<div class="sentence-loading"><span class="sentence-spinner"></span>ИИ составляет предложения...</div>';
+  var promptLines = [
+    'Составь 4 реальных немецких предложения со словом "' + word + '".',
+    'Требования: из реальной жизни, разной сложности, разные ситуации.',
+    'Отвечай ТОЛЬКО в JSON: {"sentences":[{"de":"предложение","ru":"перевод"}]}'
+  ];
+  try {
+    var messages = [{ role: 'user', content: promptLines.join('\n') }];
+    var response, data;
+    if (MISTRAL_KEY) {
+      response = await fetch('https://api.mistral.ai/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY }, body: JSON.stringify({ model: 'mistral-small-latest', messages: messages, max_tokens: 600 }) });
+    } else {
+      response = await fetch('https://api.groq.com/openai/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY }, body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: messages, max_tokens: 600 }) });
+    }
+    data = await response.json();
+    var text = data.choices && data.choices[0] ? data.choices[0].message.content : '';
+    var jsonMatch = text.match(/\{[\s\S]*\}/);
+    var parsed = null;
+    if (jsonMatch) { try { parsed = JSON.parse(jsonMatch[0]); } catch(e) {} }
+    if (parsed && parsed.sentences && parsed.sentences.length > 0) {
+      list.innerHTML = '';
+      parsed.sentences.forEach(function(s) {
+        var item = document.createElement('div'); item.className = 'sentence-item';
+        item.innerHTML = '<div class="sentence-de">' + s.de + '</div><div class="sentence-ru">' + s.ru + '</div>';
+        item.onclick = function() {
+          document.querySelectorAll('.sentence-item').forEach(function(el) { el.classList.remove('selected'); });
+          item.classList.add('selected'); selectedSentence = { de: s.de, ru: s.ru };
+        };
+        list.appendChild(item);
+      });
+      var noneItem = document.createElement('div'); noneItem.className = 'sentence-item'; noneItem.style.cssText = 'border-style:dashed;text-align:center;';
+      noneItem.innerHTML = '<div class="sentence-de" style="color:var(--muted);">Без примера</div>';
+      noneItem.onclick = function() { document.querySelectorAll('.sentence-item').forEach(function(el) { el.classList.remove('selected'); }); noneItem.classList.add('selected'); selectedSentence = null; };
+      list.appendChild(noneItem);
+    } else { list.innerHTML = '<div style="color:var(--muted);font-size:12px;padding:8px;">Не удалось сгенерировать предложения</div>'; }
+  } catch(e) { list.innerHTML = '<div style="color:var(--muted);font-size:12px;padding:8px;">Ошибка генерации</div>'; }
+}
+
+// ── STUDY PLAN ──
+async function generatePlan() {
+  var btn = document.querySelector('#panel-plan .btn-ai');
+  if (btn) { btn.textContent = '⏳ Составляю...'; btn.disabled = true; }
+  var resultDiv = document.getElementById('planResult');
+  resultDiv.innerHTML = '';
+  if (!MISTRAL_KEY && !GROQ_KEY) { resultDiv.innerHTML = '<div class="card" style="color:var(--danger);">⚠️ Нужен API ключ.</div>'; if (btn) { btn.textContent = '✨ Составить план'; btn.disabled = false; } return; }
+  var now = Date.now();
+  var dueWords = words.filter(function(w) { return (w.nextReview||0) <= now; });
+  var weakWords = words.filter(function(w) { return (w.srs||0) === 0; });
+  var topics = Array.from(new Set(words.map(function(w) { return w.topic; })));
+  var planLines = ['Составь персональный план учёбы немецкого на 7 дней (Пн-Вс).', 'Всего слов: ' + words.length + ', нужно повторить: ' + dueWords.length + ', сложных: ' + weakWords.length + ', темы: ' + topics.join(', '), 'Сложные слова: ' + weakWords.slice(0,5).map(function(w){return w.word;}).join(', '), 'Составь конкретный план по дням с упражнениями. Отвечай на русском, мотивируй!'];
+  try {
+    var messages = [{ role: 'user', content: planLines.join('\n') }];
+    var response;
+    if (MISTRAL_KEY) { response = await fetch('https://api.mistral.ai/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY }, body: JSON.stringify({ model: 'mistral-small-latest', messages: messages, max_tokens: 1200 }) }); }
+    else { response = await fetch('https://api.groq.com/openai/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY }, body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: messages, max_tokens: 1200 }) }); }
+    var data = await response.json();
+    var planText = data.choices && data.choices[0] ? data.choices[0].message.content.trim() : '⚠️ Не удалось составить план.';
+    var lines = planText.split('\n');
+    var html = '<div class="card" style="line-height:1.8;">';
+    lines.forEach(function(line) {
+      if (!line.trim()) { html += '<br>'; return; }
+      if (/^(Пн|Вт|Ср|Чт|Пт|Сб|Вс|##|\*\*)/.test(line.trim())) { html += '<div style="font-weight:800;color:var(--accent);margin-top:14px;font-size:15px;">' + line.replace(/\*\*/g,'') + '</div>'; }
+      else if (line.trim().startsWith('-') || line.trim().startsWith('•')) { html += '<div style="padding-left:12px;font-size:13px;">' + line + '</div>'; }
+      else { html += '<div style="font-size:13px;">' + line + '</div>'; }
+    });
+    html += '</div>';
+    resultDiv.innerHTML = html;
+    showToast('✅ План готов!');
+  } catch(e) { resultDiv.innerHTML = '<div class="card" style="color:var(--danger);">⚠️ Ошибка: ' + e.message + '</div>'; }
+  if (btn) { btn.textContent = '✨ Обновить план'; btn.disabled = false; }
+}
+
+// ── IMPORT FROM PHOTO ──
+function handleImportPhoto(event) {
+  var file = event.target.files[0]; if (!file) return;
+  importPhotoMime = file.type || 'image/jpeg';
+  var isPDF = file.type === 'application/pdf';
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    importPhotoBase64 = e.target.result.split(',')[1];
+    if (isPDF) { document.getElementById('importPhotoPreview').style.display = 'none'; var info = document.getElementById('importFileInfo'); info.style.display = 'block'; info.innerHTML = '📄 <strong>' + file.name + '</strong> (' + Math.round(file.size/1024) + ' KB)'; }
+    else { var preview = document.getElementById('importPhotoPreview'); preview.src = e.target.result; preview.style.display = 'block'; document.getElementById('importFileInfo').style.display = 'none'; }
+    document.getElementById('importPhotoBtn').style.display = 'block';
+    document.getElementById('importUploadZone').style.display = 'none';
+    document.getElementById('importPhotoResult').innerHTML = '';
+  };
+  reader.readAsDataURL(file);
+  event.target.value = '';
+}
+
+async function importWordsFromPhoto() {
+  if (!importPhotoBase64) return;
+  if (!MISTRAL_KEY) { showToast('⚠️ Нужен Mistral ключ! Нажми 🔑 в чате.'); return; }
+  var btn = document.getElementById('importPhotoBtn'); btn.textContent = '⏳ Распознаю...'; btn.disabled = true;
+  var resultDiv = document.getElementById('importPhotoResult');
+  resultDiv.innerHTML = '<div style="color:var(--muted);font-size:13px;margin-top:8px;">⏳ ИИ читает файл...</div>';
+  var isPDF = importPhotoMime === 'application/pdf';
+  var prompt = 'Извлеки ВСЕ немецкие слова из этого ' + (isPDF ? 'PDF' : 'изображения') + ' и переведи на русский. Отвечай ТОЛЬКО в JSON: {"words":[{"word":"слово","translation":"перевод","topic":"тема или Импорт"}]}';
+  try {
+    var contentArr = [
+      { type: 'image_url', image_url: { url: 'data:' + importPhotoMime + ';base64,' + importPhotoBase64 } },
+      { type: 'text', text: prompt }
+    ];
+    var importResponse = await fetch('https://api.mistral.ai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY },
+      body: JSON.stringify({ model: isPDF ? 'mistral-small-latest' : 'pixtral-12b-2409', messages: [{ role: 'user', content: contentArr }], max_tokens: 2000 })
+    });
+    var rawText = await importResponse.text(); var data; try { data = JSON.parse(rawText); } catch(e) { data = {}; }
+    var text = data.choices && data.choices[0] ? data.choices[0].message.content : '';
+    var jsonMatch = text.match(/\{[\s\S]*\}/); var parsed = null;
+    if (jsonMatch) { try { parsed = JSON.parse(jsonMatch[0]); } catch(e) {} }
+    if (parsed && parsed.words && parsed.words.length > 0) {
+      var added = 0;
+      parsed.words.forEach(function(w) { if (w.word && w.translation) { words.push({ id: Date.now() + Math.random(), word: w.word, translation: w.translation, topic: w.topic || 'Импорт', srs: 0, nextReview: Date.now() }); added++; } });
+      save();
+      var preview = parsed.words.slice(0,6).map(function(w) { return '<div>📌 <strong>' + w.word + '</strong> → ' + w.translation + '</div>'; }).join('');
+      resultDiv.innerHTML = '<div style="background:rgba(67,233,123,0.1);border:1px solid var(--success);border-radius:12px;padding:14px;margin-top:10px;font-size:13px;"><div style="color:var(--success);font-weight:700;margin-bottom:8px;">✅ Добавлено ' + added + ' слов!</div>' + preview + (parsed.words.length > 6 ? '<div style="color:var(--muted);margin-top:4px;">...и ещё ' + (parsed.words.length-6) + '</div>' : '') + '</div>';
+      showToast('✅ Добавлено ' + added + ' слов!');
+      importPhotoBase64 = null;
+      document.getElementById('importPhotoPreview').style.display = 'none';
+      document.getElementById('importFileInfo').style.display = 'none';
+      document.getElementById('importUploadZone').style.display = 'block';
+      document.getElementById('importPhotoBtn').style.display = 'none';
+    } else { resultDiv.innerHTML = '<div style="color:var(--danger);font-size:13px;margin-top:8px;">⚠️ Не удалось распознать слова. Попробуй другой файл.</div>'; }
+  } catch(e) { resultDiv.innerHTML = '<div style="color:var(--danger);font-size:13px;margin-top:8px;">⚠️ Ошибка: ' + e.message + '</div>'; }
+  btn.textContent = '✨ Распознать и добавить слова'; btn.disabled = false;
+}
+
 // ── CHAT ──
 function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 120) + 'px'; }
 function handleChatKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
 
 function handlePhotos(event) {
   Array.from(event.target.files).forEach(function(file) {
-    const reader = new FileReader();
+    // Limit file size to 4MB to avoid Mistral issues
+    if (file.size > 4 * 1024 * 1024) { showToast('⚠️ Файл слишком большой (макс 4MB): ' + file.name); return; }
+    var reader = new FileReader();
+    var isPDF = file.type === 'application/pdf';
     reader.onload = function(e) {
-      pendingImages.push({ base64: e.target.result.split(',')[1], mime: file.type || 'image/jpeg', url: e.target.result });
+      pendingImages.push({ base64: e.target.result.split(',')[1], mime: file.type || 'image/jpeg', url: e.target.result, isPDF: isPDF, name: file.name });
       renderImgPreviews();
     };
     reader.readAsDataURL(file);
@@ -938,12 +1449,11 @@ function handlePhotos(event) {
 function removeImage(idx) { pendingImages.splice(idx, 1); renderImgPreviews(); }
 
 function renderImgPreviews() {
-  const container = document.getElementById('imgPreviews');
-  container.innerHTML = '';
+  var container = document.getElementById('imgPreviews'); container.innerHTML = '';
   pendingImages.forEach(function(img, i) {
-    const wrap = document.createElement('div');
-    wrap.className = 'img-preview-item';
-    wrap.innerHTML = '<img src="' + img.url + '"><button class="img-remove" onclick="removeImage(' + i + ')">✕</button>';
+    var wrap = document.createElement('div'); wrap.className = 'img-preview-item';
+    if (img.isPDF) { wrap.style.cssText = 'position:relative;display:flex;align-items:center;justify-content:center;width:56px;height:56px;background:var(--surface);border:1px solid var(--border);border-radius:10px;font-size:9px;color:var(--muted);text-align:center;padding:4px;'; wrap.innerHTML = '<div>📄<br>' + (img.name||'PDF').slice(0,8) + '</div><button class="img-remove" onclick="removeImage(' + i + ')">✕</button>'; }
+    else { wrap.innerHTML = '<img src="' + img.url + '"><button class="img-remove" onclick="removeImage(' + i + ')">✕</button>'; }
     container.appendChild(wrap);
   });
 }
@@ -954,55 +1464,78 @@ function persistMessage(role, text, imageUrls) {
   if (!currentChatId || !allChats[currentChatId]) return;
   allChats[currentChatId].messages = allChats[currentChatId].messages || [];
   allChats[currentChatId].messages.push({ role: role, text: text, images: imageUrls || [], time: getTime() });
-  saveChats();
-  renderChatList();
+  saveChats(); renderChatList();
 }
 
 function appendUserMessage(text, images) {
   images = images || [];
-  const container = document.getElementById('chatMessages');
-  const div = document.createElement('div');
-  div.className = 'msg user';
-  const imgHtml = images.map(function(img) {
-    if (img.isPDF) return '<div class="img-label">📄 ' + (img.name || 'PDF файл') + '</div>';
-    return '<div class="img-label">📎 Фото</div><img class="msg-img" src="' + img.url + '">';
-  }).join('');
-  const safeText = String(text).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  var container = document.getElementById('chatMessages');
+  var div = document.createElement('div'); div.className = 'msg user';
+  var imgHtml = images.map(function(img) { return img.isPDF ? '<div class="img-label">📄 ' + (img.name||'PDF') + '</div>' : '<div class="img-label">📎 Фото</div><img class="msg-img" src="' + img.url + '">'; }).join('');
+  var safeText = String(text).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   div.innerHTML = imgHtml + '<div class="msg-bubble">' + safeText + '</div><div class="msg-time">' + getTime() + '</div>';
-  container.appendChild(div);
-  container.scrollTop = container.scrollHeight;
+  container.appendChild(div); container.scrollTop = container.scrollHeight;
   persistMessage('user', text, images.map(function(i) { return i.isPDF ? '' : i.url; }));
 }
 
 function showTyping() {
-  const container = document.getElementById('chatMessages');
-  const div = document.createElement('div');
-  div.className = 'msg ai'; div.id = 'typingIndicator';
+  var container = document.getElementById('chatMessages');
+  var div = document.createElement('div'); div.className = 'msg ai'; div.id = 'typingIndicator';
   div.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
-  container.appendChild(div);
-  container.scrollTop = container.scrollHeight;
+  container.appendChild(div); container.scrollTop = container.scrollHeight;
 }
-function removeTyping() { const el = document.getElementById('typingIndicator'); if (el) el.remove(); }
+function removeTyping() { var el = document.getElementById('typingIndicator'); if (el) el.remove(); }
 
 function appendAIMessage(text) {
   removeTyping();
-  const container = document.getElementById('chatMessages');
-  const div = document.createElement('div');
-  div.className = 'msg ai';
-  const safeText = String(text).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  // Check for [ADD_WORD] blocks
+  var addWordRegex = /\[ADD_WORD\](.*?)\[\/ADD_WORD\]/g;
+  var match;
+  var addedWords = [];
+  while ((match = addWordRegex.exec(text)) !== null) {
+    try {
+      var wordData = JSON.parse(match[1]);
+      if (wordData.word && wordData.translation) {
+        words.push({ id: Date.now() + Math.random(), word: wordData.word, translation: wordData.translation, topic: wordData.topic || 'Из чата', srs: 0, nextReview: Date.now() });
+        addedWords.push(wordData.word);
+      }
+    } catch(e) {}
+  }
+  if (addedWords.length > 0) { save(); showToast('✅ Добавлено: ' + addedWords.join(', ')); }
+
+  // Check for [DELETE_WORD] blocks
+  var delWordRegex = /\[DELETE_WORD\](.*?)\[\/DELETE_WORD\]/g;
+  var deletedWords = [];
+  while ((match = delWordRegex.exec(text)) !== null) {
+    try {
+      var delData = JSON.parse(match[1]);
+      if (delData.word) {
+        var before = words.length;
+        words = words.filter(function(w) {
+          return w.word.toLowerCase() !== delData.word.toLowerCase();
+        });
+        if (words.length < before) deletedWords.push(delData.word);
+      }
+    } catch(e) {}
+  }
+  if (deletedWords.length > 0) { save(); showToast('🗑️ Удалено из словаря: ' + deletedWords.join(', ')); }
+
+  // Remove service blocks from displayed text
+  var cleanText = text
+    .replace(/\[ADD_WORD\].*?\[\/ADD_WORD\]/gs, '')
+    .replace(/\[DELETE_WORD\].*?\[\/DELETE_WORD\]/gs, '')
+    .trim();
+
+  var container = document.getElementById('chatMessages');
+  var div = document.createElement('div'); div.className = 'msg ai';
+  var safeText = String(cleanText).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   div.innerHTML = '<div class="msg-bubble">' + safeText + '</div><div class="msg-time">' + getTime() + '</div>';
-  container.appendChild(div);
-  container.scrollTop = container.scrollHeight;
-  persistMessage('ai', text, []);
-  // Auto-update title from first messages
+  container.appendChild(div); container.scrollTop = container.scrollHeight;
+  persistMessage('ai', cleanText, []);
   if (allChats[currentChatId]) {
-    const msgs = allChats[currentChatId].messages || [];
-    if (msgs.length <= 3) {
-      const preview = text.replace(/\n/g,' ').slice(0,35);
-      allChats[currentChatId].title = preview + (text.length > 35 ? '…' : '');
-      saveChats();
-      renderChatList();
-    }
+    var msgs = allChats[currentChatId].messages || [];
+    if (msgs.length <= 3) { allChats[currentChatId].title = cleanText.replace(/\n/g,' ').slice(0,35) + (cleanText.length>35?'…':''); saveChats(); renderChatList(); }
   }
 }
 
@@ -1014,509 +1547,445 @@ async function sendMessage() {
   if (!text && imgs.length === 0) return;
   if (!currentChatId) newChat();
 
-  // Declare ALL variables first — Safari requires this
+  // Declare all variables first (Safari requirement)
   var hasImages = imgs.length > 0;
   var hasPDF = imgs.some(function(i) { return i.isPDF; });
+  var mistralModel = hasPDF ? 'mistral-small-latest' : (hasImages ? 'pixtral-12b-2409' : 'mistral-small-latest');
 
-  // Clear input immediately
-  input.value = '';
-  input.style.height = 'auto';
-  pendingImages = [];
-  renderImgPreviews();
+  // Clear input
+  input.value = ''; input.style.height = 'auto';
+  pendingImages = []; renderImgPreviews();
 
-  appendUserMessage(text || (hasPDF ? '(PDF файл)' : '(фото)'), imgs);
+  appendUserMessage(text || (hasPDF ? '(PDF)' : '(фото)'), imgs);
 
-  // Build API content for history
   var userContent = [];
-  imgs.forEach(function(img) {
-    userContent.push({ type: 'image', source: { type: 'base64', media_type: img.mime, data: img.base64 } });
-  });
+  imgs.forEach(function(img) { userContent.push({ type: 'image', source: { type: 'base64', media_type: img.mime, data: img.base64 } }); });
   if (text) userContent.push({ type: 'text', text: text });
   if (userContent.length === 0) userContent.push({ type: 'text', text: '...' });
 
   chatHistory.push({ role: 'user', content: userContent });
   if (allChats[currentChatId]) allChats[currentChatId].history = chatHistory.slice();
 
-  isAITyping = true;
-  showTyping();
+  isAITyping = true; showTyping();
 
   try {
-    var systemPrompt = chatModePrompts[chatMode] || chatModePrompts.tutor;
+    var systemPrompt = getChatPrompt(chatMode);
 
-    if (!MISTRAL_KEY && !GROQ_KEY) {
-      appendAIMessage('⚠️ Вставь API ключ! Нажми 🔑 внизу.\n\nMistral (с фото): console.mistral.ai\nGroq (только текст): console.groq.com');
-      isAITyping = false;
-      return;
-    }
-    if (!MISTRAL_KEY && hasImages) {
-      appendAIMessage('⚠️ Для фото и PDF нужен Mistral ключ.\nНажми 🔑 → OK → вставь ключ от console.mistral.ai');
-      isAITyping = false;
-      return;
-    }
+    if (!MISTRAL_KEY && !GROQ_KEY) { appendAIMessage('⚠️ Вставь API ключ! Нажми 🔑 внизу.\n\nMistral (фото): console.mistral.ai\nGroq (текст): console.groq.com'); isAITyping = false; return; }
 
-    // Build Mistral messages
-    var mistralMessages = [{ role: 'system', content: systemPrompt }];
+    // Build Gemini contents
+    var geminiContents = [];
     chatHistory.forEach(function(msg) {
-      var role = msg.role === 'assistant' ? 'assistant' : 'user';
+      var role = msg.role === 'assistant' ? 'model' : 'user';
+      var parts;
       if (typeof msg.content === 'string') {
-        mistralMessages.push({ role: role, content: msg.content });
+        parts = [{ text: msg.content }];
       } else {
-        var parts = msg.content.map(function(part) {
-          if (part.type === 'text') return { type: 'text', text: part.text };
-          if (part.type === 'image') {
-            if (part.source.media_type === 'application/pdf') {
-              return { type: 'document_url', document_url: 'data:application/pdf;base64,' + part.source.data };
-            }
-            return { type: 'image_url', image_url: { url: 'data:' + part.source.media_type + ';base64,' + part.source.data } };
-          }
+        parts = msg.content.map(function(part) {
+          if (part.type === 'text') return { text: part.text };
+          if (part.type === 'image') return { inline_data: { mime_type: part.source.media_type, data: part.source.data } };
           return null;
         }).filter(Boolean);
-        if (parts.length > 0) mistralMessages.push({ role: role, content: parts });
+        if (parts.length === 0) parts = [{ text: '...' }];
+      }
+      // Merge consecutive same-role
+      if (geminiContents.length > 0 && geminiContents[geminiContents.length-1].role === role) {
+        geminiContents[geminiContents.length-1].parts = geminiContents[geminiContents.length-1].parts.concat(parts);
+      } else {
+        geminiContents.push({ role: role, parts: parts });
       }
     });
+    if (geminiContents.length === 0 || geminiContents[geminiContents.length-1].role !== 'user') {
+      geminiContents.push({ role: 'user', parts: [{ text: '...' }] });
+    }
 
-    // Build Groq messages (text only)
+    // Build Groq messages (text only fallback)
     var groqMessages = [{ role: 'system', content: systemPrompt }];
     chatHistory.forEach(function(msg) {
       var role = msg.role === 'assistant' ? 'assistant' : 'user';
-      var t = typeof msg.content === 'string' ? msg.content : msg.content.map(function(p) {
-        return p.type === 'text' ? p.text : '[файл]';
-      }).join(' ');
+      var t = typeof msg.content === 'string' ? msg.content : msg.content.map(function(p) { return p.type === 'text' ? p.text : '[файл]'; }).join(' ');
       if (t.trim()) groqMessages.push({ role: role, content: t });
     });
 
-    var mistralModel = (hasPDF || !hasImages) ? 'mistral-small-latest' : 'pixtral-12b-2409';
+    var response, usedGroq = false, data, aiText, rawText;
 
-    var response, usedGroq = false;
     if (MISTRAL_KEY) {
+      // Build Mistral messages
+      var mistralMessages = [{ role: 'system', content: systemPrompt }];
+      chatHistory.forEach(function(msg) {
+        var role = msg.role === 'assistant' ? 'assistant' : 'user';
+        if (typeof msg.content === 'string') {
+          mistralMessages.push({ role: role, content: msg.content });
+        } else {
+          var parts = msg.content.map(function(part) {
+            if (part.type === 'text') return { type: 'text', text: part.text };
+            if (part.type === 'image') return { type: 'image_url', image_url: { url: 'data:' + part.source.media_type + ';base64,' + part.source.data } };
+            return null;
+          }).filter(Boolean);
+          if (parts.length > 0) mistralMessages.push({ role: role, content: parts });
+        }
+      });
+      var mistralModel = hasPDF ? 'mistral-small-latest' : (hasImages ? 'pixtral-12b-2409' : 'mistral-small-latest');
       response = await fetch('https://api.mistral.ai/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY },
         body: JSON.stringify({ model: mistralModel, messages: mistralMessages, max_tokens: 1000 })
       });
+      rawText = await response.text();
+      try { data = JSON.parse(rawText); } catch(e) { data = {}; }
+      if (data.choices && data.choices[0] && data.choices[0].message) {
+        aiText = data.choices[0].message.content.trim();
+      } else if (response.status === 429) {
+        if (GROQ_KEY && !hasImages) {
+          removeTyping(); appendAIMessage('⚡ Mistral занят — переключаюсь на Groq...'); showTyping();
+          response = await fetch('https://api.groq.com/openai/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY }, body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: groqMessages, max_tokens: 1000 }) });
+          rawText = await response.text(); var gdata; try { gdata = JSON.parse(rawText); } catch(e) { gdata = {}; }
+          aiText = gdata.choices && gdata.choices[0] ? '⚡ ' + gdata.choices[0].message.content.trim() : '⚠️ Нет ответа'; usedGroq = true;
+        } else {
+          removeTyping();
+          var countEl = document.createElement('div'); countEl.className = 'msg ai'; countEl.id = 'countdownMsg';
+          countEl.innerHTML = '<div class="msg-bubble">⏳ Лимит. Повторяю через <strong id="cdNum">60</strong> сек...</div>';
+          document.getElementById('chatMessages').appendChild(countEl); document.getElementById('chatMessages').scrollTop = 99999;
+          var secs = 60;
+          await new Promise(function(resolve) { var iv = setInterval(function() { secs--; var el = document.getElementById('cdNum'); if (el) el.textContent = secs; if (secs <= 0) { clearInterval(iv); resolve(); } }, 1000); });
+          var cm = document.getElementById('countdownMsg'); if (cm) cm.remove(); showTyping();
+          response = await fetch('https://api.mistral.ai/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY }, body: JSON.stringify({ model: mistralModel, messages: mistralMessages, max_tokens: 1000 }) });
+          rawText = await response.text(); try { data = JSON.parse(rawText); } catch(e) { data = {}; }
+          aiText = data.choices && data.choices[0] ? data.choices[0].message.content.trim() : '⚠️ ' + rawText.slice(0,100);
+        }
+      } else if (data.error) {
+        aiText = '⚠️ Ошибка: ' + (data.error.message || JSON.stringify(data.error));
+      } else {
+        aiText = '⚠️ Нет ответа: ' + rawText.slice(0, 150);
+      }
     } else {
       response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY },
         body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: groqMessages, max_tokens: 1000 })
       });
-      usedGroq = true;
-    }
-
-    // Rate limit — fallback to Groq or wait
-    if (response.status === 429 && GROQ_KEY && !hasImages) {
-      removeTyping();
-      appendAIMessage('⚡ Mistral занят — переключаюсь на Groq...');
-      showTyping();
-      response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY },
-        body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: groqMessages, max_tokens: 1000 })
-      });
-      usedGroq = true;
-    } else if (response.status === 429) {
-      removeTyping();
-      var countEl = document.createElement('div');
-      countEl.className = 'msg ai'; countEl.id = 'countdownMsg';
-      countEl.innerHTML = '<div class="msg-bubble">⏳ Лимит. Повторяю через <strong id="cdNum">60</strong> сек...</div>';
-      document.getElementById('chatMessages').appendChild(countEl);
-      document.getElementById('chatMessages').scrollTop = 99999;
-      var secs = 60;
-      await new Promise(function(resolve) {
-        var iv = setInterval(function() {
-          secs--;
-          var el = document.getElementById('cdNum');
-          if (el) el.textContent = secs;
-          if (secs <= 0) { clearInterval(iv); resolve(); }
-        }, 1000);
-      });
-      var cm = document.getElementById('countdownMsg'); if (cm) cm.remove();
-      showTyping();
-      response = await fetch('https://api.mistral.ai/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY },
-        body: JSON.stringify({ model: mistralModel, messages: mistralMessages, max_tokens: 1000 })
-      });
-    }
-
-    var rawText = await response.text();
-    var data;
-    try { data = JSON.parse(rawText); } catch(e) { data = {}; }
-
-    var aiText;
-    if (data.choices && data.choices[0] && data.choices[0].message) {
-      aiText = data.choices[0].message.content.trim();
-      if (usedGroq) aiText = '⚡ ' + aiText;
-    } else if (data.error) {
-      aiText = '⚠️ Ошибка: ' + (data.error.message || JSON.stringify(data.error));
-    } else {
-      aiText = '⚠️ Нет ответа: ' + rawText.slice(0, 150);
+      rawText = await response.text(); var data2; try { data2 = JSON.parse(rawText); } catch(e) { data2 = {}; }
+      if (data2.choices && data2.choices[0]) { aiText = '⚡ ' + data2.choices[0].message.content.trim(); usedGroq = true; }
+      else if (data2.error) { aiText = '⚠️ Groq ошибка: ' + data2.error.message; }
+      else { aiText = '⚠️ Нет ответа от Groq'; }
     }
 
     chatHistory.push({ role: 'assistant', content: aiText });
     if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
     if (allChats[currentChatId]) { allChats[currentChatId].history = chatHistory.slice(); saveChats(); }
     appendAIMessage(aiText);
-  } catch(e) {
-    appendAIMessage('⚠️ Ошибка: ' + e.message);
-  }
+  } catch(e) { appendAIMessage('⚠️ Ошибка: ' + e.message); }
   isAITyping = false;
 }
 
-async function importWordsFromPhoto() {
-  if (!importPhotoBase64) return;
-  if (!MISTRAL_KEY) { showToast('⚠️ Для распознавания нужен Mistral ключ! Нажми 🔑 в чате.'); return; }
-  var btn = document.getElementById('importPhotoBtn');
-  btn.textContent = '⏳ Распознаю...'; btn.disabled = true;
-  var resultDiv = document.getElementById('importPhotoResult');
-  resultDiv.innerHTML = '<div style="color:var(--muted);font-size:13px;margin-top:8px;">⏳ ИИ читает файл, подожди...</div>';
-
-  var isPDF = importPhotoMime === 'application/pdf';
-  var prompt = 'В этом ' + (isPDF ? 'PDF' : 'изображении') + ' есть немецкие слова. Извлеки ВСЕ немецкие слова и их переводы на русский язык.\n\nОтвечай ТОЛЬКО в формате JSON без лишнего текста и без markdown:\n{"words":[{"word":"немецкое слово","translation":"перевод на русский","topic":"тема если видна, иначе Импорт"}]}\n\nПравила:\n- Извлеки все слова которые видишь\n- Если нет перевода в файле — переведи сам на русский\n- Если есть тема/раздел — укажи её';
-
-  try {
-    var contentArr;
-    if (isPDF) {
-      contentArr = [
-        { type: 'text', text: prompt },
-        { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: importPhotoBase64 } }
-      ];
-    } else {
-      contentArr = [
-        { type: 'image_url', image_url: { url: 'data:' + importPhotoMime + ';base64,' + importPhotoBase64 } },
-        { type: 'text', text: prompt }
-      ];
-    }
-
-    var response = await fetch('https://api.mistral.ai/v1/chat/completions', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY },
-      body: JSON.stringify({
-        model: isPDF ? 'mistral-small-latest' : 'pixtral-12b-2409',
-        messages: [{ role: 'user', content: contentArr }],
-        max_tokens: 2000
-      })
-    });
-
-    var rawText = await response.text();
-    var data; try { data = JSON.parse(rawText); } catch(e) { data = {}; }
-
-    if (response.status === 429) {
-      resultDiv.innerHTML = '<div style="color:orange;font-size:13px;margin-top:8px;">⏳ Лимит запросов. Подожди минуту и попробуй снова.</div>';
-      btn.textContent = '✨ Распознать и добавить слова'; btn.disabled = false; return;
-    }
-
-    var text = data.choices && data.choices[0] ? data.choices[0].message.content : '';
-    var clean = text.replace(/```json|```/g, '').trim();
-    // find JSON object in response
-    var jsonMatch = clean.match(/\{[\s\S]*\}/);
-    var parsed = null;
-    if (jsonMatch) { try { parsed = JSON.parse(jsonMatch[0]); } catch(e) { parsed = null; } }
-
-    if (parsed && parsed.words && parsed.words.length > 0) {
-      var added = 0;
-      parsed.words.forEach(function(w) {
-        if (w.word && w.translation) {
-          words.push({ id: Date.now() + Math.random(), word: w.word, translation: w.translation, topic: w.topic || 'Импорт', srs: 0, nextReview: Date.now() });
-          added++;
-        }
-      });
-      save();
-      var preview = parsed.words.slice(0,6).map(function(w) { return '<div style="padding:2px 0;">📌 <strong>' + w.word + '</strong> → ' + w.translation + '</div>'; }).join('');
-      resultDiv.innerHTML = '<div style="background:rgba(67,233,123,0.1);border:1px solid var(--success);border-radius:12px;padding:14px;margin-top:10px;font-size:13px;">' +
-        '<div style="color:var(--success);font-weight:700;margin-bottom:8px;">✅ Добавлено ' + added + ' слов!</div>' + preview +
-        (parsed.words.length > 6 ? '<div style="color:var(--muted);margin-top:4px;">...и ещё ' + (parsed.words.length-6) + ' слов</div>' : '') + '</div>';
-      showToast('✅ Добавлено ' + added + ' слов!');
-      importPhotoBase64 = null;
-      document.getElementById('importPhotoPreview').style.display = 'none';
-      document.getElementById('importFileInfo').style.display = 'none';
-      document.getElementById('importUploadZone').style.display = 'block';
-      document.getElementById('importPhotoBtn').style.display = 'none';
-    } else if (data.error) {
-      resultDiv.innerHTML = '<div style="color:var(--danger);font-size:13px;margin-top:8px;">⚠️ Ошибка API: ' + (data.error.message || JSON.stringify(data.error)) + '</div>';
-    } else {
-      resultDiv.innerHTML = '<div style="color:var(--danger);font-size:13px;margin-top:8px;">⚠️ Не удалось распознать слова. Попробуй другой файл или фото получше.<br><small style="color:var(--muted)">Ответ ИИ: ' + text.slice(0,100) + '</small></div>';
-    }
-  } catch(e) {
-    resultDiv.innerHTML = '<div style="color:var(--danger);font-size:13px;margin-top:8px;">⚠️ Ошибка: ' + e.message + '</div>';
-  }
-  btn.textContent = '✨ Распознать и добавить слова'; btn.disabled = false;
+// ── CHAT HISTORY ──
+function newChat() {
+  var id = 'chat_' + Date.now();
+  var now = new Date();
+  var title = 'Чат ' + now.toLocaleDateString('ru', {day:'2-digit',month:'2-digit'}) + ' ' + now.toLocaleTimeString('ru', {hour:'2-digit',minute:'2-digit'});
+  allChats[id] = { id: id, title: title, history: [], messages: [], createdAt: Date.now() };
+  saveChats(); loadChat(id); renderChatList();
 }
-
-// ── ARTIKEL MODE ──
-var artikelQueue = [], artikelIndex = 0, artikelCorrect = 0, artikelWrong = 0;
-
-function startArtikel() {
-  var artikelWords = words.filter(function(w) {
-    return /^(der|die|das) /i.test(w.word);
-  });
-  if (artikelWords.length === 0) {
-    document.getElementById('artikelContent').innerHTML =
-      '<div class="card" style="text-align:center;padding:30px;">' +
-      '<div style="font-size:40px;margin-bottom:12px;">😅</div>' +
-      '<div style="font-size:15px;font-weight:700;margin-bottom:8px;">Нет слов с артиклями</div>' +
-      '<div style="font-size:13px;color:var(--muted);">Добавь слова в формате "der Hund", "die Katze", "das Haus"</div>' +
-      '</div>';
-    return;
-  }
-  artikelQueue = artikelWords.sort(function() { return Math.random()-0.5; });
-  artikelIndex = 0; artikelCorrect = 0; artikelWrong = 0;
-  renderArtikelQuestion();
+function deleteChat(id) {
+  delete allChats[id]; saveChats();
+  if (currentChatId === id) { currentChatId = null; chatHistory = []; var container = document.getElementById('chatMessages'); container.innerHTML = '<div class="msg ai"><div class="welcome-msg">👋 Выбери чат или нажми <strong>+ Новый</strong>!</div></div>'; }
+  renderChatList();
 }
-
-function renderArtikelQuestion() {
-  var content = document.getElementById('artikelContent');
-  if (artikelIndex >= artikelQueue.length) {
-    var pct = Math.round((artikelCorrect/artikelQueue.length)*100);
-    var emoji = pct >= 80 ? '🎉' : pct >= 50 ? '👍' : '💪';
-    content.innerHTML = '<div class="card" style="text-align:center;padding:30px;">' +
-      '<div style="font-size:48px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">' + pct + '%</div>' +
-      '<div style="font-size:16px;color:var(--muted);margin:8px 0;">' + emoji + ' ' + artikelCorrect + ' из ' + artikelQueue.length + '</div>' +
-      '<button onclick="startArtikel()">Ещё раз</button></div>';
-    return;
-  }
-  var w = artikelQueue[artikelIndex];
-  var wordWithoutArtikel = w.word.replace(/^(der|die|das) /i, '');
-  content.innerHTML = '';
-  var card = document.createElement('div');
-  card.className = 'card';
-  card.style.textAlign = 'center';
-
-  var progress = document.createElement('div');
-  progress.className = 'progress-bar-wrap';
-  progress.style.marginBottom = '16px';
-  progress.innerHTML = '<div class="progress-bar" style="width:' + Math.round((artikelIndex/artikelQueue.length)*100) + '%"></div>';
-
-  var counter = document.createElement('div');
-  counter.style.cssText = 'font-family:Space Mono,monospace;font-size:11px;color:var(--muted);margin-bottom:16px;';
-  counter.textContent = (artikelIndex+1) + ' / ' + artikelQueue.length;
-
-  var wordEl = document.createElement('div');
-  wordEl.className = 'test-word-big';
-  wordEl.style.marginBottom = '8px';
-  wordEl.textContent = wordWithoutArtikel;
-
-  var transEl = document.createElement('div');
-  transEl.style.cssText = 'color:var(--muted);font-size:13px;margin-bottom:24px;';
-  transEl.textContent = w.translation;
-
-  var soundBtn = document.createElement('button');
-  soundBtn.className = 'sound-btn';
-  soundBtn.textContent = '🔊';
-  soundBtn.style.cssText = 'display:block;margin:0 auto 20px;';
-  soundBtn.onclick = function() { speakWord(w.word); };
-
-  var btnRow = document.createElement('div');
-  btnRow.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px;';
-
-  ['der','die','das'].forEach(function(art) {
-    var btn = document.createElement('button');
-    btn.textContent = art;
-    btn.style.cssText = 'font-size:18px;font-weight:800;font-family:Space Mono,monospace;margin:0;';
-    btn.onclick = function() { checkArtikel(art, w, wordWithoutArtikel); };
-    btnRow.appendChild(btn);
-  });
-
-  var fb = document.createElement('div');
-  fb.className = 'feedback-box'; fb.id = 'artikelFeedback';
-
-  var stats = document.createElement('div');
-  stats.className = 'stats-row';
-  stats.style.marginTop = '10px';
-  stats.innerHTML = '<div class="stat-box stat-ok"><div class="stat-num">' + artikelCorrect + '</div><div class="stat-label">Правильно</div></div><div class="stat-box stat-fail"><div class="stat-num">' + artikelWrong + '</div><div class="stat-label">Ошибки</div></div>';
-
-  content.appendChild(progress);
-  card.appendChild(counter); card.appendChild(wordEl); card.appendChild(transEl);
-  card.appendChild(soundBtn); card.appendChild(btnRow); card.appendChild(fb);
-  content.appendChild(card);
-  content.appendChild(stats);
-}
-
-function checkArtikel(chosen, w, wordWithoutArtikel) {
-  var correct = w.word.toLowerCase().split(' ')[0];
-  var fb = document.getElementById('artikelFeedback');
-  var btns = document.querySelectorAll('#artikelContent button:not(.sound-btn)');
-  btns.forEach(function(b) { b.disabled = true; });
-  if (chosen === correct) {
-    artikelCorrect++;
-    fb.innerHTML = '✓ Правильно! <strong>' + w.word + '</strong>';
-    fb.className = 'feedback-box feedback-ok';
+function loadChat(id) {
+  currentChatId = id; chatHistory = (allChats[id].history || []).slice();
+  showPanel('chat');
+  var container = document.getElementById('chatMessages'); container.innerHTML = '';
+  var msgs = allChats[id].messages || [];
+  if (msgs.length === 0) {
+    var keyStatus = (MISTRAL_KEY ? '✅ Mistral' : '❌ Mistral') + ' · ' + (GROQ_KEY ? '✅ Groq' : '❌ Groq') + ' · <a href="#" onclick="setupApiKey()" style="color:var(--accent);">🔑 Настроить</a>';
+    container.innerHTML = '<div class="msg ai"><div class="welcome-msg">👋 Привет! Я ИИ-репетитор по немецкому.<br><br><strong>Что умею:</strong><br>📸 Читать фото и PDF<br>📝 Создавать тесты из материалов<br>✅ Проверять ответы и объяснять<br>💬 Отвечать на вопросы по немецкому<br><br><strong>Статус:</strong> ' + keyStatus + '</div><div class="msg-time">сейчас</div></div>';
   } else {
-    artikelWrong++;
-    fb.innerHTML = '✗ Правильно: <strong>' + w.word + '</strong>';
-    fb.className = 'feedback-box feedback-fail';
+    msgs.forEach(function(m) {
+      var div = document.createElement('div'); div.className = 'msg ' + m.role;
+      var imgHtml = (m.images||[]).filter(Boolean).map(function(url) { return '<div class="img-label">📎 Фото</div><img class="msg-img" src="' + url + '">'; }).join('');
+      var safeText = String(m.text).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      div.innerHTML = imgHtml + '<div class="msg-bubble">' + safeText + '</div><div class="msg-time">' + m.time + '</div>';
+      container.appendChild(div);
+    });
   }
-  artikelIndex++;
-  setTimeout(renderArtikelQuestion, 1400);
+  container.scrollTop = container.scrollHeight; renderChatList();
+}
+function renderChatList() {
+  var list = document.getElementById('chatList'); list.innerHTML = '';
+  var ids = Object.keys(allChats).sort(function(a,b) { return allChats[b].createdAt - allChats[a].createdAt; });
+  if (ids.length === 0) { var hint = document.createElement('div'); hint.style.cssText = 'font-size:11px;color:var(--muted);padding:8px 4px;line-height:1.6;'; hint.textContent = 'Нажми "+ Новый" чтобы начать'; list.appendChild(hint); return; }
+  ids.forEach(function(id) {
+    var chat = allChats[id]; var isActive = id === currentChatId;
+    var item = document.createElement('div'); item.className = 'chat-item' + (isActive ? ' active' : '');
+    var titleDiv = document.createElement('div'); titleDiv.className = 'chat-item-title';
+    var nameDiv = document.createElement('div'); nameDiv.className = 'chat-item-name'; nameDiv.textContent = chat.title;
+    var countDiv = document.createElement('div'); countDiv.className = 'chat-item-count'; countDiv.textContent = (chat.messages||[]).length + ' сообщ.';
+    titleDiv.appendChild(nameDiv); titleDiv.appendChild(countDiv);
+    var delBtn = document.createElement('button'); delBtn.className = 'chat-item-del'; delBtn.textContent = '✕'; delBtn.onclick = function(e) { e.stopPropagation(); deleteChat(id); };
+    item.appendChild(titleDiv); item.appendChild(delBtn);
+    item.onclick = function(e) { if (e.target !== delBtn) loadChat(id); };
+    list.appendChild(item);
+  });
 }
 
-// ── STUDY PLAN ──
-async function generatePlan() {
-  var btn = document.querySelector('#panel-plan .btn-ai');
-  if (btn) { btn.textContent = '⏳ Составляю план...'; btn.disabled = true; }
-  var resultDiv = document.getElementById('planResult');
-  resultDiv.innerHTML = '';
+// ── READING ──
+var currentReadingTopic = '';
+var currentReadingWords = [];
 
-  if (!MISTRAL_KEY && !GROQ_KEY) {
-    resultDiv.innerHTML = '<div class="card" style="color:var(--danger);">⚠️ Нужен API ключ. Нажми 🔑 в чате.</div>';
-    if (btn) { btn.textContent = '✨ Составить план'; btn.disabled = false; }
-    return;
-  }
+function showPanel_reading() { showReadingTopics(); }
 
-  var now = Date.now();
-  var dueWords = words.filter(function(w) { return (w.nextReview||0) <= now; });
-  var weakWords = words.filter(function(w) { return (w.srs||0) === 0; });
-  var strongWords = words.filter(function(w) { return (w.srs||0) >= 3; });
-  var topics = [...new Set(words.map(function(w) { return w.topic; }))];
+function showReadingTopics() {
+  document.getElementById('readingTopics').style.display = 'block';
+  document.getElementById('readingContent').style.display = 'none';
+}
 
-  var planLines = [
-    'Составь персональный план учёбы немецкого языка на 7 дней.',
-    '',
-    'Статистика ученика:',
-    '- Всего слов: ' + words.length,
-    '- Нужно повторить сегодня: ' + dueWords.length,
-    '- Сложные слова (srs=0): ' + weakWords.length,
-    '- Хорошо знает (srs>=3): ' + strongWords.length,
-    '- Темы: ' + topics.join(', '),
-    '',
-    'Примеры сложных слов: ' + weakWords.slice(0,5).map(function(w){return w.word;}).join(', '),
-    '',
-    'Составь конкретный план по дням (Пн-Вс) с указанием:',
-    '- Что повторять',
-    '- Сколько новых слов добавить',
-    '- На чём сфокусироваться',
-    '- Короткое упражнение на день',
-    '',
-    'Отвечай на русском, будь конкретным и мотивирующим!'
+function regenerateReading() { generateReading(currentReadingTopic); }
+
+async function generateReading(topic) {
+  if (!MISTRAL_KEY && !GROQ_KEY) { showToast('⚠️ Нужен API ключ!'); return; }
+  currentReadingTopic = topic;
+  document.getElementById('readingTopics').style.display = 'none';
+  document.getElementById('readingContent').style.display = 'block';
+  document.getElementById('readingWordList').style.display = 'none';
+  var box = document.getElementById('readingTextBox');
+  box.innerHTML = '<div class="reading-loading"><div class="spinner" style="margin:0 auto 12px;"></div>ИИ пишет текст...</div>';
+
+  var lvl = localStorage.getItem('user_level') || 'B1';
+  var levelInstr = {
+    'A1': '3-4 простых предложения, 5-8 немецких слов, только самые базовые слова',
+    'A2': '4-5 предложений, 8-12 немецких слов, простые конструкции',
+    'B1': '5-6 предложений, 12-18 немецких слов, средняя сложность',
+    'B2': '6-7 предложений, 18-25 немецких слов, сложные конструкции',
+    'C1': '7-8 предложений, 25-35 немецких слов, продвинутый уровень',
+    'C2': '8-10 предложений, 35+ немецких слов, уровень носителя'
+  };
+
+  var levelWordCount = { 'A1': '20-25', 'A2': '30-40', 'B1': '45-55', 'B2': '55-70', 'C1': '70-90', 'C2': '90+' };
+  var wCount = levelWordCount[lvl] || '45-55';
+  var promptParts = [
+    'Ты создаёшь учебный текст для изучения немецкого языка методом погружения.',
+    'Тема: ' + topic + '. Уровень: ' + lvl + '. ' + (levelInstr[lvl] || levelInstr['B1']),
+    'ПРАВИЛО: Каждое предложение ОБЯЗАТЕЛЬНО содержит минимум 2-3 немецких слова.',
+    'ФОРМАТ: Текст пишется на русском, но немецкие слова вставляются прямо внутри каждого предложения.',
+    'ПРИМЕР ПРАВИЛЬНОГО предложения: "Сегодня утром я встал очень früh и выпил einen Kaffee с молоком."',
+    'ПРИМЕР ПРАВИЛЬНОГО предложения: "Мы пошли в den Park, где было sehr schön und warm."',
+    'ПРИМЕР НЕПРАВИЛЬНОГО (так нельзя): "Сегодня мы пошли в парк и хорошо провели время." — нет немецких слов!',
+    'Напиши 15 предложений. В каждом предложении МИНИМУМ 2 немецких слова.',
+    'Всего немецких слов в тексте: ' + wCount + '.',
+    'После текста укажи все уникальные немецкие слова из текста с переводом.',
+    'Отвечай ТОЛЬКО в JSON: {"text":"текст здесь","words":[{"de":"слово","ru":"перевод"}]}'
   ];
-  var prompt = planLines.join('\n');
+  var prompt = promptParts.join('\n');
 
   try {
     var messages = [{ role: 'user', content: prompt }];
-    var response;
+    var response, data;
     if (MISTRAL_KEY) {
-      response = await fetch('https://api.mistral.ai/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY },
-        body: JSON.stringify({ model: 'mistral-small-latest', messages: messages, max_tokens: 1200 })
-      });
+      response = await fetch('https://api.mistral.ai/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY }, body: JSON.stringify({ model: 'mistral-small-latest', messages: messages, max_tokens: 800 }) });
     } else {
-      response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY },
-        body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: messages, max_tokens: 1200 })
-      });
+      response = await fetch('https://api.groq.com/openai/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY }, body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: messages, max_tokens: 800 }) });
     }
-    var data = await response.json();
-    var planText = data.choices && data.choices[0] ? data.choices[0].message.content.trim() : '⚠️ Не удалось составить план.';
-
-    // Render plan nicely
-    var lines = planText.split('\n');
-    var html = '<div class="card" style="line-height:1.8;">';
-    lines.forEach(function(line) {
-      if (!line.trim()) { html += '<br>'; return; }
-      if (/^(Пн|Вт|Ср|Чт|Пт|Сб|Вс|День|Monday|Tuesday|##|\*\*)/.test(line.trim())) {
-        html += '<div style="font-weight:800;color:var(--accent);margin-top:14px;font-size:15px;">' + line.replace(/\*\*/g,'') + '</div>';
-      } else if (line.trim().startsWith('-') || line.trim().startsWith('•')) {
-        html += '<div style="padding-left:12px;color:var(--text);font-size:13px;">' + line + '</div>';
-      } else {
-        html += '<div style="font-size:13px;">' + line.replace(/\*\*/g,'<strong>').replace(/\*\*/g,'</strong>') + '</div>';
-      }
-    });
-    html += '</div>';
-    resultDiv.innerHTML = html;
-    showToast('✅ План готов!');
-  } catch(e) {
-    resultDiv.innerHTML = '<div class="card" style="color:var(--danger);">⚠️ Ошибка: ' + e.message + '</div>';
-  }
-  if (btn) { btn.textContent = '✨ Обновить план'; btn.disabled = false; }
-}
-
-// ── SENTENCE GENERATOR ──
-var selectedSentence = null;
-
-async function generateSentences(word) {
-  if (!MISTRAL_KEY && !GROQ_KEY) return; // silently skip if no key
-  var picker = document.getElementById('sentencePicker');
-  var list = document.getElementById('sentenceList');
-  picker.style.display = 'block';
-  selectedSentence = null;
-  list.innerHTML = '<div class="sentence-loading"><span class="sentence-spinner"></span>ИИ составляет предложения...</div>';
-
-  var promptLines = [
-    'Составь 4 реальных немецких предложения со словом "' + word + '".',
-    '',
-    'Требования:',
-    '- Предложения должны быть из реальной жизни (разговор, работа, учёба, путешествия)',
-    '- Разной сложности: 1 простое, 2 средних, 1 сложное',
-    '- Разные ситуации и контексты, не повторяться',
-    '- Полезные для реального использования',
-    '',
-    'Отвечай ТОЛЬКО в JSON без лишнего текста:',
-    '{sentences:[{de:немецкое предложение,ru:перевод на русский}]}'
-  ];
-
-  try {
-    var messages = [{ role: 'user', content: promptLines.join('\n') }];
-    var response;
-    if (MISTRAL_KEY) {
-      response = await fetch('https://api.mistral.ai/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY },
-        body: JSON.stringify({ model: 'mistral-small-latest', messages: messages, max_tokens: 600 })
-      });
-    } else {
-      response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY },
-        body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: messages, max_tokens: 600 })
-      });
-    }
-    var data = await response.json();
-    var text = data.choices && data.choices[0] ? data.choices[0].message.content : '';
-    var jsonMatch = text.match(/\{[\s\S]*\}/);
+    data = await response.json();
+    var rawText = data.choices && data.choices[0] ? data.choices[0].message.content : '';
+    var jsonMatch = rawText.match(/\{[\s\S]*\}/);
     var parsed = null;
     if (jsonMatch) { try { parsed = JSON.parse(jsonMatch[0]); } catch(e) {} }
 
-    if (parsed && parsed.sentences && parsed.sentences.length > 0) {
-      list.innerHTML = '';
-      parsed.sentences.forEach(function(s, i) {
-        var item = document.createElement('div');
-        item.className = 'sentence-item';
-        item.innerHTML = '<div class="sentence-de">' + s.de + '</div><div class="sentence-ru">' + s.ru + '</div>';
-        item.onclick = function() {
-          document.querySelectorAll('.sentence-item').forEach(function(el) { el.classList.remove('selected'); });
-          item.classList.add('selected');
-          selectedSentence = { de: s.de, ru: s.ru };
-        };
-        list.appendChild(item);
-      });
-      // Add "none" option
-      var noneItem = document.createElement('div');
-      noneItem.className = 'sentence-item';
-      noneItem.style.cssText = 'border-style:dashed;color:var(--muted);text-align:center;font-size:13px;';
-      noneItem.innerHTML = '<div class="sentence-de" style="color:var(--muted);">Без примера</div>';
-      noneItem.onclick = function() {
-        document.querySelectorAll('.sentence-item').forEach(function(el) { el.classList.remove('selected'); });
-        noneItem.classList.add('selected');
-        selectedSentence = null;
-      };
-      list.appendChild(noneItem);
+    if (parsed && parsed.text && parsed.words && parsed.words.length > 3) {
+      currentReadingWords = parsed.words || [];
+      renderReadingText(parsed.text, currentReadingWords);
+    } else if (parsed && parsed.text) {
+      // Not enough German words - show warning and retry option
+      box.innerHTML = '<div style="color:orange;text-align:center;padding:20px;">⚠️ ИИ сгенерировал мало немецких слов.<br><br><button onclick="regenerateReading()" style="width:auto;padding:8px 16px;">🔄 Попробовать снова</button></div>';
     } else {
-      list.innerHTML = '<div style="color:var(--muted);font-size:12px;padding:8px;">Не удалось сгенерировать предложения</div>';
+      box.innerHTML = '<div style="color:var(--danger);text-align:center;padding:20px;">⚠️ Не удалось создать текст.<br><br><button onclick="regenerateReading()" style="width:auto;padding:8px 16px;">🔄 Попробовать снова</button></div>';
     }
   } catch(e) {
-    list.innerHTML = '<div style="color:var(--muted);font-size:12px;padding:8px;">Ошибка генерации</div>';
+    box.innerHTML = '<div style="color:var(--danger);">⚠️ Ошибка: ' + e.message + '</div>';
   }
+}
+
+function renderReadingText(text, words) {
+  var box = document.getElementById('readingTextBox');
+
+  // Split text into sentences, process each
+  // Strategy: replace word by word using split-join to avoid double replacement
+  var sorted = words.slice().sort(function(a, b) { return b.de.length - a.de.length; });
+
+  // Step 1: replace each German word with a unique token
+  var tokens = {};
+  var result = text;
+  sorted.forEach(function(w, i) {
+    var token = '§§' + i + '§§';
+    tokens[token] = w;
+    // Simple case-insensitive replace, word boundary aware
+    var esc = w.de.replace(/[-[\]{}()*+?.,^$|#]/g, '\\$&');
+    result = result.replace(new RegExp(esc, 'gi'), token);
+  });
+
+  // Step 2: convert tokens to spans
+  Object.keys(tokens).forEach(function(token) {
+    var w = tokens[token];
+    var span = '<span class="word-de-inline" data-de="' + w.de.replace(/"/g,'&quot;') + '" data-ru="' + w.ru.replace(/"/g,'&quot;') + '" onclick="showWordTooltip(event,this)">' + w.de + '</span>';
+    result = result.split(token).join(span);
+  });
+
+  result = result.replace(/\n/g, '<br>');
+  box.innerHTML = result;
+
+  // Show word list with add buttons
+  if (words.length > 0) {
+    var listDiv = document.getElementById('readingWordItems');
+    listDiv.innerHTML = '';
+    words.forEach(function(w) {
+      var item = document.createElement('div');
+      item.style.cssText = 'display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;';
+      var s1 = document.createElement('strong'); s1.style.cssText='color:var(--accent);flex:1;'; s1.textContent=w.de;
+      var s2 = document.createElement('span'); s2.style.cssText='color:var(--muted);flex:1;'; s2.textContent=w.ru;
+      var b2 = document.createElement('button');
+      var inDict = words_arr_has(w.de);
+      b2.textContent = inDict ? '✓' : '+ Добавить';
+      b2.style.cssText = 'width:auto;padding:4px 10px;margin:0;font-size:11px;border-radius:8px;flex-shrink:0;' + (inDict ? 'background:var(--surface);border:1px solid var(--border);color:var(--muted);cursor:default;' : 'background:var(--accent);color:white;');
+      if (!inDict) { (function(wd,wt,wb){ wb.onclick=function(){addSingleReadingWord(wb,wd,wt);}; })(w.de,w.ru,b2); }
+      item.appendChild(s1); item.appendChild(s2); item.appendChild(b2);
+      listDiv.appendChild(item);
+    });
+    document.getElementById('readingWordList').style.display = 'block';
+  }
+}
+
+var tooltipEl = null;
+function showWordTooltip(event, el) {
+  if (tooltipEl) tooltipEl.remove();
+  tooltipEl = document.createElement('div');
+  tooltipEl.className = 'word-tooltip';
+  tooltipEl.textContent = el.dataset.ru;
+  document.body.appendChild(tooltipEl);
+  var rect = el.getBoundingClientRect();
+  tooltipEl.style.left = Math.min(rect.left, window.innerWidth - 220) + 'px';
+  tooltipEl.style.top = (rect.bottom + 8) + 'px';
+  setTimeout(function() { if (tooltipEl) { tooltipEl.remove(); tooltipEl = null; } }, 2000);
+}
+
+function words_arr_has(word) {
+  return words.some(function(w) { return w.word.toLowerCase() === word.toLowerCase(); });
+}
+
+function addSingleReadingWord(btn, de, ru) {
+  if (words_arr_has(de)) return;
+  words.push({ id: Date.now() + Math.random(), word: de, translation: ru, topic: currentReadingTopic, srs: 0, nextReview: Date.now() });
+  save();
+  btn.textContent = '✓';
+  btn.style.background = 'var(--surface)';
+  btn.style.border = '1px solid var(--border)';
+  btn.style.color = 'var(--muted)';
+  btn.style.cursor = 'default';
+  showToast('✅ ' + de + ' → ' + ru);
+}
+
+function addReadingWordsToDict() {
+  if (currentReadingWords.length === 0) { showToast('⚠️ Нет слов для добавления'); return; }
+  var added = 0;
+  currentReadingWords.forEach(function(w) {
+    var exists = words.some(function(x) { return x.word.toLowerCase() === w.de.toLowerCase(); });
+    if (!exists) {
+      words.push({ id: Date.now() + Math.random(), word: w.de, translation: w.ru, topic: currentReadingTopic, srs: 0, nextReview: Date.now() });
+      added++;
+    }
+  });
+  if (added > 0) { save(); showToast('✅ Добавлено ' + added + ' слов в словарь!'); launchConfetti(); }
+  else showToast('ℹ️ Все слова уже в словаре');
+}
+
+// ── CONFETTI ──
+function launchConfetti() {
+  var container = document.getElementById('confettiContainer');
+  if (!container) return;
+  var colors = ['#ff6b9d','#6c63ff','#43e97b','#ff9ec4','#ffd700','#ff6584'];
+  for (var i = 0; i < 80; i++) {
+    (function(i) {
+      setTimeout(function() {
+        var piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = Math.random() * 100 + 'vw';
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.width = (Math.random() * 8 + 6) + 'px';
+        piece.style.height = (Math.random() * 8 + 6) + 'px';
+        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        piece.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
+        piece.style.animationDelay = (Math.random() * 0.5) + 's';
+        container.appendChild(piece);
+        setTimeout(function() { piece.remove(); }, 3000);
+      }, i * 20);
+    })(i);
+  }
+}
+
+// ── LEVEL / ONBOARDING ──
+var userLevel = localStorage.getItem('user_level') || '';
+var selectedLevelTemp = '';
+
+var levelDescriptions = {
+  'A1': 'уровень A1 (начинающий). Используй очень простые объяснения, базовую лексику, короткие предложения. Всегда давай перевод незнакомых слов.',
+  'A2': 'уровень A2 (элементарный). Объясняй просто, используй знакомые слова, давай много примеров с переводом.',
+  'B1': 'уровень B1 (средний). Можешь использовать более сложные конструкции, но всегда объясняй грамматику по-русски.',
+  'B2': 'уровень B2 (выше среднего). Используй академический стиль, сложные конструкции. Готовь к экзамену B2.',
+  'C1': 'уровень C1 (продвинутый). Можешь общаться сложно, объяснять тонкости языка и стилистику.',
+  'C2': 'уровень C2 (мастер). Используй самые сложные конструкции, идиомы, нюансы языка.'
+};
+
+function getLevelPromptSuffix() {
+  var lvl = localStorage.getItem('user_level') || 'B1';
+  return '\n\nУровень ученика: ' + lvl + '. Если спрашивает уровень — ответь что его уровень ' + lvl + '.';
+}
+
+function selectLevel(level) {
+  selectedLevelTemp = level;
+  document.querySelectorAll('.level-card').forEach(function(c) { c.classList.remove('selected'); });
+  document.querySelectorAll('.level-card').forEach(function(c) {
+    if (c.querySelector('.lc-name') && c.querySelector('.lc-name').textContent.startsWith(level)) c.classList.add('selected');
+  });
+  document.getElementById('onboardingBtn').classList.add('ready');
+}
+
+function finishOnboarding() {
+  if (!selectedLevelTemp) return;
+  localStorage.setItem('user_level', selectedLevelTemp);
+  userLevel = selectedLevelTemp;
+  document.getElementById('onboarding').style.display = 'none';
+  updateLevelBadge();
+  showToast('✅ Уровень ' + selectedLevelTemp + ' сохранён!');
+}
+
+function changeLevel() {
+  selectedLevelTemp = userLevel;
+  document.getElementById('onboarding').style.display = 'flex';
+  // Pre-select current level
+  document.querySelectorAll('.level-card').forEach(function(c) {
+    if (c.querySelector('.lc-name') && c.querySelector('.lc-name').textContent.startsWith(userLevel)) {
+      c.classList.add('selected');
+      document.getElementById('onboardingBtn').classList.add('ready');
+    }
+  });
+}
+
+function updateLevelBadge() {
+  var lvl = localStorage.getItem('user_level') || '';
+  var el = document.getElementById('levelBadge');
+  if (el) { el.textContent = lvl ? '🎓 ' + lvl : '🎓 Уровень'; }
 }
 
 // ── INIT ──
 updateTopics();
 updateWordCount();
 renderChatList();
-const chatIds = Object.keys(allChats).sort(function(a,b) { return allChats[b].createdAt - allChats[a].createdAt; });
+updateLevelBadge();
+var chatIds = Object.keys(allChats).sort(function(a,b) { return allChats[b].createdAt - allChats[a].createdAt; });
 if (chatIds.length > 0) loadChat(chatIds[0]);
-
+// Show onboarding if no level set
+if (!localStorage.getItem('user_level')) {
+  document.getElementById('onboarding').style.display = 'flex';
+}
 
 </script>
 </body>
