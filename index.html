@@ -246,6 +246,43 @@ button:active { transform: translateY(0); }
 .sentence-spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 8px; vertical-align: middle; }
 
 /* READING PANEL */
+/* Sentence hover translation */
+.sent-de {
+  cursor: pointer; border-radius: 6px; padding: 2px 4px;
+  transition: background 0.2s; display: inline;
+}
+.sent-de:hover { background: rgba(108,99,255,0.12); }
+.sent-ru {
+  display: none; color: var(--muted); font-size: 13px;
+  font-style: italic; margin-left: 6px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 2px 8px;
+}
+.sent-de:hover + .sent-ru,
+.sent-de.show-tr + .sent-ru { display: inline; }
+
+/* Grammar popup */
+.grammar-popup {
+  position: fixed; left: 50%; transform: translateX(-50%);
+  bottom: 80px; width: min(400px, 90vw);
+  background: var(--card); border: 1px solid var(--accent);
+  border-radius: 20px; padding: 18px 20px; z-index: 9990;
+  box-shadow: 0 8px 40px var(--shadow);
+  animation: slideUp 0.2s ease;
+  max-height: 60vh; overflow-y: auto;
+}
+@keyframes slideUp { from { opacity:0; transform: translateX(-50%) translateY(20px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }
+.grammar-popup-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.grammar-popup-word { font-size:18px; font-weight:800; color:var(--accent); }
+.grammar-popup-close { background:none; border:none; color:var(--muted); font-size:20px; cursor:pointer; width:auto; padding:0; margin:0; }
+.grammar-popup-body { font-size:13px; line-height:1.8; color:var(--text); white-space:pre-wrap; }
+.grammar-popup-loading { text-align:center; color:var(--muted); padding:20px; }
+.grammar-popup-actions { display:flex; gap:8px; margin-top:12px; }
+.grammar-popup-actions button { flex:1; padding:8px; margin:0; font-size:12px; border-radius:10px; }
+
+/* Reading paragraph */
+.reading-para { margin-bottom:14px; }
+.reading-text-box { line-height: 2.2; }
 .reading-topic-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin-bottom: 16px; }
 @media(max-width:500px) { .reading-topic-grid { grid-template-columns: 1fr; } }
 .topic-card {
@@ -1742,6 +1779,7 @@ function showPanel_reading() { showReadingTopics(); }
 function showReadingTopics() {
   document.getElementById('readingTopics').style.display = 'block';
   document.getElementById('readingContent').style.display = 'none';
+  renderSavedStories();
 }
 
 function regenerateReading() { generateReading(currentReadingTopic); }
@@ -1768,23 +1806,43 @@ async function generateReading(topic) {
   var levelWordCount = { 'A1': '25-35', 'A2': '40-55', 'B1': '55-70', 'B2': '70-90', 'C1': '90-110', 'C2': '110+' };
   var wCount = levelWordCount[lvl] || '55-70';
 
-  var modeInstructions = {
-    'mixed': 'Текст на русском, немецкие слова вставлены прямо в предложения. В каждом предложении МИНИМУМ 3-4 немецких слова. Используй сложные слова, фразовые глаголы, устойчивые выражения.',
-    'mostly-de': 'Текст в основном на немецком (70%), остальное на русском для связки. Используй сложные конструкции соответствующие уровню ' + lvl + '.',
-    'full-de': 'Текст ПОЛНОСТЬЮ на немецком языке уровня ' + lvl + '. Сложные слова выдели в список words с переводом на русский.'
-  };
-  var modeInstr = modeInstructions[readingMode] || modeInstructions['mixed'];
-
-  var promptParts = [
-    'Создай учебный текст для изучения немецкого языка.',
-    'Тема: ' + topic + '. Уровень ученика: ' + lvl + '.',
-    modeInstr,
-    'Длина: 15-18 предложений. Всего немецких слов/фраз: ' + wCount + '.',
-    'ВАЖНО: Используй разнообразную лексику — существительные С артиклями, глаголы в разных временах, прилагательные, наречия, предлоги.',
-    'Примеры сложных вставок для B1+: "обсудили die Möglichkeiten", "несмотря на die Schwierigkeiten", "согласно dem Vertrag"',
-    'Каждое уникальное немецкое слово/фразу добавь в список words с переводом.',
-    'Отвечай ТОЛЬКО в JSON: {"text":"текст","words":[{"de":"слово","ru":"перевод"}]}'
-  ];
+  var promptParts;
+  if (readingMode === 'mixed') {
+    promptParts = [
+      'Создай учебный СМЕШАННЫЙ текст для изучения немецкого языка.',
+      'Тема: ' + topic + '. Уровень: ' + lvl + '.',
+      'ФОРМАТ: Каждое предложение написано НА РУССКОМ, но содержит 3-5 немецких слов/фраз вставленных внутри.',
+      'КАЖДОЕ предложение обязательно содержит немецкие слова. НИ ОДНОГО чисто русского предложения!',
+      'Используй: существительные с артиклями (den Tisch, die Frau), прилагательные (sehr schön), глаголы (hat gesagt), фразы (zum Beispiel, auf jeden Fall).',
+      'Пример: "Вчера я пошёл in die Stadt и встретил einen alten Freund около dem Bahnhof."',
+      'Длина: 15 предложений. Немецких слов всего: ' + wCount + '.',
+      'Каждое немецкое слово/фразу добавь в words с переводом.',
+      'Отвечай ТОЛЬКО в JSON: {"text":"текст","words":[{"de":"слово из текста","ru":"перевод"}]}'
+    ];
+  } else if (readingMode === 'mostly-de') {
+    promptParts = [
+      'Создай учебный текст для изучения немецкого языка.',
+      'Тема: ' + topic + '. Уровень: ' + lvl + '.',
+      'ФОРМАТ: Текст состоит из ПАР — немецкое предложение + русский перевод в скобках.',
+      'Каждый абзац: сначала предложение на немецком, потом "(Перевод: ...)" на русском.',
+      'Пример: "Gestern bin ich in die Stadt gefahren. (Перевод: Вчера я поехал в город.)"',
+      'Уровень немецких предложений соответствует ' + lvl + '.',
+      'Длина: 12-15 пар предложений.',
+      'В words добавь сложные немецкие слова из текста с переводом.',
+      'Отвечай ТОЛЬКО в JSON: {"text":"текст с парами","words":[{"de":"слово","ru":"перевод"}]}'
+    ];
+  } else {
+    // full-de
+    promptParts = [
+      'Создай текст ПОЛНОСТЬЮ на немецком языке.',
+      'Тема: ' + topic + '. Уровень: ' + lvl + '.',
+      'Пиши как носитель языка, соответствуя уровню ' + lvl + '.',
+      'Длина: 12-15 предложений.',
+      'В words добавь ВСЕ важные слова из текста с переводом на русский — существительные, глаголы, прилагательные.',
+      'При наведении на предложение пользователь увидит перевод — поэтому в words добавь также переводы целых предложений в формате {"de":"предложение","ru":"перевод предложения","isSentence":true}.',
+      'Отвечай ТОЛЬКО в JSON: {"text":"текст на немецком","words":[{"de":"слово","ru":"перевод"},{"de":"предложение.","ru":"перевод.","isSentence":true}]}'
+    ];
+  }
   var prompt = promptParts.join('\n');
 
   try {
@@ -1863,6 +1921,122 @@ function renderReadingText(text, words) {
     document.getElementById('readingWordList').style.display = 'block';
   }
 }
+function renderMostlyDeText(text, words, box) {
+  // Split into German sentence + (Translation: ...) pairs
+  var lines = text.split('\n').filter(function(l) { return l.trim(); });
+  box.innerHTML = '';
+  lines.forEach(function(line) {
+    var para = document.createElement('div');
+    para.className = 'reading-para';
+    // Check if line has (Перевод: ...) pattern
+    var trMatch = line.match(/^(.+?)\s*\(Перевод:\s*(.+?)\)\s*$/);
+    if (trMatch) {
+      var deSpan = document.createElement('span');
+      deSpan.className = 'sent-de';
+      deSpan.textContent = trMatch[1].trim();
+      deSpan.onclick = function() { this.classList.toggle('show-tr'); };
+      var ruSpan = document.createElement('span');
+      ruSpan.className = 'sent-ru';
+      ruSpan.textContent = trMatch[2].trim();
+      para.appendChild(deSpan);
+      para.appendChild(ruSpan);
+    } else {
+      para.textContent = line;
+    }
+    box.appendChild(para);
+  });
+}
+
+function renderFullDeText(text, words, box) {
+  // Build sentence→translation map
+  var sentMap = {};
+  words.forEach(function(w) { if (w.isSentence) sentMap[w.de.trim()] = w.ru; });
+
+  // Split into sentences
+  var sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+  box.innerHTML = '';
+  var para = document.createElement('div'); para.className = 'reading-para';
+
+  sentences.forEach(function(sent) {
+    var trimmed = sent.trim();
+    var translation = sentMap[trimmed] || null;
+
+    // Highlight individual words
+    var nonSentWords = words.filter(function(w) { return !w.isSentence; });
+    var highlighted = trimmed;
+    var sorted = nonSentWords.slice().sort(function(a,b){ return b.de.length - a.de.length; });
+    var tokens = {};
+    sorted.forEach(function(w, i) {
+      var token = '§§' + i + '§§';
+      tokens[token] = w;
+      var matchWord = w.de.replace(/^(der|die|das|den|dem|des|ein|eine|einen|einem)\s+/i, '');
+      var esc = matchWord.replace(/[-[\]{}()*+?.,^$|#]/g, '\\$&');
+      highlighted = highlighted.replace(new RegExp('(?<![\\w\\u00C0-\\u024F])' + esc, 'gi'), token);
+    });
+    Object.keys(tokens).forEach(function(token) {
+      var w = tokens[token];
+      highlighted = highlighted.split(token).join('<span class="word-de-inline" data-de="' + w.de.replace(/"/g,'&quot;') + '" data-ru="' + w.ru.replace(/"/g,'&quot;') + '" onclick="showGrammarPopup(event,this)">' + w.de + '</span>');
+    });
+
+    var wrapper = document.createElement('span');
+    if (translation) {
+      wrapper.className = 'sent-de';
+      wrapper.innerHTML = highlighted + ' ';
+      wrapper.onclick = function(e) {
+        if (e.target.classList.contains('word-de-inline')) return;
+        this.classList.toggle('show-tr');
+      };
+      var ruSpan = document.createElement('span');
+      ruSpan.className = 'sent-ru';
+      ruSpan.textContent = translation;
+      para.appendChild(wrapper);
+      para.appendChild(ruSpan);
+    } else {
+      wrapper.innerHTML = highlighted + ' ';
+      para.appendChild(wrapper);
+    }
+  });
+  box.appendChild(para);
+}
+
+// ── GRAMMAR POPUP ──
+var grammarPopupEl = null;
+function closeGrammarPopup() { if (grammarPopupEl) { grammarPopupEl.remove(); grammarPopupEl = null; } }
+
+async function showGrammarPopup(event, el) {
+  event.stopPropagation();
+  closeGrammarPopup();
+  var word = el.dataset.de;
+  var translation = el.dataset.ru;
+  var lvl = localStorage.getItem('user_level') || 'B1';
+
+  var popup = document.createElement('div');
+  popup.className = 'grammar-popup';
+  popup.innerHTML = '<div class="grammar-popup-header"><span class="grammar-popup-word">' + word + '</span><button class="grammar-popup-close" onclick="closeGrammarPopup()">✕</button></div><div class="grammar-popup-body"><div class="grammar-popup-loading">⏳ Загружаю объяснение...</div></div><div class="grammar-popup-actions"><button onclick="addSingleReadingWord(this,\"' + word.replace(/"/g,'&quot;') + '\",\"' + translation.replace(/"/g,'&quot;') + '\")">+ В словарь</button><button class="btn-s" onclick="closeGrammarPopup()">Закрыть</button></div>';
+  document.body.appendChild(popup);
+  grammarPopupEl = popup;
+  document.addEventListener('click', closeGrammarPopup, { once: true });
+
+  if (!MISTRAL_KEY && !GROQ_KEY) { popup.querySelector('.grammar-popup-body').textContent = translation; return; }
+
+  try {
+    var promptText = 'Объясни немецкое слово "' + word + '" (перевод: ' + translation + ') для уровня ' + lvl + '.\nОбъясни КРАТКО (3-5 строк):\n1. Что это за часть речи\n2. Если существительное — артикль и падежи (Nominativ/Akkusativ/Dativ/Genitiv)\n3. Если глагол — время, спряжение\n4. Если прилагательное — степени сравнения\n5. Один пример использования\nОтвечай на русском, кратко и понятно.';
+    var messages = [{ role: 'user', content: promptText }];
+    var response, data;
+    if (MISTRAL_KEY) {
+      response = await fetch('https://api.mistral.ai/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY }, body: JSON.stringify({ model: 'mistral-small-latest', messages: messages, max_tokens: 300 }) });
+      data = await response.json();
+    } else {
+      response = await fetch('https://api.groq.com/openai/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY }, body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: messages, max_tokens: 300 }) });
+      data = await response.json();
+    }
+    var explanation = data.choices && data.choices[0] ? data.choices[0].message.content.trim() : translation;
+    if (grammarPopupEl) grammarPopupEl.querySelector('.grammar-popup-body').textContent = explanation;
+  } catch(e) {
+    if (grammarPopupEl) grammarPopupEl.querySelector('.grammar-popup-body').textContent = translation;
+  }
+}
+
 renderReadingText._wordListOnly = function(words) {
   if (!words || !words.length) return;
   var listDiv = document.getElementById('readingWordItems');
