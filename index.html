@@ -523,7 +523,11 @@ button:active { transform: translateY(0); }
       <div class="panel-scroll">
         <div class="card">
           <div style="font-size:15px;font-weight:800;margin-bottom:2px;">Добавить слово</div>
-          <span class="label">Немецкое слово</span>
+          <div style="display:flex;gap:8px;margin-top:8px;align-items:center;">
+            <button class="mode-btn active" id="btn-de-ru" onclick="setTranslateMode('de')" style="width:auto;margin:0;">🇩🇪 → 🇷🇺</button>
+            <button class="mode-btn" id="btn-ru-de" onclick="setTranslateMode('ru')" style="width:auto;margin:0;">🇷🇺 → 🇩🇪</button>
+          </div>
+          <span class="label" id="wordLabel">Немецкое слово</span>
           <input id="word" placeholder="z.B. der Hund">
           <button class="btn-voice" onclick="startVoiceInput()">🎤 Произнести слово</button>
           <span class="label">Перевод</span>
@@ -669,8 +673,12 @@ button:active { transform: translateY(0); }
     <div class="panel" id="panel-reading">
       <div class="panel-scroll">
         <div id="readingTopics">
-          <div style="font-size:15px;font-weight:800;margin-bottom:4px;">📖 Чтение</div>
-          <div style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6;">Текст на смеси русского и немецкого — немецкие слова подсвечены, нажми на любое чтобы увидеть перевод</div>
+          <div style="font-size:15px;font-weight:800;margin-bottom:8px;">📖 Чтение</div>
+          <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;">
+            <button class="mode-btn active" id="rmode-mixed" onclick="setReadingMode('mixed')" style="width:auto;margin:0;">🔀 Смешанный</button>
+            <button class="mode-btn" id="rmode-mostly-de" onclick="setReadingMode('mostly-de')" style="width:auto;margin:0;">🇩🇪 Больше немецкого</button>
+            <button class="mode-btn" id="rmode-full-de" onclick="setReadingMode('full-de')" style="width:auto;margin:0;">🇩🇪 Полный немецкий</button>
+          </div>
           <div class="reading-topic-grid">
             <div class="topic-card" onclick="generateReading('путешествия')"><div class="tc-emoji">✈️</div><div class="tc-name">Путешествия</div></div>
             <div class="topic-card" onclick="generateReading('еда и кафе')"><div class="tc-emoji">🍕</div><div class="tc-name">Еда и кафе</div></div>
@@ -681,12 +689,17 @@ button:active { transform: translateY(0); }
             <div class="topic-card" onclick="generateReading('природа и погода')"><div class="tc-emoji">🌤️</div><div class="tc-name">Природа и погода</div></div>
             <div class="topic-card" onclick="generateReading('покупки и деньги')"><div class="tc-emoji">🛍️</div><div class="tc-name">Покупки и деньги</div></div>
           </div>
+          <div id="savedStoriesSection" style="margin-top:16px;display:none;">
+            <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px;">📚 Сохранённые истории</div>
+            <div id="savedStoriesList"></div>
+          </div>
         </div>
         <div id="readingContent" style="display:none;">
-          <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;">
+          <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;flex-wrap:wrap;">
             <button class="btn-s" onclick="showReadingTopics()" style="width:auto;padding:8px 14px;margin:0;font-size:13px;">← Темы</button>
             <button class="btn-s" onclick="regenerateReading()" style="width:auto;padding:8px 14px;margin:0;font-size:13px;">🔄 Новый текст</button>
-            <button onclick="addReadingWordsToDict()" style="width:auto;padding:8px 14px;margin:0;font-size:13px;">➕ Добавить все слова</button>
+            <button class="btn-s" onclick="saveCurrentStory()" style="width:auto;padding:8px 14px;margin:0;font-size:13px;">💾 Сохранить</button>
+            <button onclick="addReadingWordsToDict()" style="width:auto;padding:8px 14px;margin:0;font-size:13px;">➕ Все слова</button>
           </div>
           <div class="reading-text-box" id="readingTextBox"></div>
           <div id="readingWordList" style="display:none;" class="card">
@@ -930,17 +943,7 @@ async function translateWord(word) {
   return data[0][0][0];
 }
 
-document.getElementById('word').addEventListener('blur', async function() {
-  var w = document.getElementById('word').value.trim();
-  if (!w) return;
-  document.getElementById('translation').value = 'Перевод...';
-  try {
-    var translated = await translateWord(w);
-    document.getElementById('translation').value = translated;
-    if (!/^(der|die|das) /i.test(w)) autoAddArtikel(w);
-    generateSentences(w);
-  } catch(e) { document.getElementById('translation').value = ''; }
-});
+// blur handler moved to translate mode section above
 
 async function autoAddArtikel(word) {
   try {
@@ -1762,20 +1765,25 @@ async function generateReading(topic) {
     'C2': '8-10 предложений, 35+ немецких слов, уровень носителя'
   };
 
-  var levelWordCount = { 'A1': '20-25', 'A2': '30-40', 'B1': '45-55', 'B2': '55-70', 'C1': '70-90', 'C2': '90+' };
-  var wCount = levelWordCount[lvl] || '45-55';
+  var levelWordCount = { 'A1': '25-35', 'A2': '40-55', 'B1': '55-70', 'B2': '70-90', 'C1': '90-110', 'C2': '110+' };
+  var wCount = levelWordCount[lvl] || '55-70';
+
+  var modeInstructions = {
+    'mixed': 'Текст на русском, немецкие слова вставлены прямо в предложения. В каждом предложении МИНИМУМ 3-4 немецких слова. Используй сложные слова, фразовые глаголы, устойчивые выражения.',
+    'mostly-de': 'Текст в основном на немецком (70%), остальное на русском для связки. Используй сложные конструкции соответствующие уровню ' + lvl + '.',
+    'full-de': 'Текст ПОЛНОСТЬЮ на немецком языке уровня ' + lvl + '. Сложные слова выдели в список words с переводом на русский.'
+  };
+  var modeInstr = modeInstructions[readingMode] || modeInstructions['mixed'];
+
   var promptParts = [
-    'Ты создаёшь учебный текст для изучения немецкого языка методом погружения.',
-    'Тема: ' + topic + '. Уровень: ' + lvl + '. ' + (levelInstr[lvl] || levelInstr['B1']),
-    'ПРАВИЛО: Каждое предложение ОБЯЗАТЕЛЬНО содержит минимум 2-3 немецких слова.',
-    'ФОРМАТ: Текст пишется на русском, но немецкие слова вставляются прямо внутри каждого предложения.',
-    'ПРИМЕР ПРАВИЛЬНОГО предложения: "Сегодня утром я встал очень früh и выпил einen Kaffee с молоком."',
-    'ПРИМЕР ПРАВИЛЬНОГО предложения: "Мы пошли в den Park, где было sehr schön und warm."',
-    'ПРИМЕР НЕПРАВИЛЬНОГО (так нельзя): "Сегодня мы пошли в парк и хорошо провели время." — нет немецких слов!',
-    'Напиши 15 предложений. В каждом предложении МИНИМУМ 2 немецких слова.',
-    'Всего немецких слов в тексте: ' + wCount + '.',
-    'После текста укажи все уникальные немецкие слова из текста с переводом.',
-    'Отвечай ТОЛЬКО в JSON: {"text":"текст здесь","words":[{"de":"слово","ru":"перевод"}]}'
+    'Создай учебный текст для изучения немецкого языка.',
+    'Тема: ' + topic + '. Уровень ученика: ' + lvl + '.',
+    modeInstr,
+    'Длина: 15-18 предложений. Всего немецких слов/фраз: ' + wCount + '.',
+    'ВАЖНО: Используй разнообразную лексику — существительные С артиклями, глаголы в разных временах, прилагательные, наречия, предлоги.',
+    'Примеры сложных вставок для B1+: "обсудили die Möglichkeiten", "несмотря на die Schwierigkeiten", "согласно dem Vertrag"',
+    'Каждое уникальное немецкое слово/фразу добавь в список words с переводом.',
+    'Отвечай ТОЛЬКО в JSON: {"text":"текст","words":[{"de":"слово","ru":"перевод"}]}'
   ];
   var prompt = promptParts.join('\n');
 
@@ -1855,6 +1863,25 @@ function renderReadingText(text, words) {
     document.getElementById('readingWordList').style.display = 'block';
   }
 }
+renderReadingText._wordListOnly = function(words) {
+  if (!words || !words.length) return;
+  var listDiv = document.getElementById('readingWordItems');
+  listDiv.innerHTML = '';
+  words.forEach(function(w) {
+    var item = document.createElement('div');
+    item.style.cssText = 'display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;';
+    var s1 = document.createElement('strong'); s1.style.cssText='color:var(--accent);flex:1;'; s1.textContent=w.de;
+    var s2 = document.createElement('span'); s2.style.cssText='color:var(--muted);flex:1;'; s2.textContent=w.ru;
+    var b2 = document.createElement('button');
+    var inDict = words_arr_has(w.de);
+    b2.textContent = inDict ? '✓' : '+ Добавить';
+    b2.style.cssText = 'width:auto;padding:4px 10px;margin:0;font-size:11px;border-radius:8px;flex-shrink:0;' + (inDict ? 'background:var(--surface);border:1px solid var(--border);color:var(--muted);cursor:default;' : 'background:var(--accent);color:white;');
+    if (!inDict) { (function(wd,wt,wb){ wb.onclick=function(){addSingleReadingWord(wb,wd,wt);}; })(w.de,w.ru,b2); }
+    item.appendChild(s1); item.appendChild(s2); item.appendChild(b2);
+    listDiv.appendChild(item);
+  });
+  document.getElementById('readingWordList').style.display = 'block';
+};
 
 var tooltipEl = null;
 function showWordTooltip(event, el) {
@@ -1923,6 +1950,127 @@ function launchConfetti() {
   }
 }
 
+// ── TRANSLATE MODE (DE→RU or RU→DE) ──
+var translateMode = 'de'; // 'de' = input German, 'ru' = input Russian
+
+function setTranslateMode(mode) {
+  translateMode = mode;
+  document.querySelectorAll('#btn-de-ru, #btn-ru-de').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('btn-' + mode + '-' + (mode === 'de' ? 'ru' : 'de')).classList.add('active');
+  var wordInput = document.getElementById('word');
+  var wordLabel = document.getElementById('wordLabel');
+  if (mode === 'de') {
+    wordLabel.textContent = 'Немецкое слово';
+    wordInput.placeholder = 'z.B. der Hund';
+  } else {
+    wordLabel.textContent = 'Русское слово';
+    wordInput.placeholder = 'например: собака';
+  }
+  wordInput.value = '';
+  document.getElementById('translation').value = '';
+  document.getElementById('sentencePicker').style.display = 'none';
+}
+
+// Override blur handler to support RU→DE
+document.getElementById('word').addEventListener('blur', async function() {
+  var w = document.getElementById('word').value.trim();
+  if (!w) return;
+  document.getElementById('translation').value = 'Перевод...';
+  try {
+    var translated;
+    if (translateMode === 'ru') {
+      // Translate Russian → German
+      var url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=ru&tl=de&dt=t&q=' + encodeURIComponent(w);
+      var res = await fetch(url);
+      var data = await res.json();
+      translated = data[0][0][0];
+      // Swap: word becomes German, translation becomes Russian
+      document.getElementById('word').value = translated;
+      document.getElementById('translation').value = w;
+      if (!/^(der|die|das) /i.test(translated)) autoAddArtikel(translated);
+      generateSentences(translated);
+    } else {
+      translated = await translateWord(w);
+      document.getElementById('translation').value = translated;
+      if (!/^(der|die|das) /i.test(w)) autoAddArtikel(w);
+      generateSentences(w);
+    }
+  } catch(e) { document.getElementById('translation').value = ''; }
+});
+
+// ── READING MODE ──
+var readingMode = 'mixed'; // 'mixed', 'mostly-de', 'full-de'
+
+function setReadingMode(mode) {
+  readingMode = mode;
+  document.querySelectorAll('[id^="rmode-"]').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('rmode-' + mode).classList.add('active');
+}
+
+// ── SAVED STORIES ──
+var savedStories = JSON.parse(localStorage.getItem('saved_stories') || '[]');
+
+function saveCurrentStory() {
+  if (!currentReadingTopic || !currentReadingWords.length) { showToast('⚠️ Сначала сгенерируй текст'); return; }
+  var textBox = document.getElementById('readingTextBox');
+  var story = {
+    id: Date.now(),
+    topic: currentReadingTopic,
+    mode: readingMode,
+    html: textBox.innerHTML,
+    words: currentReadingWords,
+    date: new Date().toLocaleDateString('ru', {day:'2-digit',month:'2-digit',year:'2-digit'})
+  };
+  savedStories.unshift(story);
+  if (savedStories.length > 20) savedStories = savedStories.slice(0,20);
+  localStorage.setItem('saved_stories', JSON.stringify(savedStories));
+  renderSavedStories();
+  showToast('💾 История сохранена!');
+}
+
+function renderSavedStories() {
+  var section = document.getElementById('savedStoriesSection');
+  var list = document.getElementById('savedStoriesList');
+  if (!savedStories.length) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+  list.innerHTML = '';
+  savedStories.forEach(function(s) {
+    var item = document.createElement('div');
+    item.style.cssText = 'display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:6px;cursor:pointer;transition:border-color 0.2s;';
+    item.onmouseover = function() { item.style.borderColor = 'var(--accent)'; };
+    item.onmouseout = function() { item.style.borderColor = 'var(--border)'; };
+    var info = document.createElement('div'); info.style.flex = '1';
+    info.innerHTML = '<div style="font-size:13px;font-weight:600;">' + s.topic + '</div><div style="font-size:11px;color:var(--muted);">' + s.date + ' · ' + s.words.length + ' слов</div>';
+    var openBtn = document.createElement('button');
+    openBtn.textContent = '📖 Читать';
+    openBtn.style.cssText = 'width:auto;padding:5px 10px;margin:0;font-size:12px;';
+    openBtn.onclick = function(e) { e.stopPropagation(); loadSavedStory(s); };
+    var delBtn = document.createElement('button');
+    delBtn.textContent = '✕';
+    delBtn.style.cssText = 'width:auto;padding:5px 8px;margin:0;font-size:12px;background:var(--surface);border:1px solid var(--border);color:var(--muted);';
+    delBtn.onclick = function(e) { e.stopPropagation(); deleteStory(s.id); };
+    item.appendChild(info); item.appendChild(openBtn); item.appendChild(delBtn);
+    list.appendChild(item);
+  });
+}
+
+function loadSavedStory(s) {
+  currentReadingTopic = s.topic;
+  currentReadingWords = s.words;
+  document.getElementById('readingTopics').style.display = 'none';
+  document.getElementById('readingContent').style.display = 'block';
+  document.getElementById('readingTextBox').innerHTML = s.html;
+  // Re-render word list
+  renderReadingText._wordListOnly(s.words);
+}
+
+function deleteStory(id) {
+  savedStories = savedStories.filter(function(s) { return s.id !== id; });
+  localStorage.setItem('saved_stories', JSON.stringify(savedStories));
+  renderSavedStories();
+  showToast('🗑️ История удалена');
+}
+
 // ── LEVEL / ONBOARDING ──
 var userLevel = localStorage.getItem('user_level') || '';
 var selectedLevelTemp = '';
@@ -1981,6 +2129,7 @@ function updateLevelBadge() {
 updateTopics();
 updateWordCount();
 renderChatList();
+renderSavedStories();
 updateLevelBadge();
 var chatIds = Object.keys(allChats).sort(function(a,b) { return allChats[b].createdAt - allChats[a].createdAt; });
 if (chatIds.length > 0) loadChat(chatIds[0]);
