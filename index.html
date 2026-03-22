@@ -245,6 +245,71 @@ button:active { transform: translateY(0); }
 .sentence-loading { text-align: center; padding: 20px; color: var(--muted); font-size: 13px; }
 .sentence-spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 8px; vertical-align: middle; }
 
+/* GRAMMAR EXERCISES */
+.grammar-opt-btn {
+  background: var(--surface); border: 2px solid var(--border);
+  border-radius: 12px; padding: 12px; cursor: pointer;
+  font-family: 'JetBrains Mono', monospace; transition: all 0.15s;
+  color: var(--text); width: 100%; margin: 0;
+}
+.grammar-opt-btn:hover { border-color: var(--accent); background: rgba(108,99,255,0.06); }
+.grammar-opt-btn:disabled { cursor: default; }
+
+/* BEAUTIFUL WORD CARDS */
+.word-item {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  padding: 14px 16px; background: var(--card);
+  border: 1px solid var(--border); border-radius: 16px;
+  margin-bottom: 8px; transition: all 0.2s; position: relative;
+  overflow: hidden;
+}
+.word-item::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 4px; border-radius: 4px 0 0 4px;
+  background: var(--topic-color, var(--accent));
+}
+.word-item:hover { border-color: var(--accent); transform: translateX(2px); }
+.word-item.due-now { border-color: var(--accent); }
+.word-item.due-now::after {
+  content: '🔔'; position: absolute; top: 8px; right: 36px;
+  font-size: 11px;
+}
+.word-de { font-size: 16px; font-weight: 800; color: var(--text); flex: 1; min-width: 100px; }
+.word-ru { font-size: 13px; color: var(--muted); flex: 1; min-width: 80px; }
+.word-topic {
+  font-size: 10px; font-weight: 700; padding: 3px 8px;
+  border-radius: 20px; background: var(--surface);
+  border: 1px solid var(--border); color: var(--muted);
+  white-space: nowrap;
+}
+
+/* READING QUIZ */
+.quiz-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  z-index: 9995; display: flex; align-items: center; justify-content: center;
+  padding: 20px; animation: panelFadeIn 0.2s ease;
+}
+.quiz-box {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 24px; padding: 28px 24px; width: min(460px, 100%);
+  box-shadow: 0 20px 60px var(--shadow);
+}
+.quiz-progress { margin-bottom: 20px; }
+.quiz-question { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+.quiz-word { font-size: 26px; font-weight: 800; color: var(--text); margin-bottom: 20px; line-height: 1.3; }
+.quiz-options { display: grid; gap: 10px; }
+.quiz-option {
+  background: var(--surface); border: 2px solid var(--border);
+  border-radius: 14px; padding: 14px 16px; cursor: pointer;
+  font-size: 14px; font-weight: 600; transition: all 0.15s;
+  text-align: left;
+}
+.quiz-option:hover { border-color: var(--accent); background: rgba(108,99,255,0.06); }
+.quiz-option.correct { border-color: var(--success); background: rgba(67,233,123,0.12); color: var(--success); }
+.quiz-option.wrong { border-color: var(--danger); background: rgba(255,71,87,0.1); color: var(--danger); }
+.quiz-result { text-align: center; padding: 10px 0; }
+.quiz-score { font-size: 52px; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
 /* READING PANEL */
 /* Sentence hover translation */
 .sent-de {
@@ -298,10 +363,21 @@ button:active { transform: translateY(0); }
 }
 .word-de-inline {
   color: var(--accent); font-weight: 700; cursor: pointer;
-  border-bottom: 2px dotted var(--accent); transition: background 0.15s;
-  padding: 0 2px; border-radius: 3px;
+  border-bottom: 2px solid var(--accent); transition: all 0.15s;
+  padding: 1px 3px; border-radius: 4px; position: relative;
 }
-.word-de-inline:hover { background: rgba(108,99,255,0.12); }
+.word-de-inline:hover, .word-de-inline.active {
+  background: var(--accent); color: white;
+}
+.word-tooltip-inline {
+  position: absolute; bottom: calc(100% + 6px); left: 50%;
+  transform: translateX(-50%);
+  background: var(--card); border: 1px solid var(--accent);
+  border-radius: 8px; padding: 4px 10px; font-size: 12px;
+  color: var(--text); white-space: nowrap; z-index: 9999;
+  box-shadow: 0 4px 16px var(--shadow); pointer-events: none;
+  font-weight: 400;
+}
 .word-tooltip {
   position: fixed; background: var(--card); border: 1px solid var(--accent);
   border-radius: 10px; padding: 6px 12px; font-size: 13px; color: var(--text);
@@ -309,6 +385,49 @@ button:active { transform: translateY(0); }
   max-width: 200px;
 }
 .reading-loading { text-align:center; padding:40px; color:var(--muted); font-size:14px; }
+
+/* PANEL TRANSITIONS */
+.panel, .chat-panel {
+  animation: none;
+}
+.panel.active, .chat-panel.active {
+  animation: panelFadeIn 0.25s ease;
+}
+@keyframes panelFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* PHRASE OF THE DAY */
+.phrase-card {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 20px; padding: 18px 20px; margin-bottom: 14px;
+  position: relative; overflow: hidden;
+  box-shadow: 0 4px 20px rgba(108,99,255,0.3);
+}
+.phrase-card::before {
+  content: '💬';
+  position: absolute; right: 16px; top: 12px;
+  font-size: 32px; opacity: 0.3;
+}
+.phrase-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.5px; color: rgba(255,255,255,0.7); margin-bottom: 8px;
+}
+.phrase-de {
+  font-size: 17px; font-weight: 800; color: white;
+  line-height: 1.4; margin-bottom: 4px;
+}
+.phrase-ru {
+  font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.4;
+}
+.phrase-new-btn {
+  position: absolute; bottom: 12px; right: 12px;
+  background: rgba(255,255,255,0.2); border: none; color: white;
+  border-radius: 8px; padding: 4px 8px; font-size: 11px;
+  cursor: pointer; width: auto; margin: 0;
+}
+.phrase-new-btn:hover { background: rgba(255,255,255,0.35); }
 
 /* CONFETTI */
 .confetti-container { position:fixed; inset:0; pointer-events:none; z-index:9998; overflow:hidden; }
@@ -544,6 +663,7 @@ button:active { transform: translateY(0); }
       <button class="nav-btn" onclick="showPanel('stats')" id="nb-stats"><span class="icon">📊</span> Статистика</button>
       <button class="nav-btn" onclick="showPanel('plan')" id="nb-plan"><span class="icon">🗓️</span> План учёбы</button>
       <button class="nav-btn" onclick="showPanel('reading')" id="nb-reading"><span class="icon">📖</span> Чтение</button>
+      <button class="nav-btn" onclick="showPanel('grammar')" id="nb-grammar"><span class="icon">✏️</span> Грамматика</button>
     </div>
     <div class="sidebar-section" style="flex:1;overflow:hidden;display:flex;flex-direction:column;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
@@ -558,6 +678,12 @@ button:active { transform: translateY(0); }
 
     <div class="panel active" id="panel-add">
       <div class="panel-scroll">
+                <div class="phrase-card" id="phraseCard">
+          <div class="phrase-label">Фраза дня</div>
+          <div class="phrase-de" id="phraseDE">Загружаю...</div>
+          <div class="phrase-ru" id="phraseRU"></div>
+          <button class="phrase-new-btn" onclick="loadNewPhrase()">🔄</button>
+        </div>
         <div class="card">
           <div style="font-size:15px;font-weight:800;margin-bottom:2px;">Добавить слово</div>
           <div style="display:flex;gap:8px;margin-top:8px;align-items:center;">
@@ -713,7 +839,7 @@ button:active { transform: translateY(0); }
           <div style="font-size:15px;font-weight:800;margin-bottom:8px;">📖 Чтение</div>
           <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;">
             <button class="mode-btn active" id="rmode-mixed" onclick="setReadingMode('mixed')" style="width:auto;margin:0;">🔀 Смешанный</button>
-            <button class="mode-btn" id="rmode-mostly-de" onclick="setReadingMode('mostly-de')" style="width:auto;margin:0;">🇩🇪 Больше немецкого</button>
+            
             <button class="mode-btn" id="rmode-full-de" onclick="setReadingMode('full-de')" style="width:auto;margin:0;">🇩🇪 Полный немецкий</button>
           </div>
           <div class="reading-topic-grid">
@@ -734,14 +860,38 @@ button:active { transform: translateY(0); }
         <div id="readingContent" style="display:none;">
           <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;flex-wrap:wrap;">
             <button class="btn-s" onclick="showReadingTopics()" style="width:auto;padding:8px 14px;margin:0;font-size:13px;">← Темы</button>
-            <button class="btn-s" onclick="regenerateReading()" style="width:auto;padding:8px 14px;margin:0;font-size:13px;">🔄 Новый текст</button>
+            <button class="btn-s" onclick="regenerateReading()" style="width:auto;padding:8px 14px;margin:0;font-size:13px;">🔄 Новый</button>
             <button class="btn-s" onclick="saveCurrentStory()" style="width:auto;padding:8px 14px;margin:0;font-size:13px;">💾 Сохранить</button>
             <button onclick="addReadingWordsToDict()" style="width:auto;padding:8px 14px;margin:0;font-size:13px;">➕ Все слова</button>
+            <button class="btn-ai" onclick="startReadingQuiz()" style="width:auto;padding:8px 14px;margin:0;font-size:13px;">🧪 Тест по тексту</button>
           </div>
           <div class="reading-text-box" id="readingTextBox"></div>
           <div id="readingWordList" style="display:none;" class="card">
             <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Немецкие слова в тексте</div>
             <div id="readingWordItems"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRAMMAR PANEL -->
+    <div class="panel" id="panel-grammar">
+      <div class="panel-scroll">
+        <div style="font-size:15px;font-weight:800;margin-bottom:4px;">✏️ Грамматика</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px;">Упражнения по грамматике немецкого по твоему уровню</div>
+
+        <div style="display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;">
+          <button class="mode-btn active" id="gtype-artikel" onclick="setGrammarType('artikel')" style="width:auto;margin:0;">🔵 Артикли</button>
+          <button class="mode-btn" id="gtype-order" onclick="setGrammarType('order')" style="width:auto;margin:0;">🔀 Порядок слов</button>
+          <button class="mode-btn" id="gtype-kasus" onclick="setGrammarType('kasus')" style="width:auto;margin:0;">📐 Падежи</button>
+        </div>
+
+        <div id="grammarExerciseArea">
+          <div class="card" style="text-align:center;padding:30px;">
+            <div style="font-size:40px;margin-bottom:12px;">✏️</div>
+            <div style="font-size:15px;font-weight:700;margin-bottom:8px;">Готов к упражнениям?</div>
+            <div style="font-size:13px;color:var(--muted);margin-bottom:20px;">ИИ создаст задания по твоему уровню</div>
+            <button class="btn-ai" onclick="loadGrammarExercises()">✨ Начать упражнения</button>
           </div>
         </div>
       </div>
@@ -830,6 +980,7 @@ button:active { transform: translateY(0); }
   <button class="bottom-nav-btn" onclick="showPanel('chat')" id="bn-chat"><span class="bn-icon">🤖</span>ИИ чат</button>
   <button class="bottom-nav-btn" onclick="showPanel('stats')" id="bn-stats"><span class="bn-icon">📊</span>Статы</button>
   <button class="bottom-nav-btn" onclick="showPanel('reading')" id="bn-reading"><span class="bn-icon">📖</span>Чтение</button>
+  <button class="bottom-nav-btn" onclick="showPanel('grammar')" id="bn-grammar"><span class="bn-icon">✏️</span>Грамматика</button>
 </nav>
 
 <script>
@@ -947,6 +1098,10 @@ function setChatMode(mode) {
 
 // ── PANELS ──
 function showPanel(name) {
+  // Animate out current panel
+  document.querySelectorAll('.panel.active, .chat-panel.active').forEach(function(p) {
+    p.style.animation = 'none';
+  });
   document.querySelectorAll('.panel, .chat-panel').forEach(function(p) { p.classList.remove('active'); });
   document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
   document.querySelectorAll('.bottom-nav-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -962,6 +1117,7 @@ function showPanel(name) {
   if (name === 'stats') renderStats();
   if (name === 'artikel') startArtikel();
   if (name === 'reading') showReadingTopics();
+  if (name === 'grammar') { grammarIndex=0; grammarCorrect=0; grammarWrong=0; }
   if (name === 'exam') {
     var sel = document.getElementById('examTopicSelect');
     if (sel) {
@@ -1024,6 +1180,32 @@ function speakWord(word) {
 }
 
 // ── ADD WORD ──
+document.getElementById('word').addEventListener('blur', async function() {
+  var w = this.value.trim();
+  if (!w) return;
+  var transField = document.getElementById('translation');
+  transField.value = 'Перевод...';
+  try {
+    if (translateMode === 'ru') {
+      // Russian → German
+      var url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=ru&tl=de&dt=t&q=' + encodeURIComponent(w);
+      var res = await fetch(url);
+      var data = await res.json();
+      var deWord = data[0][0][0];
+      this.value = deWord;
+      transField.value = w;
+      if (!/^(der|die|das) /i.test(deWord)) autoAddArtikel(deWord);
+      generateSentences(deWord);
+    } else {
+      // German → Russian
+      var translated = await translateWord(w);
+      transField.value = translated;
+      if (!/^(der|die|das) /i.test(w)) autoAddArtikel(w);
+      generateSentences(w);
+    }
+  } catch(e) { transField.value = ''; }
+});
+
 function addWord() {
   var word = document.getElementById('word').value.trim();
   var translation = document.getElementById('translation').value.trim();
@@ -1776,6 +1958,19 @@ var currentReadingWords = [];
 
 function showPanel_reading() { showReadingTopics(); }
 
+// ── READING ──
+var currentReadingTopic = '';
+var currentReadingWords = [];
+var readingMode = 'mixed';
+var savedStories = JSON.parse(localStorage.getItem('saved_stories') || '[]');
+
+function setReadingMode(mode) {
+  readingMode = mode;
+  document.querySelectorAll('[id^="rmode-"]').forEach(function(b) { b.classList.remove('active'); });
+  var btn = document.getElementById('rmode-' + mode);
+  if (btn) btn.classList.add('active');
+}
+
 function showReadingTopics() {
   document.getElementById('readingTopics').style.display = 'block';
   document.getElementById('readingContent').style.display = 'none';
@@ -1784,466 +1979,352 @@ function showReadingTopics() {
 
 function regenerateReading() { generateReading(currentReadingTopic); }
 
+function setReadingMode(mode) {
+  readingMode = mode;
+  ['mixed','mostly-de','full-de'].forEach(function(m) {
+    var b = document.getElementById('rmode-' + m);
+    if (b) b.classList.toggle('active', m === mode);
+  });
+}
+
 async function generateReading(topic) {
-  if (!MISTRAL_KEY && !GROQ_KEY) { showToast('⚠️ Нужен API ключ!'); return; }
+  if (!topic) return;
+  if (!MISTRAL_KEY && !GROQ_KEY) { showToast('Нужен API ключ!'); return; }
   currentReadingTopic = topic;
   document.getElementById('readingTopics').style.display = 'none';
   document.getElementById('readingContent').style.display = 'block';
   document.getElementById('readingWordList').style.display = 'none';
   var box = document.getElementById('readingTextBox');
-  box.innerHTML = '<div class="reading-loading"><div class="spinner" style="margin:0 auto 12px;"></div>ИИ пишет текст...</div>';
+  box.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);">⏳ Генерирую текст...</div>';
 
   var lvl = localStorage.getItem('user_level') || 'B1';
-  var levelInstr = {
-    'A1': '3-4 простых предложения, 5-8 немецких слов, только самые базовые слова',
-    'A2': '4-5 предложений, 8-12 немецких слов, простые конструкции',
-    'B1': '5-6 предложений, 12-18 немецких слов, средняя сложность',
-    'B2': '6-7 предложений, 18-25 немецких слов, сложные конструкции',
-    'C1': '7-8 предложений, 25-35 немецких слов, продвинутый уровень',
-    'C2': '8-10 предложений, 35+ немецких слов, уровень носителя'
+  var seed = Math.floor(Math.random() * 9999);
+  var prompt = buildPrompt(topic, lvl, seed);
+
+  try {
+    var aiText = await callReadingAI(prompt);
+    if (!aiText) throw new Error('Нет ответа от ИИ');
+
+    var parsed = parseJSON(aiText);
+    if (parsed && parsed.text) {
+      currentReadingWords = (parsed.words || []).filter(function(w){ return w && w.de && w.ru; });
+      renderReadingContent(parsed.text, currentReadingWords, box);
+    } else {
+      // show raw text as fallback
+      var safeText = aiText.replace(/</g,'&lt;').replace(/\n/g,'<br>'); box.innerHTML = '<div style="line-height:2;font-size:15px;">' + safeText + '</div>';
+    }
+  } catch(e) {
+    box.innerHTML = '<div style="text-align:center;padding:30px;color:var(--danger);">⚠️ ' + e.message +
+      '<br><br><button onclick="regenerateReading()" style="width:auto;padding:10px 20px;margin-top:8px;">🔄 Попробовать снова</button></div>';
+  }
+}
+
+function buildPrompt(topic, lvl, seed) {
+  var lvlInstr = {
+    'A1': 'ONLY: gut/schlecht, gehen/kommen, sein/haben, der/die/das+noun, sehr/auch/heute/ja/nein',
+    'A2': 'ONLY: Perfekt basics, kaufen/fahren/sehen, ein bisschen, common adjectives (groß/klein/schön)',
+    'B1': 'USE: obwohl/trotzdem/deswegen, Perfekt+Präteritum, modal verbs past, reflexive verbs',
+    'B2': 'USE: Konjunktiv II (wäre/hätte/würde), Passiv, Partizip II as adjective, nichtsdestotrotz',
+    'C1': 'USE: Nominalisierungen, Partizipialkonstruktionen, Genitivattribute, abstrakte Idiome',
+    'C2': 'USE: all rare structures, Redewendungen, elevated register, irony, complex embedded clauses'
   };
+  var vocab = lvlInstr[lvl] || lvlInstr['B1'];
 
-  var levelWordCount = { 'A1': '25-35', 'A2': '40-55', 'B1': '55-70', 'B2': '70-90', 'C1': '90-110', 'C2': '110+' };
-  var wCount = levelWordCount[lvl] || '55-70';
-
-  var promptParts;
+  var lines;
   if (readingMode === 'mixed') {
-    promptParts = [
-      'Создай учебный СМЕШАННЫЙ текст для изучения немецкого языка.',
-      'Тема: ' + topic + '. Уровень: ' + lvl + '.',
-      'ФОРМАТ: Каждое предложение написано НА РУССКОМ, но содержит 3-5 немецких слов/фраз вставленных внутри.',
-      'КАЖДОЕ предложение обязательно содержит немецкие слова. НИ ОДНОГО чисто русского предложения!',
-      'Используй: существительные с артиклями (den Tisch, die Frau), прилагательные (sehr schön), глаголы (hat gesagt), фразы (zum Beispiel, auf jeden Fall).',
-      'Пример: "Вчера я пошёл in die Stadt и встретил einen alten Freund около dem Bahnhof."',
-      'Длина: 15 предложений. Немецких слов всего: ' + wCount + '.',
-      'Каждое немецкое слово/фразу добавь в words с переводом.',
-      'Отвечай ТОЛЬКО в JSON: {"text":"текст","words":[{"de":"слово из текста","ru":"перевод"}]}'
-    ];
-  } else if (readingMode === 'mostly-de') {
-    promptParts = [
-      'Создай учебный текст для изучения немецкого языка.',
-      'Тема: ' + topic + '. Уровень: ' + lvl + '.',
-      'ФОРМАТ: Текст состоит из ПАР — немецкое предложение + русский перевод в скобках.',
-      'Каждый абзац: сначала предложение на немецком, потом "(Перевод: ...)" на русском.',
-      'Пример: "Gestern bin ich in die Stadt gefahren. (Перевод: Вчера я поехал в город.)"',
-      'Уровень немецких предложений соответствует ' + lvl + '.',
-      'Длина: 12-15 пар предложений.',
-      'В words добавь сложные немецкие слова из текста с переводом.',
-      'Отвечай ТОЛЬКО в JSON: {"text":"текст с парами","words":[{"de":"слово","ru":"перевод"}]}'
+    lines = [
+      'Seed ' + seed,
+      'Write a story of 12 sentences about "' + topic + '" for German level ' + lvl + '.',
+      'BASE LANGUAGE IS RUSSIAN. German words are inserted as replacements for some Russian words.',
+      'Each sentence: write in Russian, then replace 3-5 nouns/verbs/adjectives with their German equivalents.',
+      'Level ' + lvl + ' German words: ' + vocab,
+      'CORRECT example: "Один пёс ging по улице и sah по сторонам, пока не bemerkte дом."',
+      'CORRECT example: "Утром я ел ein Brot и пил Tee, потому что war sehr hungrig."',
+      'WRONG example: "Gestern bin ich in die Stadt gefahren." (this is full German, NOT allowed)',
+      'WRONG example: "Сегодня мы пошли в парк." (this is full Russian, NOT allowed)',
+      'In words array: list every German word/phrase used, with exact Russian translation.',
+      'JSON only, no markdown: {"text":"12 Russian sentences with German words inside","words":[{"de":"German word","ru":"перевод"}]}'
     ];
   } else {
-    // full-de
-    promptParts = [
-      'Создай текст ПОЛНОСТЬЮ на немецком языке.',
-      'Тема: ' + topic + '. Уровень: ' + lvl + '.',
-      'Пиши как носитель языка, соответствуя уровню ' + lvl + '.',
-      'Длина: 12-15 предложений.',
-      'В words добавь ВСЕ важные слова из текста с переводом на русский — существительные, глаголы, прилагательные.',
-      'При наведении на предложение пользователь увидит перевод — поэтому в words добавь также переводы целых предложений в формате {"de":"предложение","ru":"перевод предложения","isSentence":true}.',
-      'Отвечай ТОЛЬКО в JSON: {"text":"текст на немецком","words":[{"de":"слово","ru":"перевод"},{"de":"предложение.","ru":"перевод.","isSentence":true}]}'
+    lines = [
+      'Seed ' + seed,
+      'Write a long interesting story of EXACTLY 20 sentences in German about "' + topic + '" for level ' + lvl + '.',
+      'Style: ' + vocab,
+      'Natural flowing prose. NO numbers. NO bullet points.',
+      'Story needs: characters, plot, vivid details, emotions.',
+      'For EVERY sentence from the text add exact Russian translation to words with isSentence:true.',
+      'Do NOT add individual words - ONLY sentence translations.',
+      'JSON only: {"text":"20 German sentences","words":[{"de":"Exact sentence from text.","ru":"Точный перевод.","isSentence":true}]}'
     ];
   }
-  var prompt = promptParts.join('\n');
-
-  try {
-    var messages = [{ role: 'user', content: prompt }];
-    var response, data;
-    if (MISTRAL_KEY) {
-      response = await fetch('https://api.mistral.ai/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY }, body: JSON.stringify({ model: 'mistral-small-latest', messages: messages, max_tokens: 800 }) });
-    } else {
-      response = await fetch('https://api.groq.com/openai/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY }, body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: messages, max_tokens: 800 }) });
-    }
-    data = await response.json();
-    var rawText = data.choices && data.choices[0] ? data.choices[0].message.content : '';
-    var jsonMatch = rawText.match(/\{[\s\S]*\}/);
-    var parsed = null;
-    if (jsonMatch) { try { parsed = JSON.parse(jsonMatch[0]); } catch(e) {} }
-
-    if (parsed && parsed.text && parsed.words && parsed.words.length > 3) {
-      currentReadingWords = parsed.words || [];
-      renderReadingText(parsed.text, currentReadingWords);
-    } else if (parsed && parsed.text) {
-      // Not enough German words - show warning and retry option
-      box.innerHTML = '<div style="color:orange;text-align:center;padding:20px;">⚠️ ИИ сгенерировал мало немецких слов.<br><br><button onclick="regenerateReading()" style="width:auto;padding:8px 16px;">🔄 Попробовать снова</button></div>';
-    } else {
-      box.innerHTML = '<div style="color:var(--danger);text-align:center;padding:20px;">⚠️ Не удалось создать текст.<br><br><button onclick="regenerateReading()" style="width:auto;padding:8px 16px;">🔄 Попробовать снова</button></div>';
-    }
-  } catch(e) {
-    box.innerHTML = '<div style="color:var(--danger);">⚠️ Ошибка: ' + e.message + '</div>';
-  }
+  return lines.join('\n');
 }
 
-function renderReadingText(text, words) {
-  var box = document.getElementById('readingTextBox');
+async function callReadingAI(prompt) {
+  var msgs = [{ role: 'user', content: prompt }];
+  var res, data;
+  if (GROQ_KEY) {
+    try {
+      res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY },
+        body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: msgs, max_tokens: 1500 })
+      });
+      data = await res.json();
+      if (data.choices && data.choices[0]) return data.choices[0].message.content;
+    } catch(e) {}
+  }
+  if (MISTRAL_KEY) {
+    res = await fetch('https://api.mistral.ai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY },
+      body: JSON.stringify({ model: 'mistral-small-latest', messages: msgs, max_tokens: 1500 })
+    });
+    data = await res.json();
+    if (data.choices && data.choices[0]) return data.choices[0].message.content;
+  }
+  return null;
+}
 
-  // Split text into sentences, process each
-  // Strategy: replace word by word using split-join to avoid double replacement
-  var sorted = words.slice().sort(function(a, b) { return b.de.length - a.de.length; });
+function parseJSON(text) {
+  var clean = text.replace(/```json|```/g,'').trim();
+  var attempts = [clean, clean.slice(clean.indexOf('{')), clean.slice(clean.indexOf('{'), clean.lastIndexOf('}')+1)];
+  for (var i = 0; i < attempts.length; i++) {
+    try { var p = JSON.parse(attempts[i]); if (p && p.text) return p; } catch(e) {}
+  }
+  return null;
+}
 
-  // Step 1: replace each German word with a unique token
-  var tokens = {};
+function highlightDE(text, wordList) {
+  if (!text) return '';
+  if (!wordList || !wordList.length) return text;
+  var nonSent = wordList.filter(function(w){ return w && w.de && w.ru && !w.isSentence; });
+  if (!nonSent.length) return text;
+
+  // Sort longest first to avoid partial matches
+  var sorted = nonSent.slice().sort(function(a,b){ return b.de.length - a.de.length; });
   var result = text;
+  var tokens = {};
+
   sorted.forEach(function(w, i) {
-    var token = '§§' + i + '§§';
-    tokens[token] = w;
-    // Simple case-insensitive replace, word boundary aware
-    var esc = w.de.replace(/[-[\]{}()*+?.,^$|#]/g, '\\$&');
-    result = result.replace(new RegExp(esc, 'gi'), token);
+    var tok = '@@' + i + '@@';
+    tokens[tok] = w;
+    // Strip artikel
+    var bare = w.de.replace(/^(der|die|das|den|dem|des|ein|eine|einen|einem|einer|eines)\s/i, '').trim();
+    if (!bare || bare.length < 2) return;
+    // Simple case-insensitive indexOf replacement
+    var lowerResult = result.toLowerCase();
+    var lowerBare = bare.toLowerCase();
+    var idx = lowerResult.indexOf(lowerBare);
+    while (idx !== -1) {
+      // Check not already inside a token
+      var before = idx > 0 ? result[idx-1] : ' ';
+      var after = idx+bare.length < result.length ? result[idx+bare.length] : ' ';
+      // Only replace if surrounded by non-letter chars
+      var bOk = !/[a-zA-Z\u00C0-\u024F\u0400-\u04FF]/.test(before);
+      var aOk = !/[a-zA-Z\u00C0-\u024F\u0400-\u04FF]/.test(after);
+      if (bOk && aOk) {
+        result = result.slice(0, idx) + tok + result.slice(idx + bare.length);
+        lowerResult = result.toLowerCase();
+        idx = lowerResult.indexOf(lowerBare, idx + tok.length);
+      } else {
+        idx = lowerResult.indexOf(lowerBare, idx + 1);
+      }
+    }
   });
 
-  // Step 2: convert tokens to spans
-  Object.keys(tokens).forEach(function(token) {
-    var w = tokens[token];
-    var span = '<span class="word-de-inline" data-de="' + w.de.replace(/"/g,'&quot;') + '" data-ru="' + w.ru.replace(/"/g,'&quot;') + '" onclick="showWordTooltip(event,this)">' + w.de + '</span>';
-    result = result.split(token).join(span);
+  // Replace tokens with spans
+  Object.keys(tokens).forEach(function(tok) {
+    var w = tokens[tok];
+    var de = (w.de || '').replace(/"/g, '&quot;');
+    var ru = (w.ru || '').replace(/"/g, '&quot;');
+    var span = '<span class="word-de-inline" data-de="' + de + '" data-ru="' + ru + '" onclick="showGrammarPopup(event,this)">' + w.de + '</span>';
+    result = result.split(tok).join(span);
   });
+  return result;
+}
 
-  result = result.replace(/\n/g, '<br>');
-  box.innerHTML = result;
+function renderReadingContent(text, words, box) {
+  var nonSent = words.filter(function(w){ return !w.isSentence; });
+  var sentWords = words.filter(function(w){ return w.isSentence; });
 
-  // Show word list with add buttons
-  if (words.length > 0) {
-    var listDiv = document.getElementById('readingWordItems');
-    listDiv.innerHTML = '';
-    words.forEach(function(w) {
+  if (readingMode === 'mixed') {
+    var html = highlightDE(text, nonSent).replace(/\n/g,'<br>');
+    box.innerHTML = '<div style="line-height:2.2;font-size:15px;">' + html + '</div>';
+  } else {
+    // Full German: sentence click = show translation, NO word highlighting
+    var sentMap2 = {};
+    sentWords.forEach(function(w){ if (w.de) sentMap2[w.de.trim()] = w.ru; });
+
+    var container = document.createElement('div');
+    container.style.cssText = 'line-height:2.4;font-size:15px;';
+
+    // Helper to find translation
+    function findTrans(s) {
+      var t = sentMap2[s] || sentMap2[s+'.'] || sentMap2[s+'!'] || sentMap2[s+'?'];
+      if (t) return t;
+      var sc = s.toLowerCase().replace(/[^a-zÀ-ɏ]/g,'').slice(0,25);
+      var keys = Object.keys(sentMap2);
+      for (var ki=0; ki<keys.length; ki++) {
+        var kc = keys[ki].toLowerCase().replace(/[^a-zÀ-ɏ]/g,'').slice(0,25);
+        if (sc && kc && sc === kc) return sentMap2[keys[ki]];
+      }
+      return null;
+    }
+
+    var sentences = text.match(/[^.!?]+[.!?]+/g) || text.split('\n').filter(Boolean);
+    sentences.forEach(function(sent) {
+      var s = sent.trim(); if (!s) return;
+      var trans = findTrans(s);
+
+      var span = document.createElement('span');
+      span.style.cssText = 'display:inline;border-radius:4px;padding:1px 3px;transition:background 0.15s;' + (trans ? 'cursor:pointer;' : '');
+      span.textContent = s + ' ';
+
+      if (trans) {
+        span.title = '💬 Нажми для перевода';
+        var tip = null; var shown = false;
+        span.onmouseenter = function(){ this.style.background='rgba(108,99,255,0.08)'; };
+        span.onmouseleave = function(){ if(!shown) this.style.background=''; };
+        span.onclick = function() {
+          shown = !shown;
+          if (shown) {
+            this.style.background='rgba(108,99,255,0.12)';
+            tip = document.createElement('div');
+            tip.style.cssText='display:block;font-size:13px;color:var(--muted);font-style:italic;padding:3px 6px 8px;line-height:1.5;';
+            tip.textContent = '→ ' + trans;
+            this.parentNode.insertBefore(tip, this.nextSibling);
+          } else {
+            this.style.background='';
+            if (tip && tip.parentNode) tip.parentNode.removeChild(tip);
+            tip = null;
+          }
+        };
+      }
+      container.appendChild(span);
+    });
+    box.innerHTML = '';
+    box.appendChild(container);
+  }
+
+  // Render word list
+  var list = document.getElementById('readingWordItems');
+  list.innerHTML = '';
+  if (nonSent.length) {
+    nonSent.forEach(function(w) {
       var item = document.createElement('div');
-      item.style.cssText = 'display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;';
-      var s1 = document.createElement('strong'); s1.style.cssText='color:var(--accent);flex:1;'; s1.textContent=w.de;
-      var s2 = document.createElement('span'); s2.style.cssText='color:var(--muted);flex:1;'; s2.textContent=w.ru;
-      var b2 = document.createElement('button');
-      var inDict = words_arr_has(w.de);
-      b2.textContent = inDict ? '✓' : '+ Добавить';
-      b2.style.cssText = 'width:auto;padding:4px 10px;margin:0;font-size:11px;border-radius:8px;flex-shrink:0;' + (inDict ? 'background:var(--surface);border:1px solid var(--border);color:var(--muted);cursor:default;' : 'background:var(--accent);color:white;');
-      if (!inDict) { (function(wd,wt,wb){ wb.onclick=function(){addSingleReadingWord(wb,wd,wt);}; })(w.de,w.ru,b2); }
-      item.appendChild(s1); item.appendChild(s2); item.appendChild(b2);
-      listDiv.appendChild(item);
+      item.style.cssText='display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;';
+      var s1=document.createElement('strong'); s1.style.cssText='color:var(--accent);flex:1;'; s1.textContent=w.de;
+      var s2=document.createElement('span'); s2.style.cssText='color:var(--muted);flex:1;'; s2.textContent=w.ru;
+      var btn=document.createElement('button');
+      var inD=words_arr_has(w.de);
+      btn.textContent=inD?'✓':'+ Добавить';
+      btn.style.cssText='width:auto;padding:4px 10px;margin:0;font-size:11px;border-radius:8px;flex-shrink:0;'+(inD?'background:var(--surface);border:1px solid var(--border);color:var(--muted);cursor:default;':'background:var(--accent);color:white;');
+      if(!inD){(function(wd,wt,wb){wb.onclick=function(){addSingleReadingWord(wb,wd,wt);};})(w.de,w.ru,btn);}
+      item.appendChild(s1); item.appendChild(s2); item.appendChild(btn);
+      list.appendChild(item);
     });
-    document.getElementById('readingWordList').style.display = 'block';
+    document.getElementById('readingWordList').style.display='block';
   }
-}
-function renderMostlyDeText(text, words, box) {
-  // Split into German sentence + (Translation: ...) pairs
-  var lines = text.split('\n').filter(function(l) { return l.trim(); });
-  box.innerHTML = '';
-  lines.forEach(function(line) {
-    var para = document.createElement('div');
-    para.className = 'reading-para';
-    // Check if line has (Перевод: ...) pattern
-    var trMatch = line.match(/^(.+?)\s*\(Перевод:\s*(.+?)\)\s*$/);
-    if (trMatch) {
-      var deSpan = document.createElement('span');
-      deSpan.className = 'sent-de';
-      deSpan.textContent = trMatch[1].trim();
-      deSpan.onclick = function() { this.classList.toggle('show-tr'); };
-      var ruSpan = document.createElement('span');
-      ruSpan.className = 'sent-ru';
-      ruSpan.textContent = trMatch[2].trim();
-      para.appendChild(deSpan);
-      para.appendChild(ruSpan);
-    } else {
-      para.textContent = line;
-    }
-    box.appendChild(para);
-  });
-}
-
-function renderFullDeText(text, words, box) {
-  // Build sentence→translation map
-  var sentMap = {};
-  words.forEach(function(w) { if (w.isSentence) sentMap[w.de.trim()] = w.ru; });
-
-  // Split into sentences
-  var sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
-  box.innerHTML = '';
-  var para = document.createElement('div'); para.className = 'reading-para';
-
-  sentences.forEach(function(sent) {
-    var trimmed = sent.trim();
-    var translation = sentMap[trimmed] || null;
-
-    // Highlight individual words
-    var nonSentWords = words.filter(function(w) { return !w.isSentence; });
-    var highlighted = trimmed;
-    var sorted = nonSentWords.slice().sort(function(a,b){ return b.de.length - a.de.length; });
-    var tokens = {};
-    sorted.forEach(function(w, i) {
-      var token = '§§' + i + '§§';
-      tokens[token] = w;
-      var matchWord = w.de.replace(/^(der|die|das|den|dem|des|ein|eine|einen|einem)\s+/i, '');
-      var esc = matchWord.replace(/[-[\]{}()*+?.,^$|#]/g, '\\$&');
-      highlighted = highlighted.replace(new RegExp('(?<![\\w\\u00C0-\\u024F])' + esc, 'gi'), token);
-    });
-    Object.keys(tokens).forEach(function(token) {
-      var w = tokens[token];
-      highlighted = highlighted.split(token).join('<span class="word-de-inline" data-de="' + w.de.replace(/"/g,'&quot;') + '" data-ru="' + w.ru.replace(/"/g,'&quot;') + '" onclick="showGrammarPopup(event,this)">' + w.de + '</span>');
-    });
-
-    var wrapper = document.createElement('span');
-    if (translation) {
-      wrapper.className = 'sent-de';
-      wrapper.innerHTML = highlighted + ' ';
-      wrapper.onclick = function(e) {
-        if (e.target.classList.contains('word-de-inline')) return;
-        this.classList.toggle('show-tr');
-      };
-      var ruSpan = document.createElement('span');
-      ruSpan.className = 'sent-ru';
-      ruSpan.textContent = translation;
-      para.appendChild(wrapper);
-      para.appendChild(ruSpan);
-    } else {
-      wrapper.innerHTML = highlighted + ' ';
-      para.appendChild(wrapper);
-    }
-  });
-  box.appendChild(para);
-}
-
-// ── GRAMMAR POPUP ──
-var grammarPopupEl = null;
-function closeGrammarPopup() { if (grammarPopupEl) { grammarPopupEl.remove(); grammarPopupEl = null; } }
-
-async function showGrammarPopup(event, el) {
-  event.stopPropagation();
-  closeGrammarPopup();
-  var word = el.dataset.de;
-  var translation = el.dataset.ru;
-  var lvl = localStorage.getItem('user_level') || 'B1';
-
-  var popup = document.createElement('div');
-  popup.className = 'grammar-popup';
-  popup.innerHTML = '<div class="grammar-popup-header"><span class="grammar-popup-word">' + word + '</span><button class="grammar-popup-close" onclick="closeGrammarPopup()">✕</button></div><div class="grammar-popup-body"><div class="grammar-popup-loading">⏳ Загружаю объяснение...</div></div><div class="grammar-popup-actions"><button onclick="addSingleReadingWord(this,\"' + word.replace(/"/g,'&quot;') + '\",\"' + translation.replace(/"/g,'&quot;') + '\")">+ В словарь</button><button class="btn-s" onclick="closeGrammarPopup()">Закрыть</button></div>';
-  document.body.appendChild(popup);
-  grammarPopupEl = popup;
-  document.addEventListener('click', closeGrammarPopup, { once: true });
-
-  if (!MISTRAL_KEY && !GROQ_KEY) { popup.querySelector('.grammar-popup-body').textContent = translation; return; }
-
-  try {
-    var promptText = 'Объясни немецкое слово "' + word + '" (перевод: ' + translation + ') для уровня ' + lvl + '.\nОбъясни КРАТКО (3-5 строк):\n1. Что это за часть речи\n2. Если существительное — артикль и падежи (Nominativ/Akkusativ/Dativ/Genitiv)\n3. Если глагол — время, спряжение\n4. Если прилагательное — степени сравнения\n5. Один пример использования\nОтвечай на русском, кратко и понятно.';
-    var messages = [{ role: 'user', content: promptText }];
-    var response, data;
-    if (MISTRAL_KEY) {
-      response = await fetch('https://api.mistral.ai/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY }, body: JSON.stringify({ model: 'mistral-small-latest', messages: messages, max_tokens: 300 }) });
-      data = await response.json();
-    } else {
-      response = await fetch('https://api.groq.com/openai/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY }, body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: messages, max_tokens: 300 }) });
-      data = await response.json();
-    }
-    var explanation = data.choices && data.choices[0] ? data.choices[0].message.content.trim() : translation;
-    if (grammarPopupEl) grammarPopupEl.querySelector('.grammar-popup-body').textContent = explanation;
-  } catch(e) {
-    if (grammarPopupEl) grammarPopupEl.querySelector('.grammar-popup-body').textContent = translation;
-  }
-}
-
-renderReadingText._wordListOnly = function(words) {
-  if (!words || !words.length) return;
-  var listDiv = document.getElementById('readingWordItems');
-  listDiv.innerHTML = '';
-  words.forEach(function(w) {
-    var item = document.createElement('div');
-    item.style.cssText = 'display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;';
-    var s1 = document.createElement('strong'); s1.style.cssText='color:var(--accent);flex:1;'; s1.textContent=w.de;
-    var s2 = document.createElement('span'); s2.style.cssText='color:var(--muted);flex:1;'; s2.textContent=w.ru;
-    var b2 = document.createElement('button');
-    var inDict = words_arr_has(w.de);
-    b2.textContent = inDict ? '✓' : '+ Добавить';
-    b2.style.cssText = 'width:auto;padding:4px 10px;margin:0;font-size:11px;border-radius:8px;flex-shrink:0;' + (inDict ? 'background:var(--surface);border:1px solid var(--border);color:var(--muted);cursor:default;' : 'background:var(--accent);color:white;');
-    if (!inDict) { (function(wd,wt,wb){ wb.onclick=function(){addSingleReadingWord(wb,wd,wt);}; })(w.de,w.ru,b2); }
-    item.appendChild(s1); item.appendChild(s2); item.appendChild(b2);
-    listDiv.appendChild(item);
-  });
-  document.getElementById('readingWordList').style.display = 'block';
-};
-
-var tooltipEl = null;
-function showWordTooltip(event, el) {
-  if (tooltipEl) tooltipEl.remove();
-  tooltipEl = document.createElement('div');
-  tooltipEl.className = 'word-tooltip';
-  tooltipEl.textContent = el.dataset.ru;
-  document.body.appendChild(tooltipEl);
-  var rect = el.getBoundingClientRect();
-  tooltipEl.style.left = Math.min(rect.left, window.innerWidth - 220) + 'px';
-  tooltipEl.style.top = (rect.bottom + 8) + 'px';
-  setTimeout(function() { if (tooltipEl) { tooltipEl.remove(); tooltipEl = null; } }, 2000);
 }
 
 function words_arr_has(word) {
-  return words.some(function(w) { return w.word.toLowerCase() === word.toLowerCase(); });
+  return words.some(function(w){ return w.word && w.word.toLowerCase()===word.toLowerCase(); });
 }
-
 function addSingleReadingWord(btn, de, ru) {
   if (words_arr_has(de)) return;
-  words.push({ id: Date.now() + Math.random(), word: de, translation: ru, topic: currentReadingTopic, srs: 0, nextReview: Date.now() });
+  words.push({id:Date.now()+Math.random(),word:de,translation:ru,topic:currentReadingTopic||'Чтение',srs:0,nextReview:Date.now()});
   save();
-  btn.textContent = '✓';
-  btn.style.background = 'var(--surface)';
-  btn.style.border = '1px solid var(--border)';
-  btn.style.color = 'var(--muted)';
-  btn.style.cursor = 'default';
-  showToast('✅ ' + de + ' → ' + ru);
+  btn.textContent='✓';
+  btn.style.cssText='width:auto;padding:4px 10px;margin:0;font-size:11px;border-radius:8px;flex-shrink:0;background:var(--surface);border:1px solid var(--border);color:var(--muted);cursor:default;';
+  showToast('✅ '+de+' → '+ru);
 }
-
 function addReadingWordsToDict() {
-  if (currentReadingWords.length === 0) { showToast('⚠️ Нет слов для добавления'); return; }
-  var added = 0;
-  currentReadingWords.forEach(function(w) {
-    var exists = words.some(function(x) { return x.word.toLowerCase() === w.de.toLowerCase(); });
-    if (!exists) {
-      words.push({ id: Date.now() + Math.random(), word: w.de, translation: w.ru, topic: currentReadingTopic, srs: 0, nextReview: Date.now() });
-      added++;
-    }
-  });
-  if (added > 0) { save(); showToast('✅ Добавлено ' + added + ' слов в словарь!'); launchConfetti(); }
-  else showToast('ℹ️ Все слова уже в словаре');
+  var toAdd=currentReadingWords.filter(function(w){return !w.isSentence&&!words_arr_has(w.de);});
+  if(!toAdd.length){showToast('ℹ️ Все слова уже в словаре');return;}
+  toAdd.forEach(function(w){words.push({id:Date.now()+Math.random(),word:w.de,translation:w.ru,topic:currentReadingTopic||'Чтение',srs:0,nextReview:Date.now()});});
+  save(); showToast('✅ Добавлено '+toAdd.length+' слов!');
 }
-
-// ── CONFETTI ──
-function launchConfetti() {
-  var container = document.getElementById('confettiContainer');
-  if (!container) return;
-  var colors = ['#ff6b9d','#6c63ff','#43e97b','#ff9ec4','#ffd700','#ff6584'];
-  for (var i = 0; i < 80; i++) {
-    (function(i) {
-      setTimeout(function() {
-        var piece = document.createElement('div');
-        piece.className = 'confetti-piece';
-        piece.style.left = Math.random() * 100 + 'vw';
-        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-        piece.style.width = (Math.random() * 8 + 6) + 'px';
-        piece.style.height = (Math.random() * 8 + 6) + 'px';
-        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-        piece.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
-        piece.style.animationDelay = (Math.random() * 0.5) + 's';
-        container.appendChild(piece);
-        setTimeout(function() { piece.remove(); }, 3000);
-      }, i * 20);
-    })(i);
-  }
-}
-
-// ── TRANSLATE MODE (DE→RU or RU→DE) ──
-var translateMode = 'de'; // 'de' = input German, 'ru' = input Russian
-
-function setTranslateMode(mode) {
-  translateMode = mode;
-  document.querySelectorAll('#btn-de-ru, #btn-ru-de').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('btn-' + mode + '-' + (mode === 'de' ? 'ru' : 'de')).classList.add('active');
-  var wordInput = document.getElementById('word');
-  var wordLabel = document.getElementById('wordLabel');
-  if (mode === 'de') {
-    wordLabel.textContent = 'Немецкое слово';
-    wordInput.placeholder = 'z.B. der Hund';
-  } else {
-    wordLabel.textContent = 'Русское слово';
-    wordInput.placeholder = 'например: собака';
-  }
-  wordInput.value = '';
-  document.getElementById('translation').value = '';
-  document.getElementById('sentencePicker').style.display = 'none';
-}
-
-// Override blur handler to support RU→DE
-document.getElementById('word').addEventListener('blur', async function() {
-  var w = document.getElementById('word').value.trim();
-  if (!w) return;
-  document.getElementById('translation').value = 'Перевод...';
-  try {
-    var translated;
-    if (translateMode === 'ru') {
-      // Translate Russian → German
-      var url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=ru&tl=de&dt=t&q=' + encodeURIComponent(w);
-      var res = await fetch(url);
-      var data = await res.json();
-      translated = data[0][0][0];
-      // Swap: word becomes German, translation becomes Russian
-      document.getElementById('word').value = translated;
-      document.getElementById('translation').value = w;
-      if (!/^(der|die|das) /i.test(translated)) autoAddArtikel(translated);
-      generateSentences(translated);
-    } else {
-      translated = await translateWord(w);
-      document.getElementById('translation').value = translated;
-      if (!/^(der|die|das) /i.test(w)) autoAddArtikel(w);
-      generateSentences(w);
-    }
-  } catch(e) { document.getElementById('translation').value = ''; }
-});
-
-// ── READING MODE ──
-var readingMode = 'mixed'; // 'mixed', 'mostly-de', 'full-de'
-
-function setReadingMode(mode) {
-  readingMode = mode;
-  document.querySelectorAll('[id^="rmode-"]').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('rmode-' + mode).classList.add('active');
-}
-
-// ── SAVED STORIES ──
-var savedStories = JSON.parse(localStorage.getItem('saved_stories') || '[]');
-
 function saveCurrentStory() {
-  if (!currentReadingTopic || !currentReadingWords.length) { showToast('⚠️ Сначала сгенерируй текст'); return; }
-  var textBox = document.getElementById('readingTextBox');
-  var story = {
-    id: Date.now(),
-    topic: currentReadingTopic,
-    mode: readingMode,
-    html: textBox.innerHTML,
-    words: currentReadingWords,
-    date: new Date().toLocaleDateString('ru', {day:'2-digit',month:'2-digit',year:'2-digit'})
-  };
-  savedStories.unshift(story);
-  if (savedStories.length > 20) savedStories = savedStories.slice(0,20);
-  localStorage.setItem('saved_stories', JSON.stringify(savedStories));
-  renderSavedStories();
-  showToast('💾 История сохранена!');
+  if(!currentReadingTopic||!currentReadingWords.length){showToast('⚠️ Сначала сгенерируй текст');return;}
+  var box=document.getElementById('readingTextBox');
+  var s={id:Date.now(),topic:currentReadingTopic,mode:readingMode,html:box.innerHTML,words:currentReadingWords,date:new Date().toLocaleDateString('ru',{day:'2-digit',month:'2-digit',year:'2-digit'})};
+  savedStories.unshift(s); if(savedStories.length>20)savedStories=savedStories.slice(0,20);
+  localStorage.setItem('saved_stories',JSON.stringify(savedStories));
+  renderSavedStories(); showToast('💾 Сохранено!');
 }
-
 function renderSavedStories() {
-  var section = document.getElementById('savedStoriesSection');
-  var list = document.getElementById('savedStoriesList');
-  if (!savedStories.length) { section.style.display = 'none'; return; }
-  section.style.display = 'block';
-  list.innerHTML = '';
+  var sec=document.getElementById('savedStoriesSection');
+  var lst=document.getElementById('savedStoriesList');
+  if(!savedStories.length){if(sec)sec.style.display='none';return;}
+  if(sec)sec.style.display='block'; if(lst)lst.innerHTML='';
   savedStories.forEach(function(s) {
-    var item = document.createElement('div');
-    item.style.cssText = 'display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:6px;cursor:pointer;transition:border-color 0.2s;';
-    item.onmouseover = function() { item.style.borderColor = 'var(--accent)'; };
-    item.onmouseout = function() { item.style.borderColor = 'var(--border)'; };
-    var info = document.createElement('div'); info.style.flex = '1';
-    info.innerHTML = '<div style="font-size:13px;font-weight:600;">' + s.topic + '</div><div style="font-size:11px;color:var(--muted);">' + s.date + ' · ' + s.words.length + ' слов</div>';
-    var openBtn = document.createElement('button');
-    openBtn.textContent = '📖 Читать';
-    openBtn.style.cssText = 'width:auto;padding:5px 10px;margin:0;font-size:12px;';
-    openBtn.onclick = function(e) { e.stopPropagation(); loadSavedStory(s); };
-    var delBtn = document.createElement('button');
-    delBtn.textContent = '✕';
-    delBtn.style.cssText = 'width:auto;padding:5px 8px;margin:0;font-size:12px;background:var(--surface);border:1px solid var(--border);color:var(--muted);';
-    delBtn.onclick = function(e) { e.stopPropagation(); deleteStory(s.id); };
-    item.appendChild(info); item.appendChild(openBtn); item.appendChild(delBtn);
-    list.appendChild(item);
+    var item=document.createElement('div');
+    item.style.cssText='display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:6px;';
+    var info=document.createElement('div'); info.style.flex='1';
+    info.innerHTML='<div style="font-size:13px;font-weight:600;">'+s.topic+'</div><div style="font-size:11px;color:var(--muted);">'+s.date+'</div>';
+    var ob=document.createElement('button'); ob.textContent='📖'; ob.style.cssText='width:auto;padding:5px 10px;margin:0;';
+    ob.onclick=function(){loadSavedStory(s);};
+    var db=document.createElement('button'); db.textContent='✕'; db.style.cssText='width:auto;padding:5px 8px;margin:0;background:var(--surface);border:1px solid var(--border);color:var(--muted);';
+    db.onclick=function(){deleteStory(s.id);};
+    item.appendChild(info); item.appendChild(ob); item.appendChild(db); lst.appendChild(item);
   });
 }
-
 function loadSavedStory(s) {
-  currentReadingTopic = s.topic;
-  currentReadingWords = s.words;
-  document.getElementById('readingTopics').style.display = 'none';
-  document.getElementById('readingContent').style.display = 'block';
-  document.getElementById('readingTextBox').innerHTML = s.html;
-  // Re-render word list
-  renderReadingText._wordListOnly(s.words);
+  currentReadingTopic=s.topic; currentReadingWords=s.words||[]; readingMode=s.mode||'mixed';
+  setReadingMode(readingMode);
+  document.getElementById('readingTopics').style.display='none';
+  document.getElementById('readingContent').style.display='block';
+  document.getElementById('readingTextBox').innerHTML=s.html||'';
+  var nonSent=(s.words||[]).filter(function(w){return !w.isSentence;});
+  var lst=document.getElementById('readingWordItems'); lst.innerHTML='';
+  nonSent.forEach(function(w){
+    var item=document.createElement('div');
+    item.style.cssText='display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;';
+    var s1=document.createElement('strong'); s1.style.cssText='color:var(--accent);flex:1;'; s1.textContent=w.de;
+    var s2=document.createElement('span'); s2.style.cssText='color:var(--muted);flex:1;'; s2.textContent=w.ru;
+    item.appendChild(s1); item.appendChild(s2); lst.appendChild(item);
+  });
+  if(nonSent.length) document.getElementById('readingWordList').style.display='block';
+}
+function deleteStory(id) {
+  savedStories=savedStories.filter(function(s){return s.id!==id;});
+  localStorage.setItem('saved_stories',JSON.stringify(savedStories));
+  renderSavedStories(); showToast('🗑️ Удалено');
 }
 
-function deleteStory(id) {
-  savedStories = savedStories.filter(function(s) { return s.id !== id; });
-  localStorage.setItem('saved_stories', JSON.stringify(savedStories));
-  renderSavedStories();
-  showToast('🗑️ История удалена');
+var grammarPopupEl=null;
+function closeGrammarPopup(){if(grammarPopupEl){grammarPopupEl.remove();grammarPopupEl=null;}}
+async function showGrammarPopup(event,el) {
+  event.stopPropagation(); closeGrammarPopup();
+  var word=el.dataset.de; var tr=el.dataset.ru;
+  var lvl=localStorage.getItem('user_level')||'B1';
+  var popup=document.createElement('div'); popup.className='grammar-popup';
+  popup.innerHTML = '<div class="grammar-popup-header"><span class="grammar-popup-word">'+word+'</span><button class="grammar-popup-close" onclick="closeGrammarPopup()">✕</button></div><div class="grammar-popup-body" id="gpBody" style="white-space:pre-wrap;">⏳ Загружаю...</div>';
+  var actDiv2 = document.createElement('div'); actDiv2.className='grammar-popup-actions';
+  var addBtn2=document.createElement('button'); addBtn2.textContent='+ В словарь';
+  (function(w,t){addBtn2.onclick=function(){addSingleReadingWord(addBtn2,w,t);};})(word,tr);
+  var closeBtn3=document.createElement('button'); closeBtn3.textContent='Закрыть'; closeBtn3.className='btn-s'; closeBtn3.onclick=closeGrammarPopup;
+  actDiv2.appendChild(addBtn2); actDiv2.appendChild(closeBtn3); popup.appendChild(actDiv2);
+  document.body.appendChild(popup); grammarPopupEl=popup;
+  setTimeout(function(){document.addEventListener('click',closeGrammarPopup,{once:true});},200);
+  try {
+    var promptLines=['Слово "'+word+'" ('+tr+'). Уровень '+lvl+'.','Объясни кратко по-русски (5 строк):','1. Часть речи','2. Артикль/падежи или формы глагола','3. Пример предложения'];
+    var prompt=promptLines.join('\n');
+    var msgs=[{role:'user',content:prompt}]; var res,data,explanation=tr;
+    if(GROQ_KEY){
+      try{
+        res=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:msgs,max_tokens:250})});
+        data=await res.json(); if(data.choices&&data.choices[0]) explanation=data.choices[0].message.content.trim();
+      }catch(e){}
+    } else if(MISTRAL_KEY){
+      res=await fetch('https://api.mistral.ai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+MISTRAL_KEY},body:JSON.stringify({model:'mistral-small-latest',messages:msgs,max_tokens:250})});
+      data=await res.json(); if(data.choices&&data.choices[0]) explanation=data.choices[0].message.content.trim();
+    }
+    var b=document.getElementById('gpBody'); if(b) b.textContent=explanation;
+  }catch(e){var b=document.getElementById('gpBody'); if(b) b.textContent=tr;}
 }
+
 
 // ── LEVEL / ONBOARDING ──
 var userLevel = localStorage.getItem('user_level') || '';
@@ -2299,12 +2380,424 @@ function updateLevelBadge() {
   if (el) { el.textContent = lvl ? '🎓 ' + lvl : '🎓 Уровень'; }
 }
 
+// ── PHRASE OF THE DAY ──
+var phrases = [
+  {de:'Übung macht den Meister.', ru:'Практика делает мастера.'},
+  {de:'Aller Anfang ist schwer.', ru:'Любое начало тяжело.'},
+  {de:'Morgenstund hat Gold im Mund.', ru:'Утро вечера мудренее.'},
+  {de:'Was du heute kannst besorgen, das verschiebe nicht auf morgen.', ru:'Не откладывай на завтра то, что можно сделать сегодня.'},
+  {de:'Wer nicht wagt, der nicht gewinnt.', ru:'Кто не рискует, тот не выигрывает.'},
+  {de:'Es ist noch kein Meister vom Himmel gefallen.', ru:'Мастерами не рождаются, ими становятся.'},
+  {de:'Andere Länder, andere Sitten.', ru:'В чужой монастырь со своим уставом не ходят.'},
+  {de:'Reden ist Silber, Schweigen ist Gold.', ru:'Слово — серебро, молчание — золото.'},
+  {de:'Man lernt nie aus.', ru:'Учиться никогда не поздно.'},
+  {de:'Kleine Schritte führen auch zum Ziel.', ru:'Маленькие шаги тоже ведут к цели.'},
+  {de:'Der frühe Vogel fängt den Wurm.', ru:'Кто рано встаёт, тому Бог подаёт.'},
+  {de:'Ohne Fleiß kein Preis.', ru:'Без труда не вытащишь рыбку из пруда.'},
+  {de:'Gut Ding will Weile haben.', ru:'Хорошее дело не терпит спешки.'},
+  {de:'Viele Wege führen nach Rom.', ru:'Все дороги ведут в Рим.'},
+  {de:'Ende gut, alles gut.', ru:'Всё хорошо, что хорошо кончается.'},
+  {de:'Lachen ist die beste Medizin.', ru:'Смех — лучшее лекарство.'},
+  {de:'Durch Fehler wird man klug.', ru:'На ошибках учатся.'},
+  {de:'Geduld bringt Rosen.', ru:'Терпение и труд всё перетрут.'},
+  {de:'Das Leben ist kein Wunschkonzert.', ru:'Жизнь — не праздник.'},
+  {de:'Wer suchet, der findet.', ru:'Кто ищет, тот найдёт.'}
+];
+
+function loadPhraseOfDay() {
+  var today = new Date().toISOString().slice(0,10);
+  var saved = JSON.parse(localStorage.getItem('phrase_of_day') || '{}');
+  var phrase;
+  if (saved.date === today && saved.phrase) {
+    phrase = saved.phrase;
+  } else {
+    phrase = phrases[Math.floor(Math.random() * phrases.length)];
+    localStorage.setItem('phrase_of_day', JSON.stringify({date: today, phrase: phrase}));
+  }
+  showPhrase(phrase);
+}
+
+function loadNewPhrase() {
+  var phrase = phrases[Math.floor(Math.random() * phrases.length)];
+  localStorage.setItem('phrase_of_day', JSON.stringify({
+    date: new Date().toISOString().slice(0,10), phrase: phrase
+  }));
+  showPhrase(phrase);
+}
+
+function showPhrase(phrase) {
+  var de = document.getElementById('phraseDE');
+  var ru = document.getElementById('phraseRU');
+  if (de) de.textContent = phrase.de;
+  if (ru) ru.textContent = phrase.ru;
+  // Animate
+  var card = document.getElementById('phraseCard');
+  if (card) {
+    card.style.animation = 'none';
+    card.offsetHeight; // reflow
+    card.style.animation = 'panelFadeIn 0.3s ease';
+  }
+}
+
+// ── GRAMMAR EXERCISES ──
+var grammarType = 'artikel';
+var grammarQueue = [];
+var grammarIndex = 0;
+var grammarCorrect = 0;
+var grammarWrong = 0;
+
+function setGrammarType(type) {
+  grammarType = type;
+  ['artikel','order','kasus'].forEach(function(t) {
+    var b = document.getElementById('gtype-' + t);
+    if (b) b.classList.toggle('active', t === type);
+  });
+}
+
+async function loadGrammarExercises() {
+  if (!MISTRAL_KEY && !GROQ_KEY) { showToast('⚠️ Нужен API ключ!'); return; }
+  var area = document.getElementById('grammarExerciseArea');
+  area.innerHTML = '<div style="text-align:center;padding:30px;color:var(--muted);">⏳ ИИ создаёт упражнения...</div>';
+
+  var lvl = localStorage.getItem('user_level') || 'B1';
+  var userWords = words.slice(-20).map(function(w){ return w.word; }).join(', ');
+  var prompt = buildGrammarPrompt(lvl, userWords);
+
+  try {
+    var messages = [{ role: 'user', content: prompt }];
+    var response, data;
+    if (GROQ_KEY) {
+      response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY },
+        body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: messages, max_tokens: 1000 })
+      });
+      data = await response.json();
+    }
+    if (!data || !data.choices) {
+      response = await fetch('https://api.mistral.ai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY },
+        body: JSON.stringify({ model: 'mistral-small-latest', messages: messages, max_tokens: 1000 })
+      });
+      data = await response.json();
+    }
+
+    var text = data.choices && data.choices[0] ? data.choices[0].message.content : '';
+    var clean = text.replace(/```json|```/g, '').trim();
+    var m = clean.match(/\{[\s\S]*\}/);
+    var parsed = null;
+    if (m) { try { parsed = JSON.parse(m[0]); } catch(e) {} }
+
+    if (parsed && parsed.exercises && parsed.exercises.length > 0) {
+      grammarQueue = parsed.exercises;
+      grammarIndex = 0; grammarCorrect = 0; grammarWrong = 0;
+      renderGrammarQuestion();
+    } else {
+      area.innerHTML = '<div class="card" style="color:var(--danger);text-align:center;padding:20px;">⚠️ Не удалось создать упражнения.<br><br><button onclick="loadGrammarExercises()" style="width:auto;padding:10px 20px;margin-top:8px;">🔄 Попробовать снова</button></div>';
+    }
+  } catch(e) {
+    area.innerHTML = '<div class="card" style="color:var(--danger);text-align:center;padding:20px;">⚠️ Ошибка: ' + e.message + '</div>';
+  }
+}
+
+function buildGrammarPrompt(lvl, userWords) {
+  var levelDesc = {
+    'A1': 'absolute beginner — only basic nouns: Hund/Haus/Mann/Frau/Kind/Tisch, simple present',
+    'A2': 'elementary — everyday nouns, simple sentences, Perfekt basics',
+    'B1': 'intermediate — modal verbs, Nebensatze weil/dass/wenn, Prateritum',
+    'B2': 'upper intermediate — Konjunktiv II, Passiv, complex subordinate clauses',
+    'C1': 'advanced — sophisticated vocabulary, Partizipialkonstruktionen, idiomatic expressions',
+    'C2': 'mastery — native-level, rare constructions, subtle distinctions'
+  };
+  var desc = levelDesc[lvl] || levelDesc['B1'];
+  var lines;
+
+  if (grammarType === 'artikel') {
+    lines = [
+      'Create exactly 8 German article exercises for level ' + lvl + ' (' + desc + ').',
+      'STRICT: vocabulary difficulty MUST match ' + lvl + '. A1=basic nouns only. B2=abstract nouns.',
+      'Prioritize these student words if level-appropriate: ' + userWords,
+      'Hint: explain WHY in Russian (род, окончание, правило).',
+      'JSON only: {"exercises":[{"type":"artikel","word":"Hund","correct":"der","hint":"мужской род"},{"type":"artikel","word":"Möglichkeit","correct":"die","hint":"слова на -keit всегда die"}]}'
+    ];
+  } else if (grammarType === 'order') {
+    lines = [
+      'Create exactly 6 word order exercises for level ' + lvl + ' (' + desc + ').',
+      'A1: Subject+Verb+Object only. B1: add weil/modal. B2+: Konjunktiv/Passiv constructions.',
+      'Hint in Russian: explain the grammar rule.',
+      'JSON only: {"exercises":[{"type":"order","words":["gehe","Ich","heute","in die Stadt"],"correct":"Ich gehe heute in die Stadt.","hint":"Глагол всегда на 2-м месте"},{"type":"order","words":["nicht","Er","kommt","heute"],"correct":"Er kommt heute nicht.","hint":"nicht идёт в конец"}]}'
+    ];
+  } else {
+    lines = [
+      'Create exactly 7 German case exercises for level ' + lvl + ' (' + desc + ').',
+      'A1-A2: Nominativ+Akkusativ only. B1+: add Dativ. B2+: add Genitiv.',
+      'Each has ___ as blank. Give 4 article options. Hint in Russian: case + why.',
+      'JSON only: {"exercises":[{"type":"kasus","sentence":"Ich sehe ___ Mann.","options":["der","den","dem","des"],"correct":"den","kasus":"Akkusativ","hint":"sehen — кого/что — Akkusativ"},{"type":"kasus","sentence":"Er hilft ___ Frau.","options":["die","der","den","das"],"correct":"der","kasus":"Dativ","hint":"helfen — кому — Dativ"}]}'
+    ];
+  }
+  return lines.join('\n');
+}
+function renderGrammarQuestion() {
+  var area = document.getElementById('grammarExerciseArea');
+  if (grammarIndex >= grammarQueue.length) {
+    showGrammarResult(); return;
+  }
+  var ex = grammarQueue[grammarIndex];
+  var pct = Math.round((grammarIndex / grammarQueue.length) * 100);
+
+  var html = '<div class="card">';
+  html += '<div class="progress-bar-wrap" style="margin-bottom:16px;"><div class="progress-bar" style="width:' + pct + '%"></div></div>';
+  html += '<div style="font-size:11px;color:var(--muted);margin-bottom:12px;">' + (grammarIndex+1) + ' / ' + grammarQueue.length + ' · ' + (grammarType === 'artikel' ? 'Артикли' : grammarType === 'order' ? 'Порядок слов' : 'Падежи') + '</div>';
+
+  if (ex.type === 'artikel') {
+    html += '<div style="font-size:22px;font-weight:800;margin-bottom:8px;">___ ' + ex.word + '</div>';
+    html += '<div style="font-size:13px;color:var(--muted);margin-bottom:20px;">' + (ex.hint || '') + '</div>';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">';
+    ['der','die','das'].forEach(function(art) {
+      html += '<button class="grammar-opt-btn" onclick="checkGrammar(\'' + art + '\',\'' + ex.correct + '\')" style="font-size:18px;font-weight:800;font-family:monospace;padding:14px;">' + art + '</button>';
+    });
+    html += '</div>';
+  } else if (ex.type === 'order') {
+    var shuffled = ex.words.slice();
+    html += '<div style="font-size:14px;color:var(--muted);margin-bottom:12px;">Составь предложение из слов:</div>';
+    html += '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;">';
+    shuffled.forEach(function(w) {
+      html += '<span style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:14px;font-weight:600;">' + w + '</span>';
+    });
+    html += '</div>';
+    html += '<input id="grammarOrderInput" placeholder="Напиши правильное предложение..." style="margin-bottom:10px;">';
+    html += '<div style="display:flex;gap:8px;">';
+    html += '<button onclick="checkGrammarOrder(\'' + ex.correct.replace(/'/g,"\\'") + '\')" style="width:auto;padding:12px 20px;margin:0;">Проверить</button>';
+    html += '<button class="btn-s" onclick="showGrammarHint(\'' + (ex.hint||'').replace(/'/g,"\\'") + '\')" style="width:auto;padding:12px 16px;margin:0;">💡 Подсказка</button>';
+    html += '</div>';
+  } else {
+    html += '<div style="font-size:18px;font-weight:700;margin-bottom:8px;">' + ex.sentence + '</div>';
+    html += '<div style="font-size:13px;color:var(--muted);margin-bottom:20px;">' + (ex.hint || '') + '</div>';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">';
+    (ex.options || ['der','die','das','dem']).forEach(function(opt) {
+      html += '<button class="grammar-opt-btn" onclick="checkGrammar(\'' + opt + '\',\'' + ex.correct + '\')" style="font-size:15px;font-weight:700;padding:12px;">' + opt + '</button>';
+    });
+    html += '</div>';
+    if (ex.kasus) html += '<div style="font-size:11px;color:var(--muted);margin-top:12px;text-align:center;">Падеж: ' + ex.kasus + '</div>';
+  }
+
+  html += '<div id="grammarFeedback" style="margin-top:14px;"></div>';
+  html += '</div>';
+  html += '<div class="stats-row" style="margin-top:8px;"><div class="stat-box stat-ok"><div class="stat-num">' + grammarCorrect + '</div><div class="stat-label">Правильно</div></div><div class="stat-box stat-fail"><div class="stat-num">' + grammarWrong + '</div><div class="stat-label">Ошибки</div></div></div>';
+  area.innerHTML = html;
+
+  if (ex.type === 'order') {
+    var inp = document.getElementById('grammarOrderInput');
+    if (inp) inp.focus();
+    inp.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') checkGrammarOrder(ex.correct);
+    });
+  }
+}
+
+function checkGrammar(chosen, correct) {
+  var fb = document.getElementById('grammarFeedback');
+  document.querySelectorAll('.grammar-opt-btn').forEach(function(b) {
+    b.disabled = true;
+    if (b.textContent.trim() === correct) b.style.background = 'rgba(67,233,123,0.2)', b.style.borderColor = 'var(--success)', b.style.color = 'var(--success)';
+    else if (b.textContent.trim() === chosen && chosen !== correct) b.style.background = 'rgba(255,71,87,0.1)', b.style.borderColor = 'var(--danger)', b.style.color = 'var(--danger)';
+  });
+  if (chosen === correct) {
+    grammarCorrect++;
+    fb.innerHTML = '<div style="color:var(--success);font-weight:700;">✓ Правильно!</div>';
+    launchConfetti();
+  } else {
+    grammarWrong++;
+    fb.innerHTML = '<div style="color:var(--danger);font-weight:700;">✗ Правильный ответ: <strong>' + correct + '</strong></div>';
+  }
+  var ex = grammarQueue[grammarIndex];
+  if (ex && ex.hint && chosen !== correct) {
+    fb.innerHTML += '<div style="font-size:12px;color:var(--muted);margin-top:4px;">💡 ' + ex.hint + '</div>';
+  }
+  grammarIndex++;
+  setTimeout(renderGrammarQuestion, 1500);
+}
+
+function checkGrammarOrder(correct) {
+  var inp = document.getElementById('grammarOrderInput');
+  if (!inp) return;
+  var answer = inp.value.trim();
+  var fb = document.getElementById('grammarFeedback');
+  inp.disabled = true;
+  var isCorrect = answer.toLowerCase().replace(/[.!?]/g,'') === correct.toLowerCase().replace(/[.!?]/g,'');
+  if (isCorrect) {
+    grammarCorrect++;
+    inp.style.borderColor = 'var(--success)';
+    fb.innerHTML = '<div style="color:var(--success);font-weight:700;">✓ Правильно!</div>';
+    launchConfetti();
+  } else {
+    grammarWrong++;
+    inp.style.borderColor = 'var(--danger)';
+    fb.innerHTML = '<div style="color:var(--danger);font-weight:700;">✗ Правильно: <strong>' + correct + '</strong></div>';
+  }
+  grammarIndex++;
+  setTimeout(renderGrammarQuestion, 1800);
+}
+
+function showGrammarHint(hint) {
+  var fb = document.getElementById('grammarFeedback');
+  if (fb) fb.innerHTML = '<div style="color:var(--accent);font-size:13px;">💡 ' + hint + '</div>';
+}
+
+function showGrammarResult() {
+  var pct = Math.round((grammarCorrect / grammarQueue.length) * 100);
+  var emoji = pct >= 80 ? '🎉' : pct >= 50 ? '👍' : '💪';
+  var area = document.getElementById('grammarExerciseArea');
+  area.innerHTML = '<div class="card" style="text-align:center;padding:30px;">' +
+    '<div style="font-size:52px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">' + pct + '%</div>' +
+    '<div style="font-size:20px;margin:8px 0;">' + emoji + '</div>' +
+    '<div style="color:var(--muted);font-size:14px;margin-bottom:20px;">' + grammarCorrect + ' из ' + grammarQueue.length + ' правильно</div>' +
+    '<div style="display:flex;gap:10px;justify-content:center;">' +
+    '<button class="btn-ai" onclick="loadGrammarExercises()" style="width:auto;padding:12px 20px;margin:0;">🔄 Ещё раз</button>' +
+    '<button class="btn-s" onclick="setGrammarType(grammarType);loadGrammarExercises()" style="display:none;"></button>' +
+    '</div></div>';
+  if (pct >= 80) launchConfetti();
+  trackActivity(grammarCorrect, grammarWrong);
+}
+
+
+// ── READING QUIZ ──
+var quizWords = [], quizIndex = 0, quizCorrect = 0, quizEl = null;
+
+function startReadingQuiz() {
+  var pool = currentReadingWords.filter(function(w){ return !w.isSentence && w.de && w.ru; });
+  if (pool.length < 3) { showToast('⚠️ Мало слов для теста! Нужно минимум 3.'); return; }
+  quizWords = pool.sort(function(){ return Math.random()-0.5; }).slice(0, Math.min(8, pool.length));
+  quizIndex = 0; quizCorrect = 0;
+  renderQuizQuestion();
+}
+
+function renderQuizQuestion() {
+  if (quizEl) quizEl.remove();
+  if (quizIndex >= quizWords.length) {
+    showQuizResult(); return;
+  }
+  var w = quizWords[quizIndex];
+  var pool = currentReadingWords.filter(function(x){ return !x.isSentence && x.ru && x.ru !== w.ru; });
+  var wrongs = pool.sort(function(){ return Math.random()-0.5; }).slice(0,3).map(function(x){ return x.ru; });
+  var options = [w.ru].concat(wrongs).sort(function(){ return Math.random()-0.5; });
+
+  var overlay = document.createElement('div');
+  overlay.className = 'quiz-overlay'; overlay.id = 'quizOverlay';
+  var box = document.createElement('div'); box.className = 'quiz-box';
+
+  var pct = Math.round((quizIndex / quizWords.length) * 100);
+  box.innerHTML =
+    '<div class="quiz-progress"><div class="progress-bar-wrap"><div class="progress-bar" style="width:'+pct+'%"></div></div></div>' +
+    '<div class="quiz-question">Вопрос ' + (quizIndex+1) + ' из ' + quizWords.length + ' — переведи слово:</div>' +
+    '<div class="quiz-word">' + w.de + '</div>' +
+    '<div class="quiz-options" id="quizOptions"></div>' +
+    '<button class="btn-s" onclick="closeQuiz()" style="width:auto;margin-top:16px;padding:8px 16px;font-size:13px;">✕ Закрыть</button>';
+
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+  quizEl = overlay;
+
+  var optContainer = document.getElementById('quizOptions');
+  options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'quiz-option'; btn.textContent = opt;
+    btn.onclick = function() { checkQuizAnswer(opt, w.ru, options); };
+    optContainer.appendChild(btn);
+  });
+}
+
+function checkQuizAnswer(chosen, correct, options) {
+  document.querySelectorAll('.quiz-option').forEach(function(btn) {
+    btn.onclick = null;
+    if (btn.textContent === correct) btn.classList.add('correct');
+    else if (btn.textContent === chosen && chosen !== correct) btn.classList.add('wrong');
+  });
+  if (chosen === correct) { quizCorrect++; launchConfetti(); }
+  quizIndex++;
+  setTimeout(renderQuizQuestion, 1200);
+}
+
+function showQuizResult() {
+  if (quizEl) quizEl.remove();
+  var pct = Math.round((quizCorrect / quizWords.length) * 100);
+  var emoji = pct >= 80 ? '🎉' : pct >= 50 ? '👍' : '💪';
+  var overlay = document.createElement('div');
+  overlay.className = 'quiz-overlay'; overlay.id = 'quizOverlay';
+  overlay.innerHTML = '<div class="quiz-box quiz-result">' +
+    '<div class="quiz-score">' + pct + '%</div>' +
+    '<div style="font-size:24px;margin:8px 0;">' + emoji + '</div>' +
+    '<div style="color:var(--muted);font-size:14px;margin-bottom:20px;">' + quizCorrect + ' из ' + quizWords.length + ' правильно</div>' +
+    '<div style="display:flex;gap:10px;justify-content:center;">' +
+    '<button onclick="startReadingQuiz()" style="width:auto;padding:10px 20px;">🔄 Ещё раз</button>' +
+    '<button class="btn-s" onclick="closeQuiz()" style="width:auto;padding:10px 20px;">Закрыть</button>' +
+    '</div></div>';
+  document.body.appendChild(overlay);
+  quizEl = overlay;
+  if (pct >= 80) launchConfetti();
+}
+
+function closeQuiz() {
+  if (quizEl) { quizEl.remove(); quizEl = null; }
+}
+
+// ── TRANSLATE MODE (DE→RU or RU→DE) ──
+var translateMode = 'de';
+
+function setTranslateMode(mode) {
+  translateMode = mode;
+  var btnDE = document.getElementById('btn-de-ru');
+  var btnRU = document.getElementById('btn-ru-de');
+  if (btnDE) btnDE.classList.toggle('active', mode === 'de');
+  if (btnRU) btnRU.classList.toggle('active', mode === 'ru');
+  var wordInput = document.getElementById('word');
+  var wordLabel = document.getElementById('wordLabel');
+  if (mode === 'de') {
+    if (wordLabel) wordLabel.textContent = 'Немецкое слово';
+    if (wordInput) wordInput.placeholder = 'z.B. der Hund';
+  } else {
+    if (wordLabel) wordLabel.textContent = 'Русское слово';
+    if (wordInput) wordInput.placeholder = 'например: собака';
+  }
+  if (wordInput) wordInput.value = '';
+  var trans = document.getElementById('translation');
+  if (trans) trans.value = '';
+  var picker = document.getElementById('sentencePicker');
+  if (picker) picker.style.display = 'none';
+}
+
+// ── CONFETTI ──
+function launchConfetti() {
+  var container = document.getElementById('confettiContainer');
+  if (!container) return;
+  var colors = ['#ff6b9d','#6c63ff','#43e97b','#ff9ec4','#ffd700','#ff6584'];
+  for (var i = 0; i < 60; i++) {
+    (function(i) {
+      setTimeout(function() {
+        var piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = Math.random() * 100 + 'vw';
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.width = (Math.random() * 8 + 6) + 'px';
+        piece.style.height = (Math.random() * 8 + 6) + 'px';
+        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        piece.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
+        piece.style.animationDelay = (Math.random() * 0.5) + 's';
+        container.appendChild(piece);
+        setTimeout(function() { if (piece.parentNode) piece.remove(); }, 3000);
+      }, i * 20);
+    })(i);
+  }
+}
+
 // ── INIT ──
 updateTopics();
 updateWordCount();
 renderChatList();
 renderSavedStories();
 updateLevelBadge();
+loadPhraseOfDay();
 var chatIds = Object.keys(allChats).sort(function(a,b) { return allChats[b].createdAt - allChats[a].createdAt; });
 if (chatIds.length > 0) loadChat(chatIds[0]);
 // Show onboarding if no level set
